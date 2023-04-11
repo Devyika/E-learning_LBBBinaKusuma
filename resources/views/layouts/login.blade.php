@@ -22,14 +22,15 @@
       <img src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="logo pnm">
     </div>
     <div class="card-body">
-      <form action="{{ asset('assets/index3.html') }}" method="post">
+      <form action="{{ url('/login')}}" method="post">
+        @csrf
         <div class="input-group mb-3">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
-          <input type="text" class="form-control" placeholder="Username">
+          <input name="username" type="text" class="form-control" placeholder="Username">
         </div>
         <div class="input-group mb-3">
           <div class="input-group-append">
@@ -37,7 +38,7 @@
               <span class="fas fa-lock"></span>
             </div>
           </div>
-          <input type="password" class="form-control" placeholder="Password">
+          <input name="password" type="password" class="form-control" placeholder="Password">
         </div>
         <button type="submit" class="btn btn-primary btn-block">Login</button>
         <div class="text-center mt-2" style="opacity: 0.75;">
