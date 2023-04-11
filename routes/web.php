@@ -31,6 +31,7 @@ Route::get('/logout', [LoginController::class, 'logout']);
 Route::middleware(['auth'])->group(function() {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/master-user', [MasterUserController::class, 'index']);
 
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     // Route::redirect('/home', '/dashboard', 301);

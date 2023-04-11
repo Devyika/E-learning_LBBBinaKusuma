@@ -23,7 +23,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ url('/user') }}" class="nav-link active">
+                    <a href="{{ url('/master-user') }}" class="nav-link active">
                       <i class="fas fa-users pr-2"></i>
                       <p>User</p>
                     </a>
