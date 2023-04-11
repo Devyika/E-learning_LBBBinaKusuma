@@ -21,11 +21,6 @@
         <li class="nav-item dropdown">
             
         <!-- Notifications Dropdown Menu -->
-        <li class="nav-item">
-            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-            <i class="fas fa-expand-arrows-alt"></i>
-            </a>
-        </li>
         <li class="nav-item user-panel">
             <a data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
             <div class="mt-1 d-flex">
@@ -33,6 +28,10 @@
                 <img src="{{ asset('assets/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
                 </div>
             </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('/logout') }}" role="button">
+                <i class="fas fa-sign-out-alt"></i>
             </a>
         </li>
     </ul>
