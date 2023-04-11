@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-Route::get('/', [LoginController::class, 'showLoginForm']);
+Route::get('/login', [LoginController::class, 'showLoginForm']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::middleware(['auth'])->group(function() {
@@ -37,3 +37,6 @@ Route::middleware(['auth'])->group(function() {
 
     Route::resource('/mahasiswa', MahasiswaController::class)->parameter('mahasiswa', 'id');
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
