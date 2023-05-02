@@ -36,8 +36,8 @@ Route::middleware(['auth'])->group(function() {
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     // Route::redirect('/home', '/dashboard', 301);
 
-    Route::resource('/mahasiswa', MahasiswaController::class)->parameter('mahasiswa', 'id');
+    // Route::resource('/mahasiswa', MahasiswaController::class)->parameter('mahasiswa', 'id');
 });
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
