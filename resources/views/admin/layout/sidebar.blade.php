@@ -38,7 +38,7 @@
               </li>
               <li class="nav-header">USER</li>
               <li class="nav-item">
-                <a href="{{ url('/user/admin') }}" class="nav-link">
+                <a href="{{ url('/admin') }}" class="nav-link">
                   <i class="fas fa-user-shield pr-2"></i>
                   <p>
                     Admin
@@ -47,7 +47,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/user/guru') }}" class="nav-link">
+                <a href="{{ url('/guru') }}" class="nav-link">
                   <i class="fas fa-chalkboard-teacher pr-2"></i>
                   <p>
                     Guru
@@ -56,7 +56,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/user/siswa') }}" class="nav-link">
+                <a href="{{ url('/siswa') }}" class="nav-link">
                   <i class="fas fa-user-graduate pl-1 pr-2"></i>
                   <p>
                     Siswa
