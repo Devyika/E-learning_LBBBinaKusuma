@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\MasterUser;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class MasterUserController extends Controller
 {
@@ -24,7 +26,7 @@ class MasterUserController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -35,7 +37,23 @@ class MasterUserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'name' => ['required', 'string', 'max:255'],
+            'level_user' => ['required', 'int'],
+            'password' => ['required', 'string', 'min:4'],
+        ]);
+
+        $hashedPassword = Hash::make($request->input('password'));
+
+        User::create([
+            'username' => $request->input('username'),
+            'name' => $request->input('name'),
+            'level_user' => $request->input('level_user'),
+            'password' => $hashedPassword,
+        ]);
+
+        return redirect('master-user')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**

@@ -21,6 +21,9 @@
   <div class="container-fluid">
     <!-- SELECT2 EXAMPLE -->
     <div class="card card-default">
+      <form method="POST" action="master-user">
+        @csrf
+        {!! (isset($user))? method_field('PUT') : ''!!}
       <div class="card-header">
         <h3 class="card-title">Form Input</h3>
 
@@ -35,26 +38,38 @@
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label>Nama</label>
-              <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap">
+              <label>name</label>
+              <input type="text" value="{{ isset($user)? $user->name : old('name') }}" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="name Lengkap">
+              @error('name')
+                <span class="error invalid-feedback">{{ $message }} </span>
+              @enderror
             </div>
               
             <div class="form-group">
-              <label>Level</label>
-              <select class="form-control select2" style="width: 100%;">
-                <option selected="selected">Guru</option>
-                <option>Siswa</option>
+              <label>level</label>
+              <select class="form-control select2 @error('level_user') is-invalid @enderror" style="width: 100%;" name="level_user" value="{{ isset($user)? $user->level_user : old('level_user') }}">
+                <option selected="selected" value=1>Guru</option>
+                <option value=2>Siswa</option>
               </select>
+              @error('level_user')
+                <span class="error invalid-feedback">{{ $message }} </span>
+              @enderror
             </div>
 
             <div class="form-group">
               <label>Username</label>
-              <input type="text" name="username" class="form-control" placeholder="Username">
+              <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" placeholder="Username" value="{{ isset($user)? $user->username : old('username') }}">
+              @error('username')
+                <span class="error invalid-feedback">{{ $message }} </span>
+              @enderror
             </div>
 
             <div class="form-group">
               <label>Password</label>
-              <input type="password" name="password" class="form-control" placeholder="Password">
+              <input type="password" name="password" class="form-control @error('username') is-invalid @enderror" placeholder="Password">
+              @error('password')
+                <span class="error invalid-feedback">{{ $message }} </span>
+              @enderror
             </div>
 
             <div class="form-group">
@@ -69,6 +84,7 @@
       <!-- /.card-body -->
     
     </div>
+    </form>
     <!-- /.card -->
 
     <!-- SELECT2 EXAMPLE -->
