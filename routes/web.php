@@ -25,19 +25,14 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-Route::get('/login', [LoginController::class, 'showLoginForm']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::middleware(['auth'])->group(function() {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/master-user', [MasterUserController::class, 'index']);
-
-    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    // Route::redirect('/home', '/dashboard', 301);
-
-    // Route::resource('/mahasiswa', MahasiswaController::class)->parameter('mahasiswa', 'id');
+    Route::resource('/master-user', MasterUserController::class);
+    Route::resource('/mata-pelajaran', MapelController::class);
+    Route::resource('/admin', AdminController::class);
+    Route::resource('/guru', GuruController::class);
+    Route::resource('/siswa', SiswaController::class);
 });
-// Auth::routes();
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
