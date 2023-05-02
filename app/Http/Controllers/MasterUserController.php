@@ -40,6 +40,7 @@ class MasterUserController extends Controller
         $request->validate([
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255', 'unique:users'],
             'level_user' => ['required', 'int'],
             'password' => ['required', 'string', 'min:4'],
         ]);
@@ -49,6 +50,7 @@ class MasterUserController extends Controller
         User::create([
             'username' => $request->input('username'),
             'name' => $request->input('name'),
+            'email' => $request->input('email'),
             'level_user' => $request->input('level_user'),
             'password' => $hashedPassword,
         ]);
