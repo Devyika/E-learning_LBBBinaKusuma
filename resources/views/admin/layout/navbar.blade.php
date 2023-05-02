@@ -11,7 +11,7 @@
             <a href="{{ url('/user') }}" class="nav-link bg-primary">User</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="{{ url('/dashboard') }}" class="nav-link bg-primary">Mata Pelajaran</a>
+            <a href="{{ url('/mata-pelajaran') }}" class="nav-link bg-primary">Mata Pelajaran</a>
         </li>
     </ul>
 
