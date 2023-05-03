@@ -18,12 +18,12 @@
 
 <!-- Main content -->
 <section class="content">
-
-          <!-- Main content -->
-<section class="content">
   <div class="container-fluid">
     <!-- SELECT2 EXAMPLE -->
     <div class="card card-default">
+      <form method="POST" action="mata-pelajaran">
+        @csrf
+        {!! (isset($mapel))? method_field('PUT') : ''!!}
       <div class="card-header">
         <h3 class="card-title">Form Input</h3>
 
@@ -39,12 +39,30 @@
           <div class="col">
             <div class="form-group">
               <label>Nama Mata Pelajaran</label>
-              <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap">
+              <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" placeholder="Nama Mata Pelajaran" value="{{ isset($mapel)? $mapel->nama : old('nama') }}">
+              @error('nama')
+                <span class="error invalid-feedback">{{ $message }} </span>
+              @enderror
+            </div>
+
+            <div class="form-group">
+              <label>Jurusan</label>
+              <select class="form-control select2 @error('jurusan') is-invalid @enderror" style="width: 100%;" name="jurusan" value="{{ isset($mapel)? $mapel->jurusan : old('jurusan') }}">
+                <option selected="selected" value=1>IPA</option>
+                <option value=2>IPS</option>
+                <option value=3>UMUM</option>
+              </select>
+              @error('jurusan')
+                <span class="error invalid-feedback">{{ $message }} </span>
+              @enderror
             </div>
               
             <div class="form-group">
               <label>Deskripsi Mata Pelajaran</label>
-              <input type="text" name="deskripsi" class="form-control" placeholder="Deskripsi">
+              <input type="text" name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" placeholder="Deskripsi" value="{{ isset($mapel)? $mapel->deskripsi : old('deskripsi') }}">
+              @error('deskripsi')
+                <span class="error invalid-feedback">{{ $message }} </span>
+              @enderror
             </div>
 
             <div class="form-group">
@@ -57,7 +75,7 @@
         </div>
       </div>
       <!-- /.card-body -->
-    
+    </form>
     </div>
 </section>
 @endsection

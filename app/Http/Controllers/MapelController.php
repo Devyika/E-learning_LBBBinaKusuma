@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mapel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MapelController extends Controller
 {
@@ -34,7 +36,21 @@ class MapelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:mapel'],
+            'deskripsi' => ['required', 'string', 'max:255'],
+            'jurusan' => ['required', 'int']
+            //'id_user' => ['required', 'int']
+        ]);
+
+        Mapel::create([
+            'name' => $request->input('nasdad'),
+            'jurusan' => $request->input('jurusan'),
+            'deskripsi' => $request->input('deskripsi')
+            //'id_user' => Auth::user()->id
+        ]);
+
+        return redirect('mata-pelajaran')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**
