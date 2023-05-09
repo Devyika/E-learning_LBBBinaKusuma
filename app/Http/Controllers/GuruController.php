@@ -14,10 +14,15 @@ class GuruController extends Controller
      */
     public function index()
     {
-        $guru = User::where('level_user', 1)
-                   ->get();
+        $countAdmin = User::where('level_user', 0)->count();
+        $countGuru = User::where('level_user', 1)->count();
+        $countSiswa = User::where('level_user', 2)->count();
+        $guru = User::where('level_user', 1)->get();
         return view('admin.guru')
-                ->with('guru', $guru);
+                ->with('guru', $guru)
+                ->with('countAdmin', $countAdmin)
+                ->with('countGuru', $countGuru)
+                ->with('countSiswa', $countSiswa);
     }
 
     /**

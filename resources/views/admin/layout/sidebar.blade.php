@@ -42,7 +42,7 @@
                   <i class="fas fa-user-shield pr-2"></i>
                   <p>
                     Admin
-                    <span class="badge badge-info right">2</span>
+                    <span class="badge badge-info right">{{ $countAdmin }}</span>
                   </p>
                 </a>
               </li>
@@ -51,7 +51,7 @@
                   <i class="fas fa-chalkboard-teacher pr-2"></i>
                   <p>
                     Guru
-                    <span class="badge badge-info right">2</span>
+                    <span class="badge badge-info right">{{ $countGuru }}</span>
                   </p>
                 </a>
               </li>
@@ -60,7 +60,7 @@
                   <i class="fas fa-user-graduate pl-1 pr-2"></i>
                   <p>
                     Siswa
-                    <span class="badge badge-info right">2</span>
+                    <span class="badge badge-info right">{{ $countSiswa }}</span>
                   </p>
                 </a>
               </li>

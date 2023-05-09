@@ -14,12 +14,16 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        $siswa = User::where('level_user', 2)
-                   ->get();
+        $countAdmin = User::where('level_user', 0)->count();
+        $countGuru = User::where('level_user', 1)->count();
+        $countSiswa = User::where('level_user', 2)->count();
+        $siswa = User::where('level_user', 2)->get();
         return view('admin.siswa')
-                ->with('siswa', $siswa);
+                ->with('siswa', $siswa)
+                ->with('countAdmin', $countAdmin)
+                ->with('countGuru', $countGuru)
+                ->with('countSiswa', $countSiswa);
     }
-
     /**
      * Show the form for creating a new resource.
      *

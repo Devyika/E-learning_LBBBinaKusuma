@@ -14,10 +14,15 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $adm = User::where('level_user', 0)
-                   ->get();
+        $countAdmin = User::where('level_user', 0)->count();
+        $countGuru = User::where('level_user', 1)->count();
+        $countSiswa = User::where('level_user', 2)->count();
+        $adm = User::where('level_user', 0)->get();
         return view('admin.admin')
-                ->with('adm', $adm);
+                ->with('adm', $adm)
+                ->with('countAdmin', $countAdmin)
+                ->with('countGuru', $countGuru)
+                ->with('countSiswa', $countSiswa);
     }
 
     /**
