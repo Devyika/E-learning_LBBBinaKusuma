@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class GuruController extends Controller
@@ -13,7 +14,10 @@ class GuruController extends Controller
      */
     public function index()
     {
-        return view('admin.guru');
+        $guru = User::where('level_user', 1)
+                   ->get();
+        return view('admin.guru')
+                ->with('guru', $guru);
     }
 
     /**

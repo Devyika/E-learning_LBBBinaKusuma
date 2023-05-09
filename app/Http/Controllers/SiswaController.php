@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SiswaController extends Controller
@@ -13,7 +14,10 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        return view('admin.siswa');
+        $siswa = User::where('level_user', 2)
+                   ->get();
+        return view('admin.siswa')
+                ->with('siswa', $siswa);
     }
 
     /**

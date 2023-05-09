@@ -18,7 +18,7 @@
 
     <div class="card card-default">
       <div class="card-header">
-        <h3 class="card-title">Data User</h3>
+        <h3 class="card-title">Data Admin</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -49,71 +49,47 @@
                 <table class="table table-head-fixed text-nowrap">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>User</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th>Reason</th>
+                      <th>No</th>
+                      <th>Username</th>
+                      <th>Nama</th>
+                      <th>Email</th>
+                      <th>Level User</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>183</td>
-                      <td>John Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-success">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>219</td>
-                      <td>Alexander Pierce</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-warning">Pending</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>657</td>
-                      <td>Bob Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-primary">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>175</td>
-                      <td>Mike Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-danger">Denied</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>134</td>
-                      <td>Jim Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-success">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>494</td>
-                      <td>Victoria Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-warning">Pending</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>832</td>
-                      <td>Michael Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-primary">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>982</td>
-                      <td>Rocky Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-danger">Denied</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
+                    @if($adm->count() > 0)
+                      @foreach($adm as $i => $a)
+                        <tr>
+                          <td>{{++$i}}</td>
+                          <td>{{$a->username}}</td>
+                          <td>{{$a->name}}</td>
+                          <td>{{$a->email}}</td>
+                          <td>
+                            @if($a->level_user == 0)
+                                <p>Admin</p>
+                            @elseif($a->level_user == 1)
+                                <p>Guru</p>
+                            @elseif($a->level_user == 2)
+                                <p>Siswa</p>
+                            @endif
+                          </td>
+                          <td>
+                            <a href="{{ url('/admin/'. $a->id.'/edit')}}" class="btn btn-sm btn-warning">edit</a>
+                            
+                            <form method="POST" action="{{ url('/admin/'.$a->id)}}">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="btn btn-sm btn-danger">hapus</button>
+                            </form>
+                          </td>
+                        </tr>
+                      @endforeach
+                    @else
+                        <tr><td colspan="6" class="text-center">Data Tidak Ada</td></tr>
+                    @endif
                   </tbody>
+
                 </table>
               </div>
             </div>
