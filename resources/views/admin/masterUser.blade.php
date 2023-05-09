@@ -38,7 +38,7 @@
         <div class="row">
           <div class="col">
             <div class="form-group">
-              <label>name</label>
+              <label>Nama</label>
               <input type="text" value="{{ isset($user)? $user->name : old('name') }}" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="name Lengkap">
               @error('name')
                 <span class="error invalid-feedback">{{ $message }} </span>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="form-group">
-              <label>email</label>
+              <label>Email</label>
               <input type="email" value="{{ isset($user)? $user->email : old('email') }}" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="email">
               @error('email')
                 <span class="error invalid-feedback">{{ $message }} </span>
@@ -54,7 +54,7 @@
             </div>
               
             <div class="form-group">
-              <label>level</label>
+              <label>Level</label>
               <select class="form-control select2 @error('level_user') is-invalid @enderror" style="width: 100%;" name="level_user" value="{{ isset($user)? $user->level_user : old('level_user') }}">
                 <option selected="selected" value=1>Guru</option>
                 <option value=2>Siswa</option>

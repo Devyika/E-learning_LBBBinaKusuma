@@ -48,9 +48,9 @@
             <div class="form-group">
               <label>Jurusan</label>
               <select class="form-control select2 @error('jurusan') is-invalid @enderror" style="width: 100%;" name="jurusan" value="{{ isset($mapel)? $mapel->jurusan : old('jurusan') }}">
-                <option selected="selected" value=1>IPA</option>
-                <option value=2>IPS</option>
-                <option value=3>UMUM</option>
+                <option selected value="IPA">IPA</option>
+                <option value="IPS">IPS</option>
+                <option value="UMUM">UMUM</option>
               </select>
               @error('jurusan')
                 <span class="error invalid-feedback">{{ $message }} </span>

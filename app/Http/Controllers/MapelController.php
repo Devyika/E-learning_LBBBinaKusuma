@@ -36,18 +36,19 @@ class MapelController extends Controller
      */
     public function store(Request $request)
     {
+        $userId = Auth::user()->id;
+
         $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:mapel'],
-            'deskripsi' => ['required', 'string', 'max:255'],
-            'jurusan' => ['required', 'int']
-            //'id_user' => ['required', 'int']
+            'nama' => ['required', 'string', 'max:255', 'unique:mapel'],
+            'jurusan' => ['required', 'string', 'max:255'],
+            'deskripsi' => ['required', 'string']
         ]);
 
         Mapel::create([
-            'name' => $request->input('nasdad'),
+            'nama' => $request->input('nama'),
             'jurusan' => $request->input('jurusan'),
-            'deskripsi' => $request->input('deskripsi')
-            //'id_user' => Auth::user()->id
+            'deskripsi' => $request->input('deskripsi'),
+            'user_id' => $userId
         ]);
 
         return redirect('mata-pelajaran')->with('success', 'User Berhasil Ditambahkan');
@@ -56,10 +57,10 @@ class MapelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Mapel $mapel)
     {
         //
     }
@@ -67,10 +68,10 @@ class MapelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Mapel $mapel)
     {
         //
     }
@@ -79,10 +80,10 @@ class MapelController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Mapel $mapel)
     {
         //
     }
@@ -90,10 +91,10 @@ class MapelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Mapel  $mapel
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Mapel $mapel)
     {
         //
     }
