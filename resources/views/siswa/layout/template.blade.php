@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Proyek_1 | Admin | {{ Auth::user()->name }}</title>
+  <title>Proyek_1 | Siswa | {{ Auth::user()->name }}</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -35,11 +35,11 @@
   </div>
 
   <!-- Navbar -->
-  @include('admin.layout.navbar')
+  @include('siswa.layout.navbar')
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  @include('admin.layout.sidebar')
+  @include('siswa.layout.sidebar')
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -50,7 +50,7 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  @include('admin.layout.footer')
+  @include('siswa.layout.footer')
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-light">

@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse as HttpFoundationJsonResponse;
 
 class LoginController extends Controller
@@ -29,7 +30,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    // protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -72,7 +73,7 @@ class LoginController extends Controller
         }
 
         return $request->wantsJson()
-            ? new HttpFoundationJsonResponse([], 204)
+            ? new JsonResponse([], 204)
             : redirect('/login');
     }
 
@@ -82,6 +83,17 @@ class LoginController extends Controller
             return $this->redirectTo();
         }
 
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/dashboard';
+        $level_user = Auth::user()->level_user;
+
+        switch ($level_user) {
+            case 0:
+                return '/admin/dashboard';
+            case 1:
+                return '/guru/dashboard';
+            case 2:
+                return '/siswa/dashboard';
+            default:
+                return '/';
+        }
     }
 }

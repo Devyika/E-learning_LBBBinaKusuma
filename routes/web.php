@@ -1,10 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
-
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Admin\{
+    DashboardAdminController,
+};
+
+use App\Http\Controllers\Guru\{
+    DashboardGuruController,
+};
+
+use App\Http\Controllers\Siswa\{
+    DashboardSiswaController,
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -17,22 +27,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/login', [LoginController::class, 'index']);
-// Route::get('/dashboard', [DashboardController::class, 'index']);
-
-// Auth::routes();
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Auth::routes();
 Route::get('/logout', [LoginController::class, 'logout']);
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardAdminController::class, 'index']);
+});
 
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::resource('/master-user', MasterUserController::class);
-    Route::resource('/mata-pelajaran', MapelController::class);
-    Route::resource('/admin', AdminController::class);
-    Route::resource('/guru', GuruController::class);
-    Route::resource('/siswa', SiswaController::class);
+Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
+    Route::get('/dashboard', [DashboardGuruController::class, 'index']);
+});
+
+Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {
+    Route::get('/dashboard', [DashboardSiswaController::class, 'index']);
 });

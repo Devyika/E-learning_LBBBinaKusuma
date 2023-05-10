@@ -66,7 +66,7 @@
               </li>
               <li class="nav-header">JURUSAN</li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="" class="nav-link">
                   <i class="fas fa-book-open pr-2"></i>
                   <p>
                     IPA

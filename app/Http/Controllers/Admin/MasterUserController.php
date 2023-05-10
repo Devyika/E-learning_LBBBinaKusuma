@@ -19,7 +19,7 @@ class MasterUserController extends Controller
         $countAdmin = User::where('level_user', 0)->count();
         $countGuru = User::where('level_user', 1)->count();
         $countSiswa = User::where('level_user', 2)->count();
-        return view('admin.masterUser')
+        return view('guru.masterUser')
                 ->with('countAdmin', $countAdmin)
                 ->with('countGuru', $countGuru)
                 ->with('countSiswa', $countSiswa);
