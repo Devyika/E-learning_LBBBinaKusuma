@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mapel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,9 +14,16 @@ class MapelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
-        return view('admin.mapel');
+        $countAdmin = User::where('level_user', 0)->count();
+        $countGuru = User::where('level_user', 1)->count();
+        $countSiswa = User::where('level_user', 2)->count();
+        return view('admin.mapel')
+                ->with('countAdmin', $countAdmin)
+                ->with('countGuru', $countGuru)
+                ->with('countSiswa', $countSiswa);
     }
 
     /**
