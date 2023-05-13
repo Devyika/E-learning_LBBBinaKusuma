@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\{
     DashboardAdminController,
+    MasterUserController,
 };
 
 use App\Http\Controllers\Guru\{
@@ -32,6 +33,7 @@ Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardAdminController::class, 'index']);
+    Route::resource('master-user', MasterUserController::class);
 });
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {

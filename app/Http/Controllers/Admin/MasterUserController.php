@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\MasterUser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class MasterUserController extends Controller
         $countAdmin = User::where('level_user', 0)->count();
         $countGuru = User::where('level_user', 1)->count();
         $countSiswa = User::where('level_user', 2)->count();
-        return view('guru.masterUser')
+        return view('admin.masterUser')
                 ->with('countAdmin', $countAdmin)
                 ->with('countGuru', $countGuru)
                 ->with('countSiswa', $countSiswa);
@@ -61,7 +62,7 @@ class MasterUserController extends Controller
             'password' => $hashedPassword,
         ]);
 
-        return redirect('master-user')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/master-user')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**
