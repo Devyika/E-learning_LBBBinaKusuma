@@ -31,7 +31,6 @@ class LoginController extends Controller
      * @var string
      */
     // protected $redirectTo = RouteServiceProvider::HOME;
-    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -76,5 +75,25 @@ class LoginController extends Controller
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect('/login');
+    }
+
+    public function redirectPath()
+    {
+        if (method_exists($this, 'redirectTo')) {
+            return $this->redirectTo();
+        }
+
+        $level_user = Auth::user()->level_user;
+
+        switch ($level_user) {
+            case 0:
+                return '/admin/dashboard';
+            case 1:
+                return '/guru/dashboard';
+            case 2:
+                return '/siswa/dashboard';
+            default:
+                return '/';
+        }
     }
 }

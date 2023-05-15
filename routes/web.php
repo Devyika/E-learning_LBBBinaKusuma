@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\{
     DashboardAdminController,
-    MapelController,
     MasterUserController,
 };
 
@@ -32,16 +31,15 @@ use App\Http\Controllers\Siswa\{
 Auth::routes();
 Route::get('/logout', [LoginController::class, 'logout']);
 
-Route::middleware(['auth', 'IsAdmin'])->group(function () {
+Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardAdminController::class, 'index']);
     Route::resource('master-user', MasterUserController::class);
-    Route::resource('mata-pelajaran', MapelController::class);
 });
 
-Route::middleware(['auth', 'IsGuru'])->group(function () {
+Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
 });
 
-Route::middleware(['auth', 'IsSiswa'])->group(function () {
+Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'index']);
 });
