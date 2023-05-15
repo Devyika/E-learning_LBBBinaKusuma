@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace app\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Mapel;
 use App\Models\User;
 use Illuminate\Http\Request;

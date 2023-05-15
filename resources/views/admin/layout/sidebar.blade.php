@@ -21,20 +21,7 @@
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{ url('/admin/master-user') }}" class="nav-link">
-                      <i class="fas fa-users pr-2"></i>
-                      <p>User</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/mata-pelajaran') }}" class="nav-link">
-                      <i class="fas fa-book-open pr-2"></i>
-                      <p>Mata Pelajaran</p>
-                    </a>
-                  </li>
-                </ul>
+                
               </li>
               <li class="nav-header">USER</li>
               <li class="nav-item">
