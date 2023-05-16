@@ -38,7 +38,7 @@
               </li>
               <li class="nav-header">USER</li>
               <li class="nav-item">
-                <a href="{{ url('/admin') }}" class="nav-link">
+                <a href="{{ url('admin/admin') }}" class="nav-link">
                   <i class="fas fa-user-shield pr-2"></i>
                   <p>
                     Admin
