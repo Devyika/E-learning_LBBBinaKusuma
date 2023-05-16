@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in (v2)</title>
+  <title>LMS | SMA Negeri 4 Probolinggo</title>
+  <link rel="icon" href="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" sizes="32x32" />
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -13,13 +14,20 @@
   <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
+  <style>
+    .btn-warning {
+      color: #ffffff!important;
+    }
+  </style>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
   <!-- /.login-logo -->
-  <div class="card card-outline card-primary p-3">
+  <div class="card card-outline card-warning p-3">
     <div class="card-header text-center">
-      <img src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="logo pnm">
+      <a href="{{ url('/') }}">
+        <img src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="Logo" style="cursor: pointer;">
+      </a>      
     </div>
     <div class="card-body">
       <form action="{{ url('/login')}}" method="post">
@@ -40,9 +48,9 @@
           </div>
           <input name="password" type="password" class="form-control" placeholder="Password">
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button type="submit" class="btn btn-warning btn-block">Login</button>
         <div class="text-center mt-2" style="opacity: 0.75;">
-          <small>Masukkan Username dan Password<br>(Menggunakan NIM & password)</small>
+          <small>Masukkan Username dan Password<br>(Menggunakan username & password)</small>
         </div>
           <!-- /.col -->
         </div>

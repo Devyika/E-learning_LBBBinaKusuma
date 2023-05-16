@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardAdminController extends Controller
 {
@@ -14,7 +16,12 @@ class DashboardAdminController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        $user = User::join('admin', 'users.username', '=', 'admin.username')
+                ->select('users.username', 'admin.*')
+                ->where('users.id', Auth::user()->id)
+                ->first();
+
+        return view('admin.dashboard', ['user' => $user]);
     }
 
     /**

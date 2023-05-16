@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Proyek_1 | Admin | {{ Auth::user()->name }}</title>
+  <title>LMS | SMA Negeri 4 Probolinggo | Admin | {{ Auth::user()->name }}</title>
+  <link rel="icon" href="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" sizes="32x32" />
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -18,15 +19,37 @@
   <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
   <style>
     .image-preview {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+        width: 250px;
+        height: 350px;
+        overflow: hidden;
     }
 
     .image-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile {
+        width: 35px;
+        height: 35px;
+        overflow: hidden;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .profile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+    }
+
+    .card-warning {
+      color: #ffffff!important;
+    }
+
+    .bg-warning {
+      color: #ffffff!important;
     }
 </style>
 </head>
@@ -35,7 +58,7 @@
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="AdminLTELogo" width="100" height="100">
+    <img class="animation__shake" src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="AdminLTELogo" width="75" height="75">
   </div>
 
   <!-- Navbar -->
@@ -63,7 +86,6 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
 <!-- jQuery -->
 <script src="{{ asset('/assets/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
@@ -87,21 +109,21 @@
 <script src="{{ asset('/assets/dist/js/demo.js') }}"></script>
 <!-- Page specific script -->
 <script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
+        $(function () {
+          $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+          }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+          $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+          });
+        });
 
         function previewPhotoCreate() {
           const photo = document.getElementById('photo').files[0];
@@ -116,6 +138,7 @@
             reader.readAsDataURL(photo);
           }
         }
+
         function previewPhotoEdit(id) {
         const photo = document.getElementById('photo-' + id).files[0];
         const photoPreview = document.getElementById('photo-preview-' + id);
@@ -128,6 +151,10 @@
         if (photo) {
             reader.readAsDataURL(photo);
         }
+        }
+
+        function triggerFileInput() {
+          document.getElementById('photo').click();
         }
 </script>
 </body>

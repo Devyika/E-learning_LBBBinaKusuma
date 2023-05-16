@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -19,11 +20,17 @@ class AdminController extends Controller
      */
     public function index()
     {
+        $user = User::join('admin', 'users.username', '=', 'admin.username')
+                ->select('users.username', 'admin.*')
+                ->where('users.id', Auth::user()->id)
+                ->first();
+
         $admin = User::join('admin', 'users.username', '=', 'admin.username')
             ->where('users.level_user', 0)
             ->get();
 
-        return view('admin.admin')->with('admin', $admin);
+        return view('admin.admin', ['user' => $user])
+                ->with('admin', $admin);
     }
 
     /**
@@ -45,29 +52,40 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
             'name' => ['required', 'string', 'max:255'],
-            'email' => 'required|unique:admin,email|max:69|email',
-            'password' => ['required', 'string', 'min:4'],
-            'level_user' => ['required', 'integer'],
-            'foto' => ['required'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:admin'],
+            'foto' => ['required', 'image', 'max:2048'],
         ]);
 
-        if ($request->file('foto')) {
-            $image_name = $request->file('foto')->store('file/img/admin', 'public');
+        $prefix = '00'; // Prefix with 00
+        $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Generate a 4-digit unique ID
+
+        $username = $prefix . $uniqueId;
+
+        // Check if the generated username already exists in the Admin model
+        while (Admin::where('username', $username)->exists()) {
+            $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Regenerate the unique ID
+            $username = $prefix . $uniqueId;
         }
 
-        $hashedPassword = Hash::make($request->input('password'));
+        if ($request->file('foto')) {
+            $file = $request->file('foto');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'admin-foto-' . $username . '.' . $extension;
+            $image_name = $file->storeAs('file/img/admin', $filename, 'public');
+        }        
+
+        $hashedPassword = Hash::make($username);
 
         User::create([
-            'username' => $request->input('username'),
+            'username' => $username,
             'name' => $request->input('name'),
             'password' => $hashedPassword,
-            'level_user' => $request->input('level_user'),
+            'level_user' => 0,
         ]);
 
         Admin::create([
-            'username' => $request->input('username'),
+            'username' => $username,
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'foto' => $image_name,
@@ -75,7 +93,6 @@ class AdminController extends Controller
 
         return redirect('admin/admin')->with('success', 'User Berhasil Ditambahkan');
     }
-    
 
     /**
      * Display the specified resource.
@@ -96,7 +113,9 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $admin = Admin::find($id);
+        return view('admin.admin')
+                ->with('admin', $admin);
     }
 
     /**
@@ -107,9 +126,47 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+{
+    // Validasi inputan
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($id)],
+        'foto' => ['nullable', 'image', 'max:2048'],
+    ]);
+
+    // Cari data admin berdasarkan ID
+    $admin = Admin::find($id);
+
+    // Update data admin
+    $admin->name = $validated['name'];
+    $admin->email = $validated['email'];
+
+    // Proses upload dan update foto ke dalam server jika ada
+    if ($request->hasFile('foto')) {
+        $foto = $request->file('foto');
+        $fotoName = 'admin-foto-' . $admin->username . '.' . $foto->getClientOriginalExtension();
+
+        // Hapus foto lama
+        if ($admin->foto && Storage::exists($admin->foto)) {
+            Storage::delete($admin->foto);
+        }
+
+        // Simpan foto baru
+        $foto->storeAs('file/img/admin', $fotoName, 'public');
+        $admin->foto = 'file/img/admin/' . $fotoName;
     }
+
+    $admin->save();
+
+    // Update password jika diisi
+    if ($request->filled('password')) {
+        $user = User::where('username', $admin->username)->first();
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
+    }
+
+    return redirect()->back()->with('success', 'Data admin berhasil diperbarui.');
+}
 
     /**
      * Remove the specified resource from storage.

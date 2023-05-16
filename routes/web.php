@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +32,9 @@ use App\Http\Controllers\Siswa\{
 */
 
 Auth::routes();
+
+Route::get('/', [HomeController::class, 'index']);
+
 Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
