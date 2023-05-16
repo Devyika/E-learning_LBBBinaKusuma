@@ -23,20 +23,20 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ url('/master-user') }}" class="nav-link">
+                    <a href="{{ url('/guru/profile') }}" class="nav-link">
                       <i class="fas fa-users pr-2"></i>
-                      <p>User</p>
+                      <p>Profil</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{ url('/mata-pelajaran') }}" class="nav-link">
+                    <a href="{{ url('/guru/#') }}" class="nav-link">
                       <i class="fas fa-book-open pr-2"></i>
-                      <p>Mata Pelajaran</p>
+                      <p>---</p>
                     </a>
                   </li>
                 </ul>
               </li>
-              <li class="nav-header">USER</li>
+              <li class="nav-header">Kelas</li>
               <li class="nav-item">
                 <a href="{{ url('/admin') }}" class="nav-link">
                   <i class="fas fa-user-shield pr-2"></i>
