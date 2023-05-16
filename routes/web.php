@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\{
 
 use App\Http\Controllers\Guru\{
     DashboardGuruController,
+    PertemuanController,
 };
 
 use App\Http\Controllers\Siswa\{
@@ -38,6 +39,7 @@ Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
+    Route::resource('pertemuan', PertemuanController::class);
 });
 
 Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {

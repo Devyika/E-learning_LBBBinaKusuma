@@ -1,9 +1,11 @@
 <?php
+namespace App\Http\Controllers\Guru;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Models\Pertemuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PertemuanController extends Controller
 {
@@ -14,7 +16,30 @@ class PertemuanController extends Controller
      */
     public function index()
     {
-        //
+        $userId = Auth::user()->id;
+    
+        $kelas = DB::table('kelas_mapel_guru')
+            ->join('kelas', 'kelas_mapel_guru.id_kelas', '=', 'kelas.id')
+            ->select('kelas.nama', 'id_kelas')
+            ->where('id_guru', $userId)
+            ->groupBy('id_kelas')
+            ->get();
+
+        foreach($kelas as $k){
+            $kls = $k->id_kelas;
+        }
+        
+        $mapel = DB::table('kelas_mapel_guru')
+            ->join('mapel', 'kelas_mapel_guru.id_mapel', '=', 'mapel.id')
+            ->select('mapel.nama','kelas_mapel_guru.id')
+            ->where('id_guru', $userId)
+            ->where('id_kelas', $kls)
+            ->get();
+
+        return view('guru.pertemuan')
+            ->with('kelas', $kelas)
+            ->with('mapel', $mapel)
+        ;
     }
 
     /**
