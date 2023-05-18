@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Dashboard</h1>
+      <h1>DASHBOARD</h1>
     </div>
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
@@ -23,37 +23,128 @@
 <div class="container-fluid">
   <!-- Small boxes (Stat box) -->
   <div class="row">
-    <div class="col-lg-6 col-4">
-      <!-- small box -->
-      <div class="small-box bg-info">
-        <div class="inner">
-          <h3>6</h3>
-
-          <p>Foods</p>
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Admin</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $countAdmin }} Admin</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-shield fa-2x"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="icon">
-          <i class="fas fa-hamburger"></i>
-        </div>
-        <a href="{{ url('/food') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
     </div>
-    <!-- ./col -->
-    <div class="col-lg-6 col-4">
-      <!-- small box -->
-      <div class="small-box bg-info">
-        <div class="inner">
-          <h3>9</h3>
-
-          <p>Drinks</p>
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Guru</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $countGuru }} Guru</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="icon">
-          <i class="fas fa-cocktail"></i>
-        </div>
-        <a href="{{ url('/drink') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
     </div>
-    <!-- ./col -->
-  </div>
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Siswa
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold">{{ $countSiswa }} Siswa</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-6 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Jurusan</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $countJurusan }} Jurusan</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-scroll fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Kelas</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $countGuru }} Kelas</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-chalkboard fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-6 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Mata Pelajaran</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $countAdmin }} Mata Pelajaran</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-swatchbook fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Pertemuan</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $countGuru }} Pertemuan</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-comment-alt fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
   <!-- /.row -->
   <!-- Main row -->
   

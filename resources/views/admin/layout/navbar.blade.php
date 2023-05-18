@@ -1,6 +1,6 @@
 <nav class="main-header navbar navbar-expand navbar-light bg-warning">
     <!-- Left navbar links -->
-    <ul class="navbar-nav">
+    {{-- <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link bg-warning" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
@@ -13,7 +13,7 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a href="{{ url('/mata-pelajaran') }}" class="nav-link bg-warning">Mata Pelajaran</a>
         </li>
-    </ul>
+    </ul> --}}
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -34,7 +34,7 @@
                         <i class="fas fa-info-circle mr-2"></i> Detail
                     </a>
                     @if (Auth::user()->username == "admin")
-                    <a class="dropdown-item btn btn-warning" data-toggle="modal" data-target="#editModal-{{ $user->id }}" role="button" style="pointer-events: none; cursor: default; opacity: 0.5;">
+                    <a class="dropdown-item btn btn-warning" data-toggle="modal" data-target="" role="button" style="pointer-events: none; cursor: default; opacity: 0.5;">
                         <i class="fas fa-edit mr-2"></i> Edit
                     </a>                    
                     @else
@@ -129,6 +129,7 @@
     </div>
 </div>
 
+@if (Auth::user()->username != "admin")
 <div class="modal fade" id="editModal-{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="editModal-{{ $user->id }}" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -197,3 +198,4 @@
         </div>
     </div>
 </div>
+@endif

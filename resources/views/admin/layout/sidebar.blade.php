@@ -64,8 +64,44 @@
                   </p>
                 </a>
               </li>
-              <li class="nav-header">JURUSAN</li>
+              <li class="nav-header">SEKOLAH</li>
               <li class="nav-item">
+                <a href="{{ url('admin/sekolah-jurusan') }}" class="nav-link">
+                  <i class="fas fa-scroll pr-2"></i>
+                  <p>
+                    Jurusan
+                    <span class="badge badge-info right">{{ $countJurusan }}</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin/sekolah-kelas') }}" class="nav-link">
+                  <i class="fas fa-chalkboard pr-2"></i>
+                  <p>
+                    Kelas
+                    <span class="badge badge-info right">{{ $countAdmin }}</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin/sekolah-mata_pelajaran') }}" class="nav-link">
+                  <i class="fas fa-swatchbook pr-2"></i>
+                  <p>
+                    Mata Pelajaran
+                    <span class="badge badge-info right">{{ $countAdmin }}</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin/sekolah-pertemuan') }}" class="nav-link">
+                  <i class="fas fa-comment-alt pr-2"></i>
+                  <p>
+                    Pertemuan
+                    <span class="badge badge-info right">{{ $countAdmin }}</span>
+                  </p>
+                </a>
+              </li>
+              {{-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-book-open pr-2"></i>
                   <p>
@@ -77,61 +113,13 @@
                   <li class="nav-item">
                     <a href="{{ url('/ipa/') }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
-                      <p>PKn</p>
+                      <p>Kelas</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="{{ url('/ipa/') }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
-                      <p>Agama</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Matematika</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Bhs. Indonesia</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Kimia</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Fisika</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Biologi</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Bhs. Inggris</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Bhs. Jawa</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Penjaskes</p>
+                      <p>Mata Pelajaran</p>
                     </a>
                   </li>
                 </ul>
@@ -146,67 +134,19 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
+                    <a href="{{ url('/ipa/') }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
-                      <p>PKn</p>
+                      <p>Kelas</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
+                    <a href="{{ url('/ipa/') }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
-                      <p>Agama</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Matematika</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Bhs. indonesia</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Ekonomi</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Sosiologi</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Sejarah</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Bhs. Inggris</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Bhs. Jawa</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ips/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Penjaskes</p>
+                      <p>Mata Pelajaran</p>
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> --}}
             </ul>
           </li>
         </ul>
