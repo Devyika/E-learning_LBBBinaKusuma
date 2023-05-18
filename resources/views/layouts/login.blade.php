@@ -38,7 +38,7 @@
               <span class="fas fa-envelope"></span>
             </div>
           </div>
-          <input name="username" type="text" class="form-control" placeholder="Username">
+          <input name="username" type="text" class="form-control" placeholder="Username" required>
         </div>
         <div class="input-group mb-3">
           <div class="input-group-append">
@@ -46,7 +46,7 @@
               <span class="fas fa-lock"></span>
             </div>
           </div>
-          <input name="password" type="password" class="form-control" placeholder="Password">
+          <input name="password" type="password" class="form-control" placeholder="Password" required>
         </div>
         <button type="submit" class="btn btn-warning btn-block">Login</button>
         <div class="text-center mt-2" style="opacity: 0.75;">

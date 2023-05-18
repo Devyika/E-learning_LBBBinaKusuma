@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\{
     DashboardAdminController,
-    AdminController,
+    UserAdminController,
+    UserGuruController,
+    UserSiswaController,
 };
 
 use App\Http\Controllers\Guru\{
@@ -39,7 +41,10 @@ Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardAdminController::class, 'index']);
-    Route::resource('admin', AdminController::class);
+    Route::resource('user', UserController::class);
+    Route::resource('user-admin', UserAdminController::class);
+    Route::resource('user-guru', UserGuruController::class);
+    Route::resource('user-siswa', UserSiswaController::class);
 });
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {

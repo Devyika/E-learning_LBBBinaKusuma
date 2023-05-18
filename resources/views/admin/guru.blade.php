@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Master User</h1>
+      <h1>User</h1>
     </div>
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
@@ -18,7 +18,7 @@
 
     <div class="card card-default">
       <div class="card-header">
-        <h3 class="card-title">Data Guru</h3>
+        <h3 class="card-title">Guru</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -31,67 +31,57 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">    
-                <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 300px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                    <div class="input-group-append">
-                      <button type="submit" class="btn btn-default">
-                        <i class="fas fa-search"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div class="card-header">
+                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#addGuruModal">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
               </div>
               <!-- /.card-header -->
-              <div class="card-body table-responsive p-0" style="height: 300px;">
-                <table class="table table-head-fixed text-nowrap">
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
                   <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Username</th>
-                      <th>Nama</th>
-                      <th>Email</th>
-                      <th>Level User</th>
-                      <th>Action</th>
-                    </tr>
+                  <tr>
+                    <th style="width: 5%;">No.</th>
+                    <th style="width: 30%;">Username</th>
+                    <th style="width: 50%;">Name</th>
+                    <th style="width: 15%;">Action</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    @if($guru->count() > 0)
-                      @foreach($guru as $i => $g)
-                        <tr>
-                          <td>{{++$i}}</td>
-                          <td>{{$g->username}}</td>
-                          <td>{{$g->name}}</td>
-                          <td>{{$g->email}}</td>
-                          <td>
-                            @if($g->level_user == 0)
-                                <p>Admin</p>
-                            @elseif($g->level_user == 1)
-                                <p>Guru</p>
-                            @elseif($g->level_user == 2)
-                                <p>Siswa</p>
-                            @endif
-                          </td>
-                          <td>
-                            <a href="{{ url('/guru/'. $g->id.'/edit')}}" class="btn btn-sm btn-warning">edit</a>
-                            
-                            <form method="POST" action="{{ url('/guru/'.$g->id)}}">
-                              @csrf
-                              @method('DELETE')
-                              <button type="submit" class="btn btn-sm btn-danger">hapus</button>
-                            </form>
-                          </td>
-                        </tr>
+                    @if ($guru->count() > 0)
+                      @foreach ($guru as $i => $a)
+                      <tr>
+                        <td class="text-center">{{++$i}}</td>
+                        <td>{{$a->username}}</td>
+                        <td>{{$a->name}}</td>
+                        <td class="d-flex justify-content-around">
+                          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal{{$a->id}}">
+                            <i class="fa-solid fa-circle-info"></i>
+                          </button>
+                          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editGuruModal-{{ $a->id }}">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteGuruModal-{{ $a->id }}">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
                       @endforeach
                     @else
-                        <tr><td colspan="6" class="text-center">Data Tidak Ada</td></tr>
+                      <tr><td colspan="6" class="text-center">No matching records found</td></tr>
                     @endif
                   </tbody>
-
+                  <tfoot>
+                  <tr>
+                    <th>No.</th>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                  </tr>
+                  </tfoot>
                 </table>
               </div>
+              <!-- /.card-body -->
             </div>
           </div>
         </div>
@@ -104,4 +94,194 @@
   <!-- /.card-body -->
 </div>
 <!-- /.card -->
+<!-- Modal -->
+<div class="modal fade" id="addGuruModal" tabindex="-1" role="dialog" aria-labelledby="addGuruModal-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addGuruModal-label"><strong>Tambah Guru</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addGuruForm" method="POST" action="{{ url('admin/user-guru') }}" enctype="multipart/form-data">
+          @csrf
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="image-preview img-fluid rounded img-thumbnail">
+                  <img id="photo-preview" src="https://fakeimg.pl/354x472?text=Photo&font=lobster" alt="Foto Profile">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama">
+                @error('name')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Masukkan Email">
+                @error('email')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="form-group">
+                <label for="foto">Foto Profile</label>
+                <input type="file" class="form-control @error('foto') is-invalid @enderror" id="photo" name="foto" accept="image/*" onchange="previewPhotoCreate()" style="padding: 0; height: 100%;">
+                @error('foto')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+        <button type="submit" class="btn btn-primary btn-sm" form="addGuruForm"><i class="fa-solid fa-save"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+                       
+@foreach ($guru as $a)
+<div class="modal fade" id="detailModal{{$a->id}}" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel{{$a->id}}" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel{{$a->id}}"><strong>Detail Guru </strong>{{$a->name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="image-preview">
+              <img src="{{asset('storage/'.$a->foto)}}" alt="{{ $a->name }}" class="img-fluid rounded img-thumbnail">
+            </div>
+          </div>
+          <div class="col-md-8">
+            <label><strong>Username</strong></label>
+            <p>{{$a->username}}</p>
+            <label><strong>Name</strong></label>
+            <p>{{$a->name}}</p>
+            <label><strong>Email</strong></label>
+            <p>{{$a->email}}</p> 
+            <label><strong>User</strong></label>
+            @php
+                $userLevels = [
+                    0 => 'Admin',
+                    1 => 'Guru',
+                    2 => 'Siswa',
+                ];
+            @endphp
+
+            <p>{{ $userLevels[$a->level_user] ?? 'Unknown' }}</p>
+          </div>                                
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+@endforeach
+          
+@foreach ($guru as $a)
+<div class="modal fade" id="editGuruModal-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="editGuruModal-label-{{ $a->id }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editGuruModal-label-{{ $a->id }}"><strong>Edit Guru </strong>{{ $a->name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editGuruForm-{{ $a->id }}" method="POST" action="{{ url('/admin/user-guru/'. $a->id) }}" enctype="multipart/form-data">
+          @csrf
+          @method('PUT')
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <div class="image-preview img-fluid rounded img-thumbnail">
+                  <img id="photo-preview-{{ $a->id }}" src="{{ asset('storage/' . $a->foto) }}" alt="Foto Profile">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="name">Nama</label>
+                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $a->name) }}" placeholder="Masukkan Nama">
+                @error('name')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $a->email) }}" placeholder="Masukkan Email">
+                @error('email')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Masukkan Password">
+                @error('password')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="form-group">
+                <label for="foto">Foto Profile</label>
+                <input type="file" class="form-control @error('foto') is-invalid @enderror" id="photo-{{ $a->id }}" name="foto" accept="image/*" onchange="previewPhotoEdit({{ $a->id }})" style="padding: 0; height: 100%;">
+                @error('foto')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+        <button type="submit" class="btn btn-primary btn-sm" form="editGuruForm-{{ $a->id }}"><i class="fa-solid fa-save"></i></button>
+      </div>
+    </div>                              
+  </div>
+</div>   
+@endforeach
+
+@foreach ($guru as $a)
+<div class="modal fade" id="deleteGuruModal-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteGuruModal-label-{{ $a->id }}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="deleteGuruModal-label-{{ $a->id }}"><strong>Hapus Guru </strong>{{ $a->name }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <p>Anda yakin ingin menghapus guru ini?</p>
+          </div>
+          <div class="modal-footer">
+              <form method="POST" action="{{ url('/admin/user-guru/'.$a->id)}}">
+                  @csrf
+                  @method('DELETE')
+                  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+                  <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>     
+@endforeach                          
+
 @endsection

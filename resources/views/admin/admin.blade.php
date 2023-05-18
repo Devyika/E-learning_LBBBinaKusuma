@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Master User</h1>
+      <h1>User</h1>
     </div>
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
@@ -18,7 +18,7 @@
 
     <div class="card card-default">
       <div class="card-header">
-        <h3 class="card-title">Data Admin</h3>
+        <h3 class="card-title">Admin</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -105,7 +105,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="addAdminForm" method="POST" action="{{ url('admin/admin') }}" enctype="multipart/form-data">
+        <form id="addAdminForm" method="POST" action="{{ url('admin/user-admin') }}" enctype="multipart/form-data">
           @csrf
           <div class="row">
             <div class="col-md-4">
@@ -151,7 +151,7 @@
                        
 @foreach ($admin as $a)
 <div class="modal fade" id="detailModal{{$a->id}}" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel{{$a->id}}" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="detailModalLabel{{$a->id}}"><strong>Detail Admin </strong>{{$a->name}}</h5>
@@ -162,7 +162,9 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-4">
-            <img src="{{asset('storage/'.$a->foto)}}" alt="{{ $a->name }}" class="img-fluid rounded img-thumbnail">
+            <div class="image-preview">
+              <img src="{{asset('storage/'.$a->foto)}}" alt="{{ $a->name }}" class="img-fluid rounded img-thumbnail">
+            </div>
           </div>
           <div class="col-md-8">
             <label><strong>Username</strong></label>
@@ -203,7 +205,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="editAdminForm-{{ $a->id }}" method="POST" action="{{ url('/admin/admin/'. $a->id) }}" enctype="multipart/form-data">
+        <form id="editAdminForm-{{ $a->id }}" method="POST" action="{{ url('/admin/user-admin/'. $a->id) }}" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <div class="row">
@@ -270,7 +272,7 @@
               <p>Anda yakin ingin menghapus admin ini?</p>
           </div>
           <div class="modal-footer">
-              <form method="POST" action="{{ url('/admin/admin/'.$a->id)}}">
+              <form method="POST" action="{{ url('/admin/user-admin/'.$a->id)}}">
                   @csrf
                   @method('DELETE')
                   <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>

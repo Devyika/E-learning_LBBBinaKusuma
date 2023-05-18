@@ -20,7 +20,7 @@
   <style>
     .image-preview {
         width: 250px;
-        height: 350px;
+        height: 250px;
         overflow: hidden;
     }
 
@@ -28,13 +28,13 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: top;
     }
 
     .profile {
         width: 35px;
         height: 35px;
         overflow: hidden;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
     }
 
     .profile img {
@@ -50,6 +50,14 @@
 
     .bg-warning {
       color: #ffffff!important;
+    }
+
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #ffc107;
+        color: #fff;
     }
 </style>
 </head>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
+use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
-class AdminController extends Controller
+class UserSiswaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,12 +25,12 @@ class AdminController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
 
-        $admin = User::join('admin', 'users.username', '=', 'admin.username')
-            ->where('users.level_user', 0)
+        $siswa = User::join('siswa', 'users.username', '=', 'siswa.username')
+            ->where('users.level_user', 2)
             ->get();
 
-        return view('admin.admin', ['user' => $user])
-                ->with('admin', $admin);
+        return view('admin.siswa', ['user' => $user])
+                ->with('siswa', $siswa);
     }
 
     /**
@@ -53,17 +53,17 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:admin'],
-            'foto' => ['required', 'image', 'max:2048'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:siswa'],
+            'foto' => ['required', 'image', 'max:2248'],
         ]);
 
-        $prefix = '00'; // Prefix with 00
+        $prefix = '22'; // Prefix with 22
         $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Generate a 4-digit unique ID
 
         $username = $prefix . $uniqueId;
 
-        // Check if the generated username already exists in the Admin model
-        while (Admin::where('username', $username)->exists()) {
+        // Check if the generated username already exists in the siswa model
+        while (Siswa::where('username', $username)->exists()) {
             $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Regenerate the unique ID
             $username = $prefix . $uniqueId;
         }
@@ -71,27 +71,26 @@ class AdminController extends Controller
         if ($request->file('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'admin-foto-' . $username . '.' . $extension;
-            $image_name = $file->storeAs('file/img/admin', $filename, 'public');
+            $filename = 'siswa-foto-' . $username . '.' . $extension;
+            $image_name = $file->storeAs('file/img/siswa', $filename, 'public');
         }        
 
         $hashedPassword = Hash::make($username);
 
         User::create([
             'username' => $username,
-            'name' => $request->input('name'),
             'password' => $hashedPassword,
-            'level_user' => 0,
+            'level_user' => 2,
         ]);
 
-        Admin::create([
+        Siswa::create([
             'username' => $username,
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'foto' => $image_name,
         ]);
 
-        return redirect('admin/admin')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/user-siswa')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**
@@ -113,9 +112,9 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        $admin = Admin::find($id);
-        return view('admin.admin')
-                ->with('admin', $admin);
+        $siswa = Siswa::find($id);
+        return view('admin.siswa')
+                ->with('siswa', $siswa);
     }
 
     /**
@@ -130,42 +129,39 @@ class AdminController extends Controller
     // Validasi inputan
     $validated = $request->validate([
         'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($id)],
-        'foto' => ['nullable', 'image', 'max:2048'],
+        'email' => ['required', 'string', 'email', 'max:255', Rule::unique('siswa')->ignore($id)],
+        'password' => ['nullable', 'string', 'min:4'],
+        'foto' => ['nullable', 'image', 'max:2248'],
     ]);
 
-    // Cari data admin berdasarkan ID
-    $admin = Admin::find($id);
+    // Cari data siswa berdasarkan ID
+    $siswa = Siswa::find($id);
 
-    // Update data admin
-    $admin->name = $validated['name'];
-    $admin->email = $validated['email'];
+    // Update data siswa
+    $siswa->name = $validated['name'];
+    $siswa->email = $validated['email'];
 
     // Proses upload dan update foto ke dalam server jika ada
     if ($request->hasFile('foto')) {
         $foto = $request->file('foto');
-        $fotoName = 'admin-foto-' . $admin->username . '.' . $foto->getClientOriginalExtension();
-
-        // Hapus foto lama
-        if ($admin->foto && Storage::exists($admin->foto)) {
-            Storage::delete($admin->foto);
-        }
+        $fotoName = 'siswa-foto-' . $siswa->username . '.' . $foto->getClientOriginalExtension();
+        Storage::disk('public')->delete($siswa->foto);
 
         // Simpan foto baru
-        $foto->storeAs('file/img/admin', $fotoName, 'public');
-        $admin->foto = 'file/img/admin/' . $fotoName;
+        $foto->storeAs('file/img/siswa', $fotoName, 'public');
+        $siswa->foto = 'file/img/siswa/' . $fotoName;
     }
 
-    $admin->save();
+    $siswa->save();
 
     // Update password jika diisi
     if ($request->filled('password')) {
-        $user = User::where('username', $admin->username)->first();
-        $user->password = Hash::make($request->input('password'));
+        $user = User::where('username', $siswa->username)->first();
+        $siswa->password = Hash::make($validated['password']);
         $user->save();
     }
 
-    return redirect()->back()->with('success', 'Data admin berhasil diperbarui.');
+    return redirect()->back()->with('success', 'Data siswa berhasil diperbarui.');
 }
 
     /**
@@ -177,20 +173,20 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
-        $admin = Admin::find($id);
-        $user = User::where('username', $admin->username)->first();
+        $siswa = Siswa::find($id);
+        $user = User::where('username', $siswa->username)->first();
 
-        if ($admin->foto) {
-            Storage::disk('public')->delete($admin->foto);
+        if ($siswa->foto) {
+            Storage::disk('public')->delete($siswa->foto);
         }
     
-        $admin->delete();
+        $siswa->delete();
 
         if ($user) {
             $user->delete();
         }
     
-        return redirect()->back()->with('success', 'Data admin, user, dan file foto berhasil dihapus.');
+        return redirect()->back()->with('success', 'Data siswa, user, dan file foto berhasil dihapus.');
     }
     
 }

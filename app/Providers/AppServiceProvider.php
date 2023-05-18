@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Admin;
+use App\Models\Guru;
+use App\Models\Siswa;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        View::share('countAdmin', Admin::count());
+        View::share('countGuru', Guru::count());
+        View::share('countSiswa', Siswa::count());
     }
 }
