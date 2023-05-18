@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Admin;
 use App\Models\Guru;
 use App\Models\Jurusan;
+use App\Models\Kelas;
 use App\Models\Siswa;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -32,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
         View::share('countGuru', Guru::count());
         View::share('countSiswa', Siswa::count());
         View::share('countJurusan', Jurusan::count());
+        View::share('countKelas', Kelas::count());
     }
 }

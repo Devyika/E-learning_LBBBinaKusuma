@@ -1,10 +1,10 @@
 <nav class="main-header navbar navbar-expand navbar-light bg-warning">
     <!-- Left navbar links -->
-    {{-- <ul class="navbar-nav">
+    <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link bg-warning" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
-        <li class="nav-item d-none d-sm-inline-block">
+        {{-- <li class="nav-item d-none d-sm-inline-block">
             <a href="{{ url('/dashboard') }}" class="nav-link bg-warning">Dashboard</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
@@ -12,8 +12,8 @@
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="{{ url('/mata-pelajaran') }}" class="nav-link bg-warning">Mata Pelajaran</a>
-        </li>
-    </ul> --}}
+        </li> --}}
+    </ul>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -29,20 +29,20 @@
                         @endif
                     </div>
                 </div>
-                <div class="dropdown-menu dropdown-menu-right fade">
-                    <a class="dropdown-item btn btn-warning" data-toggle="modal" data-target="#detailModal" role="button">
+                <div class="dropdown-menu dropdown-menu-right fade" style="min-width: 0; border: none; padding: 0;">
+                    <a class="dropdown-item btn btn-warning" data-toggle="modal" data-target="#detailModal">
                         <i class="fas fa-info-circle mr-2"></i> Detail
                     </a>
                     @if (Auth::user()->username == "admin")
-                    <a class="dropdown-item btn btn-warning" data-toggle="modal" data-target="" role="button" style="pointer-events: none; cursor: default; opacity: 0.5;">
+                    <a class="dropdown-item btn btn-warning" data-toggle="modal" data-target="" style="pointer-events: none; cursor: default; opacity: 0.5;">
                         <i class="fas fa-edit mr-2"></i> Edit
                     </a>                    
                     @else
-                    <a class="dropdown-item btn btn-warning" data-toggle="modal" data-target="#editModal-{{ $user->id }}" role="button">
+                    <a class="dropdown-item btn btn-warning" data-toggle="modal" data-target="#editModal-{{ $user->id }}">
                         <i class="fas fa-edit mr-2"></i> Edit
                     </a>
                     @endif
-                    <a class="dropdown-item btn btn-warning" href="{{ url('/logout') }}" role="button">
+                    <a class="dropdown-item btn btn-warning" href="{{ url('/logout') }}">
                         <i class="fas fa-sign-out-alt mr-2"></i> Logout
                     </a>
                 </div>              

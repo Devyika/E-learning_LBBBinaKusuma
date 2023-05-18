@@ -79,7 +79,7 @@
                   <i class="fas fa-chalkboard pr-2"></i>
                   <p>
                     Kelas
-                    <span class="badge badge-info right">{{ $countAdmin }}</span>
+                    <span class="badge badge-info right">{{ $countKelas }}</span>
                   </p>
                 </a>
               </li>

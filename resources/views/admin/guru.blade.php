@@ -111,7 +111,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <div class="image-preview img-fluid rounded img-thumbnail">
-                  <img id="photo-preview" src="https://fakeimg.pl/354x472?text=Photo&font=lobster" alt="Foto Profile">
+                  <img id="photo-preview" src="https://fakeimg.pl/250x250?text=Photo&font=lobster" alt="Foto Profile">
                 </div>
               </div>
             </div>

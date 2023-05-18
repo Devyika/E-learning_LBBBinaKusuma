@@ -100,7 +100,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                             Kelas</div>
-                        <div class="h5 mb-0 font-weight-bold">{{ $countGuru }} Kelas</div>
+                        <div class="h5 mb-0 font-weight-bold">{{ $countKelas }} Kelas</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-chalkboard fa-2x"></i>
