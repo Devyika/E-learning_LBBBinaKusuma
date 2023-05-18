@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jurusan', function (Blueprint $table) {
+        Schema::create('modul', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->nullable();
-            $table->string('deskripsi')->nullable();
+            $table->string('nama');
+            $table->string('deskripsi');
+            $table->string('file_modul');
+            $table->unsignedBigInteger('id_pertemuan')->nullable();
+            $table->foreign('id_pertemuan')->references('id')->on('pertemuan');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jurusan');
+        Schema::dropIfExists('modul');
     }
 };

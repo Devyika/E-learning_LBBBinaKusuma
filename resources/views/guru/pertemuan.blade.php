@@ -23,36 +23,89 @@
 <div class="container-fluid">
   <!-- Small boxes (Stat box) -->
   <div class="row">
-    <div class="col-lg-6 col-4">
-      <!-- small box -->
-      <div class="small-box bg-info">
-        <div class="inner">
-          <h3>6</h3>
+    <div class="col-12">
+      <a href="" class="btn btn-sm btn-primary">Tambah Pertemuan</a><br><br>
+      <div class="card">
+        <div class="card-header">
+          @if ($kelas->count() == 1)
+          @foreach ($kelas as $k)
+          @endforeach
+          @endif
 
-          <p>Foods</p>
+          @if ($mapel2->count() == 1)
+          @foreach ($mapel2 as $m)
+          @endforeach
+          @endif
+          <h3 class="card-title">Kelas : {{$k->nama}}  |  Pelajaran {{$m->nama}}</h3>
         </div>
-        <div class="icon">
-          <i class="fas fa-hamburger"></i>
-        </div>
-        <a href="{{ url('/food') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-6 col-4">
-      <!-- small box -->
-      <div class="small-box bg-info">
-        <div class="inner">
-          <h3>9</h3>
+        <!-- ./card-header -->
+        <div class="card-body p-0">
+          <table class="table table-hover">
+            <tbody>
+              @foreach ($pertemuan as $p)
+              <tr>
+                <td class="border-0">{{$p->nama}}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="true">
+                <td>
+                  <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                  Modul &nbsp; | &nbsp; <a href="" class="btn btn-sm btn-warning">+</a>
+                </td>
+              </tr>
+              <tr class="expandable-body">
+                <td>
+                  <div class="p-0">
+                    <table class="table table-hover">
+                      <tbody>
+                        @foreach ($modul as $m)
+                        @if ($m->id_pertemuan == $p->id)
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                          <td>
+                            &emsp; {{$m->nama}}
+                          </td>
+                        </tr>
+                        @endif
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
 
-          <p>Drinks</p>
+              <tr data-widget="expandable-table" aria-expanded="true">
+                <td>
+                  <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                  Tugas &nbsp; | &nbsp; <a href="" class="btn btn-sm btn-danger">+</a>
+                </td>
+              </tr>
+              <tr class="expandable-body">
+                <td>
+                  <div class="p-0">
+                    <table class="table table-hover">
+                      <tbody>
+                        @foreach ($tugas as $t)
+                        @if ($t->id_pertemuan == $p->id)
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                          <td>
+                            &emsp; {{$t->nama}} &nbsp; | &nbsp; <a href="" class="btn btn-sm btn-primary">Lihat Tugas Siswa</a>
+                          </td>
+                        </tr>
+                        @endif
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+              
+            </tbody>
+          </table>
         </div>
-        <div class="icon">
-          <i class="fas fa-cocktail"></i>
-        </div>
-        <a href="{{ url('/drink') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <!-- /.card-body -->
       </div>
+      <!-- /.card -->
     </div>
-    <!-- ./col -->
   </div>
   <!-- /.row -->
   <!-- Main row -->

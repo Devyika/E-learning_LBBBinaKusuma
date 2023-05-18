@@ -28,7 +28,7 @@
                 @foreach($mapel as $i => $m)
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ url('/guru') }}/pertemuan" class="nav-link">
+                    <a href="{{ url('/guru/pertemuan/'.$m->id) }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
                       <p>{{$m->nama}}</p>
                     </a>
