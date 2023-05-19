@@ -90,7 +90,7 @@ class UserAdminController extends Controller
             'foto' => $image_name,
         ]);
 
-        return redirect('admin/user-admin')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/input-admin')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**

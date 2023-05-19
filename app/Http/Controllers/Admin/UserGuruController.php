@@ -90,7 +90,7 @@ class UserGuruController extends Controller
             'foto' => $image_name,
         ]);
 
-        return redirect('admin/user-guru')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/input-guru')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**

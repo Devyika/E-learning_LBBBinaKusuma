@@ -22,21 +22,21 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-{
-    $this->registerPolicies();
+        public function boot()
+    {
+        $this->registerPolicies();
 
-    Gate::define('isAdmin', function ($user) {
-        return $user->level_user == 0;
-    });
+        Gate::define('admin', function ($user) {
+            return $user->level_user == 0;
+        });
 
-    Gate::define('isGuru', function ($user) {
-        return $user->level_user == 1;
-    });
+        Gate::define('guru', function ($user) {
+            return $user->level_user == 1;
+        });
 
-    Gate::define('isSiswa', function ($user) {
-        return $user->level_user == 2;
-    });
-}
+        Gate::define('siswa', function ($user) {
+            return $user->level_user == 2;
+        });
+    }
 
 }

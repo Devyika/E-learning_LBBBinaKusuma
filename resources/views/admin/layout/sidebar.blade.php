@@ -36,9 +36,9 @@
                   </li>
                 </ul> --}}
               </li>
-              <li class="nav-header">USER</li>
+              <li class="nav-header">INPUT</li>
               <li class="nav-item">
-                <a href="{{ url('admin/user-admin') }}" class="nav-link">
+                <a href="{{ url('admin/input-admin') }}" class="nav-link">
                   <i class="fas fa-user-shield pr-2"></i>
                   <p>
                     Admin
@@ -47,7 +47,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin/user-guru') }}" class="nav-link">
+                <a href="{{ url('admin/input-guru') }}" class="nav-link">
                   <i class="fas fa-chalkboard-teacher pr-2"></i>
                   <p>
                     Guru
@@ -56,7 +56,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin/user-siswa') }}" class="nav-link">
+                <a href="{{ url('admin/input-siswa') }}" class="nav-link">
                   <i class="fas fa-user-graduate pl-1 pr-2"></i>
                   <p>
                     Siswa
@@ -64,9 +64,8 @@
                   </p>
                 </a>
               </li>
-              <li class="nav-header">SEKOLAH</li>
               <li class="nav-item">
-                <a href="{{ url('admin/sekolah-jurusan') }}" class="nav-link">
+                <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
                   <i class="fas fa-scroll pr-2"></i>
                   <p>
                     Jurusan
@@ -75,44 +74,16 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin/sekolah-kelas') }}" class="nav-link">
-                  <i class="fas fa-chalkboard pr-2"></i>
-                  <p>
-                    Kelas
-                    <span class="badge badge-info right">{{ $countKelas }}</span>
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('admin/sekolah-tingkat') }}" class="nav-link">
+                <a href="{{ url('admin/input-tingkat') }}" class="nav-link">
                   <i class="fa-solid fa-layer-group pr-2"></i>
                   <p>
                     Tingkat
-                    <span class="badge badge-info right">{{ $countKelas }}</span>
+                    <span class="badge badge-info right">{{ $countTingkat }}</span>
                   </p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin/sekolah-pertemuan') }}" class="nav-link">
-                  <i class="fas fa-comment-alt pr-2"></i>
-                  <p>
-                    Pertemuan
-                    <span class="badge badge-info right">{{ $countAdmin }}</span>
-                  </p>
-                </a>
-              </li>
-              <li class="nav-header">DATA</li>
-              <li class="nav-item">
-                <a href="{{ url('admin/sekolah-jurusan') }}" class="nav-link">
-                  <i class="fas fa-scroll pr-2"></i>
-                  <p>
-                    Jurusan
-                    <span class="badge badge-info right">{{ $countJurusan }}</span>
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('admin/sekolah-kelas') }}" class="nav-link">
+                <a href="{{ url('admin/input-kelas') }}" class="nav-link">
                   <i class="fas fa-chalkboard pr-2"></i>
                   <p>
                     Kelas
@@ -121,47 +92,63 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin/sekolah-mata_pelajaran') }}" class="nav-link">
-                  <i class="fas fa-swatchbook pr-2"></i>
+                <a href="{{ url('admin/input-mata_pelajaran') }}" class="nav-link">
+                  <i class="fa-solid fa-lines-leaning pr-2"></i>
                   <p>
                     Mata Pelajaran
-                    <span class="badge badge-info right">{{ $countAdmin }}</span>
+                    <span class="badge badge-info right">{{ $countMapel }}</span>
                   </p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin/sekolah-pertemuan') }}" class="nav-link">
+                <a href="{{ url('admin/input-pertemuan') }}" class="nav-link">
                   <i class="fas fa-comment-alt pr-2"></i>
                   <p>
                     Pertemuan
-                    <span class="badge badge-info right">{{ $countAdmin }}</span>
+                    <span class="badge badge-info right">{{ $countPertemuan }}</span>
                   </p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="fas fa-book-open pr-2"></i>
+              <li class="nav-header">SETTING</li>
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="fas fa-scroll pr-2"></i>
                   <p>
-                    IPA
+                    Jurusan
                     <i class="fas fa-angle-left right"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
+                  @foreach($allJurusan as $j)
                   <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
+                    <a href="{{ url('/admin/'.$j->id) }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
-                      <p>Kelas</p>
+                      <p>{{ $j->name }}</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/ipa/') }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Mata Pelajaran</p>
-                    </a>
-                  </li>
+                  @endforeach
                 </ul>
               </li>
               <li class="nav-item">
+                <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
+                  <i class="fas fa-chalkboard pr-2"></i>
+                  <p>
+                    Kelas
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  @foreach($allTingkat as $t)
+                  <li class="nav-item">
+                    <a href="{{ url('/admin/'.$t->id) }}" class="nav-link">
+                      <i class="fas fa-book pr-2"></i>
+                      <p>{{ $t->name }}</p>
+                    </a>
+                  </li>
+                  @endforeach
+                </ul>
+              </li>
+              {{-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-book-open pr-2"></i>
                   <p>

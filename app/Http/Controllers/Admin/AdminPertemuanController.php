@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Jurusan;
+use App\Models\Pertemuan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class JurusanController extends Controller
+class AdminPertemuanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +22,9 @@ class JurusanController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
         
-        $jurusan = Jurusan::all();
+        $pertemuan = Pertemuan::all();
 
-        return view('admin.jurusan', ['jurusan' => $jurusan])
+        return view('admin.pertemuan', ['pertemuan' => $pertemuan])
                 ->with('user', $user);
     }
 
@@ -47,25 +47,23 @@ class JurusanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'deskripsi' => ['nullable', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:50'],
         ]);
 
-        Jurusan::create([
-            'name' => $request->input('name'),
-            'deskripsi' => $request->input('deskripsi'),
+        Pertemuan::create([
+            'nama' => $request->input('nama'),
         ]);
 
-        return redirect('admin/sekolah-jurusan')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/input-pertemuan')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Kelas  $pertemuan
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Pertemuan $pertemuan)
     {
         //
     }
@@ -73,10 +71,10 @@ class JurusanController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Kelas  $pertemuan
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Pertemuan $pertemuan)
     {
         //
     }
@@ -85,35 +83,33 @@ class JurusanController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Kelas  $pertemuan
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'deskripsi' => ['nullable', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:50'],
         ]);
 
-        $jurusan = Jurusan::findOrFail($id);
-        $jurusan->name = $request->input('name');
-        $jurusan->deskripsi = $request->input('deskripsi');
-        $jurusan->save();
+        $pertemuan = Pertemuan::findOrFail($id);
+        $pertemuan->nama = $request->input('nama');
+        $pertemuan->save();
 
-        return redirect('admin/sekolah-jurusan')->with('success', 'Data Jurusan Berhasil Diupdate');
+        return redirect('admin/input-pertemuan')->with('success', 'Kelas berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Kelas  $pertemuan
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $jurusan = Jurusan::findOrFail($id);
-        $jurusan->delete();
+        $pertemuan = Pertemuan::findOrFail($id);
+        $pertemuan->delete();
 
-        return redirect('admin/sekolah-jurusan')->with('success', 'Data Jurusan Berhasil Dihapus');
+        return redirect('admin/input-pertemuan')->with('success', 'Kelas berhasil dihapus.');
     }
 }

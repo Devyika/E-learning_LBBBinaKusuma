@@ -11,4 +11,7 @@ class Pertemuan extends Model
 
     protected $table = 'pertemuan';
     
+    protected $fillable = [
+        'nama',
+    ];
 }

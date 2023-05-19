@@ -8,7 +8,7 @@
     </div>
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="#">Menu</a></li>
+        <li class="breadcrumb-item"><a href="#">Input</a></li>
         <li class="breadcrumb-item active">Dashboard</li>
       </ol>
     </div>

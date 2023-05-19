@@ -13,8 +13,5 @@ class Mapel extends Model
 
     protected $fillable = [
         'nama',
-        'jurusan',
-        'deskripsi',
-        'user_id'
     ];
 }

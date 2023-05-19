@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mapel;
+use App\Models\Jurusan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class MapelController extends Controller
+class AdminJurusanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +22,9 @@ class MapelController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
         
-        $mapel = Mapel::all();
+        $jurusan = Jurusan::all();
 
-        return view('admin.Mapel', ['mapel' => $mapel])
+        return view('admin.jurusan', ['jurusan' => $jurusan])
                 ->with('user', $user);
     }
 
@@ -47,23 +47,23 @@ class MapelController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => ['required', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:50'],
         ]);
 
-        Mapel::create([
-            'nama' => $request->input('nama'),
+        Jurusan::create([
+            'name' => $request->input('name'),
         ]);
 
-        return redirect('admin/input-mata_pelajaran')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/input-jurusan')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Mapel  $mapel
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Mapel $mapel)
+    public function show($id)
     {
         //
     }
@@ -71,10 +71,10 @@ class MapelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Mapel  $mapel
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Mapel $mapel)
+    public function edit($id)
     {
         //
     }
@@ -83,33 +83,33 @@ class MapelController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Mapel  $mapel
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => ['required', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:50'],
         ]);
 
-        $mapel = Mapel::findOrFail($id);
-        $mapel->nama = $request->input('nama');
-        $mapel->save();
+        $jurusan = Jurusan::findOrFail($id);
+        $jurusan->name = $request->input('name');
+        $jurusan->save();
 
-        return redirect('admin/input-mata_pelajaran')->with('success', 'Mapel berhasil diperbarui.');
+        return redirect('admin/input-jurusan')->with('success', 'Data Jurusan Berhasil Diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Mapel  $mapel
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $mapel = Mapel::findOrFail($id);
-        $mapel->delete();
+        $jurusan = Jurusan::findOrFail($id);
+        $jurusan->delete();
 
-        return redirect('admin/input-mata_pelajaran')->with('success', 'Mapel berhasil dihapus.');
+        return redirect('admin/input-jurusan')->with('success', 'Data Jurusan Berhasil Dihapus');
     }
 }

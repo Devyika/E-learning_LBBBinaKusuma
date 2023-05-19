@@ -90,7 +90,7 @@ class UserSiswaController extends Controller
             'foto' => $image_name,
         ]);
 
-        return redirect('admin/user-siswa')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/input-siswa')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**

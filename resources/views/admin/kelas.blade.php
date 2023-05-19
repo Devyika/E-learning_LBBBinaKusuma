@@ -4,12 +4,12 @@
 <div class="container-fluid">
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>SEKOLAH</h1>
+      <h1>INPUT</h1>
     </div>
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="#">Menu</a></li>
-        <li class="breadcrumb-item active">Dashboard</li>
+        <li class="breadcrumb-item"><a href="#">Input</a></li>
+        <li class="breadcrumb-item active">Kelas</li>
       </ol>
     </div>
   </div>
@@ -93,7 +93,7 @@
 <!-- /.card -->
 <!-- Modal -->
 <div class="modal fade" id="addKelasModal" tabindex="-1" role="dialog" aria-labelledby="addKelasModal-label" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
+  <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addKelasModal-label"><strong>Tambah Kelas</strong></h5>
@@ -102,7 +102,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="addKelasForm" method="POST" action="{{ url('admin/sekolah-kelas') }}" enctype="multipart/form-data">
+        <form id="addKelasForm" method="POST" action="{{ url('admin/input-kelas') }}" enctype="multipart/form-data">
           @csrf
           <div class="form-group">
             <label for="nama">Nama Kelas</label>
@@ -154,7 +154,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="editKelasForm-{{ $k->id }}" method="POST" action="{{ url('/admin/sekolah-kelas/'. $k->id) }}" enctype="multipart/form-data">
+        <form id="editKelasForm-{{ $k->id }}" method="POST" action="{{ url('/admin/input-kelas/'. $k->id) }}" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <div class="form-group">
@@ -177,10 +177,10 @@
 
 @foreach ($kelas as $k)
 <div class="modal fade" id="deleteKelasModal-{{ $k->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteKelasModal-label-{{ $k->id }}" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="deleteKelasModal-label-{{ $k->id }}"><strong>Hapus Kelas </strong>{{ $k->name }}</h5>
+              <h5 class="modal-title" id="deleteKelasModal-label-{{ $k->id }}"><strong>Hapus Kelas </strong>{{ $k->nama }}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
               </button>
@@ -189,7 +189,7 @@
               <p>Anda yakin ingin menghapus Kelas ini?</p>
           </div>
           <div class="modal-footer">
-              <form method="POST" action="{{ url('/admin/sekolah-kelas/'.$k->id)}}">
+              <form method="POST" action="{{ url('/admin/input-kelas/'.$k->id)}}">
                   @csrf
                   @method('DELETE')
                   <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
