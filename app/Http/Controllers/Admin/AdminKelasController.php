@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\JurusanTingkatKelas;
 use App\Models\Kelas;
+use App\Models\Tingkat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AdminKelasController extends Controller
 {
@@ -111,5 +114,75 @@ class AdminKelasController extends Controller
         $kelas->delete();
 
         return redirect('admin/input-kelas')->with('success', 'Kelas berhasil dihapus.');
+    }
+
+    public function jurusanTingkatKelas_index($id)
+    {
+        $user = User::join('admin', 'users.username', '=', 'admin.username')
+                ->select('users.username', 'admin.*')
+                ->where('users.id', Auth::user()->id)
+                ->first();
+        
+        $jurusanTingkatKelas = JurusanTingkatKelas::with('jurusan', 'tingkat', 'kelas')
+            ->where('id_tingkat', $id)
+            ->get();
+
+        $tingkat = Tingkat::find($id);
+
+        return view('admin.jurusanTingkatKelas', ['jurusanTingkatKelas' => $jurusanTingkatKelas, 'tingkat' => $tingkat])
+            ->with('user', $user);
+    }
+
+    public function jurusanTingkatKelas_store(Request $request)
+    {
+        $request->validate([
+            'id_jurusan' => ['required'],
+            'id_tingkat' => ['required'],
+            'id_kelas' => [
+                'required',
+                Rule::unique('jurusan_tingkat_kelas', 'id_kelas')->where(function ($query) use ($request) {
+                    return $query->where('id_jurusan', $request->input('id_jurusan'));
+                }),
+            ],
+        ]);
+
+        JurusanTingkatKelas::create([
+            'id_jurusan' => $request->input('id_jurusan'),
+            'id_tingkat' => $request->input('id_tingkat'),
+            'id_kelas' => $request->input('id_kelas'),
+        ]);
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan');
+    }
+
+    public function jurusanTingkatKelas_update(Request $request, $id)
+    {
+        $request->validate([
+            'id_jurusan' => ['required'],
+            'id_tingkat' => ['required'],
+            'id_kelas' => [
+                'required',
+                Rule::unique('jurusan_tingkat_kelas', 'id_kelas')->where(function ($query) use ($request, $id) {
+                    return $query->where('id_jurusan', $request->input('id_jurusan'))
+                                ->where('id', '!=', $id);
+                }),
+            ],
+        ]);
+
+        $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);
+        $jurusanTingkatKelas->id_jurusan = $request->input('id_jurusan');
+        $jurusanTingkatKelas->id_tingkat = $request->input('id_tingkat');
+        $jurusanTingkatKelas->id_kelas = $request->input('id_kelas');
+        $jurusanTingkatKelas->save();
+
+        return redirect()->back()->with('success', 'Data berhasil diperbarui');
+    }
+
+    public function jurusanTingkatKelas_destroy($id)
+    {
+        $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);
+        $jurusanTingkatKelas->delete();
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
 }

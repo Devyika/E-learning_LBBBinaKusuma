@@ -45,7 +45,7 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardAdminController::class, 'index']);
+    Route::resource('/dashboard', DashboardAdminController::class);
     Route::resource('user', UserController::class);
     Route::resource('input-admin', UserAdminController::class);
     Route::resource('input-guru', UserGuruController::class);
@@ -55,6 +55,10 @@ Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
     Route::resource('input-tingkat', AdminTingkatController::class);
     Route::resource('input-pertemuan', AdminPertemuanController::class);
     Route::resource('input-mata_pelajaran', MapelController::class);
+    Route::get('kelas/{id}', [AdminKelasController::class, 'jurusanTingkatKelas_index']);
+    Route::post('kelas/{id}', [AdminKelasController::class, 'jurusanTingkatKelas_store']);
+    Route::put('kelas/{id}', [AdminKelasController::class, 'jurusanTingkatKelas_update']);
+    Route::delete('kelas/{id}', [AdminKelasController::class, 'jurusanTingkatKelas_destroy']);
 });
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {

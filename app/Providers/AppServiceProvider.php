@@ -42,5 +42,6 @@ class AppServiceProvider extends ServiceProvider
         View::share('countPertemuan', Pertemuan::count());
         View::share('allJurusan', Jurusan::all());
         View::share('allTingkat', Tingkat::all());
+        View::share('allKelas', Kelas::all());
     }
 }

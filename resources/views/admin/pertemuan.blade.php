@@ -131,7 +131,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body text-center">
         <label><strong>Nama Pertemuan</strong></label>
         <p>{{$p->nama}}</p>
       </div>

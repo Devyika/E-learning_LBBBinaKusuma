@@ -111,25 +111,6 @@
               </li>
               <li class="nav-header">SETTING</li>
               <li class="nav-item">
-                <a href="" class="nav-link">
-                  <i class="fas fa-scroll pr-2"></i>
-                  <p>
-                    Jurusan
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  @foreach($allJurusan as $j)
-                  <li class="nav-item">
-                    <a href="{{ url('/admin/'.$j->id) }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>{{ $j->name }}</p>
-                    </a>
-                  </li>
-                  @endforeach
-                </ul>
-              </li>
-              <li class="nav-item">
                 <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
                   <i class="fas fa-chalkboard pr-2"></i>
                   <p>
@@ -140,7 +121,7 @@
                 <ul class="nav nav-treeview">
                   @foreach($allTingkat as $t)
                   <li class="nav-item">
-                    <a href="{{ url('/admin/'.$t->id) }}" class="nav-link">
+                    <a href="{{ url('/admin/kelas/'.$t->id) }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
                       <p>{{ $t->name }}</p>
                     </a>
