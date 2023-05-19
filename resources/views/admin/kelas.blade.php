@@ -110,16 +110,7 @@
             @error('nama')
               <span class="invalid-feedback" role="alert">{{ $message }}</span>
             @enderror
-          </div>
-          <div class="form-group">
-            <label for="jurusan">Jurusan</label>
-            <select name="jurusan" id="jurusan" class="form-control selectpicker" data-style="btn-primary">
-                <option value="" selected disabled>Pilih Jurusan</option>
-                @foreach($jurusan as $j)
-                    <option value="{{ $j->id }}">{{ $j->name }}</option>
-                @endforeach
-            </select>
-        </div>               
+          </div>              
         </form>
       </div>
       <div class="modal-footer">
@@ -132,7 +123,7 @@
                        
 @foreach ($kelas as $k)
 <div class="modal fade" id="detailModal{{$k->id}}" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel{{$k->id}}" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
+  <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="detailModalLabel{{$k->id}}"><strong>Detail Kelas </strong>{{$k->name}}</h5>
@@ -143,8 +134,6 @@
       <div class="modal-body">
         <label><strong>Nama Kelas</strong></label>
         <p>{{$k->nama}}</p>
-        <label><strong>Deskripsi</strong></label>
-        <p>{{$k->deskripsi}}</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
@@ -156,7 +145,7 @@
           
 @foreach ($kelas as $k)
 <div class="modal fade" id="editKelasModal-{{ $k->id }}" tabindex="-1" role="dialog" aria-labelledby="editKelasModal-label-{{ $k->id }}" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="editKelasModal-label-{{ $k->id }}"><strong>Edit Kelas </strong>{{ $k->name }}</h5>
@@ -169,16 +158,9 @@
           @csrf
           @method('PUT')
           <div class="form-group">
-            <label for="name">Nama Kelas</label>
-            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $k->name) }}" placeholder="Masukkan Nama">
-            @error('name')
-              <span class="invalid-feedback" role="alert">{{ $message }}</span>
-            @enderror
-          </div>
-          <div class="form-group">
-            <label for="deskripsi">Deskripsi</label>
-            <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" placeholder="Masukkan Deskripsi" rows="5">{{ old('deskripsi', $k->deskripsi) }}</textarea>
-            @error('deskripsi')
+            <label for="nama">Nama Kelas</label>
+            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama', $k->nama) }}" placeholder="Masukkan Nama">
+            @error('nama')
               <span class="invalid-feedback" role="alert">{{ $message }}</span>
             @enderror
           </div>

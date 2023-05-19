@@ -1,9 +1,10 @@
 <?php
 
-namespace app\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mapel;
+use App\Models\Jurusan;
+use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,16 +17,19 @@ class MapelController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function index()
-    {
-        $countAdmin = User::where('level_user', 0)->count();
-        $countGuru = User::where('level_user', 1)->count();
-        $countSiswa = User::where('level_user', 2)->count();
-        return view('admin.mapel')
-                ->with('countAdmin', $countAdmin)
-                ->with('countGuru', $countGuru)
-                ->with('countSiswa', $countSiswa);
-    }
+     public function index()
+     {
+         $user = User::join('admin', 'users.username', '=', 'admin.username')
+                 ->select('users.username', 'admin.*')
+                 ->where('users.id', Auth::user()->id)
+                 ->first();
+         
+         $jurusan = Jurusan::all();
+         $kelas = Kelas::all();
+ 
+         return view('admin.mapel', ['kelas' => $kelas, 'jurusan' => $jurusan])
+                 ->with('user', $user);
+     }
 
     /**
      * Show the form for creating a new resource.

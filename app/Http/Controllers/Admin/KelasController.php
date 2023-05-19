@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Jurusan;
 use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,9 +23,8 @@ class KelasController extends Controller
                 ->first();
         
         $kelas = Kelas::all();
-        $jurusan = Jurusan::all();
 
-        return view('admin.kelas', ['kelas' => $kelas, 'jurusan' => $jurusan])
+        return view('admin.kelas', ['kelas' => $kelas])
                 ->with('user', $user);
     }
 
@@ -50,12 +48,10 @@ class KelasController extends Controller
     {
         $request->validate([
             'nama' => ['required', 'string', 'max:50'],
-            'jurusan' => ['required', 'string', 'max:255'],
         ]);
 
         Kelas::create([
             'nama' => $request->input('nama'),
-            'id_jurusan' => $request->input('jurusan'),
         ]);
 
         return redirect('admin/sekolah-kelas')->with('success', 'User Berhasil Ditambahkan');
@@ -94,12 +90,10 @@ class KelasController extends Controller
     {
         $request->validate([
             'nama' => ['required', 'string', 'max:50'],
-            'jurusan' => ['required', 'string', 'max:255'],
         ]);
 
         $kelas = Kelas::findOrFail($id);
         $kelas->nama = $request->input('nama');
-        $kelas->id_jurusan = $request->input('jurusan');
         $kelas->save();
 
         return redirect('admin/sekolah-kelas')->with('success', 'Kelas berhasil diperbarui.');

@@ -13,13 +13,14 @@ use App\Http\Controllers\Admin\{
     UserSiswaController,
     JurusanController,
     KelasController,
+    MapelController,
 };
 
 use App\Http\Controllers\Guru\{
     DashboardGuruController,
     PertemuanController,
 };
-use App\Http\Controllers\KelasController as ControllersKelasController;
+
 use App\Http\Controllers\Siswa\{
     DashboardSiswaController,
 };
@@ -49,11 +50,14 @@ Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
     Route::resource('user-siswa', UserSiswaController::class);
     Route::resource('sekolah-jurusan', JurusanController::class);
     Route::resource('sekolah-kelas', KelasController::class);
+    //Route::resource('sekolah-tingkat', TingkatController::class);
+    Route::resource('sekolah-mata_pelajaran', MapelController::class);
 });
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
     Route::resource('pertemuan', PertemuanController::class);
+    Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);
 });
 
 Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {

@@ -84,6 +84,43 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ url('admin/sekolah-tingkat') }}" class="nav-link">
+                  <i class="fa-solid fa-layer-group pr-2"></i>
+                  <p>
+                    Tingkat
+                    <span class="badge badge-info right">{{ $countKelas }}</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin/sekolah-pertemuan') }}" class="nav-link">
+                  <i class="fas fa-comment-alt pr-2"></i>
+                  <p>
+                    Pertemuan
+                    <span class="badge badge-info right">{{ $countAdmin }}</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-header">DATA</li>
+              <li class="nav-item">
+                <a href="{{ url('admin/sekolah-jurusan') }}" class="nav-link">
+                  <i class="fas fa-scroll pr-2"></i>
+                  <p>
+                    Jurusan
+                    <span class="badge badge-info right">{{ $countJurusan }}</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin/sekolah-kelas') }}" class="nav-link">
+                  <i class="fas fa-chalkboard pr-2"></i>
+                  <p>
+                    Kelas
+                    <span class="badge badge-info right">{{ $countKelas }}</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ url('admin/sekolah-mata_pelajaran') }}" class="nav-link">
                   <i class="fas fa-swatchbook pr-2"></i>
                   <p>
