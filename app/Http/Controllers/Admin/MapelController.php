@@ -141,11 +141,13 @@ class MapelController extends Controller
         $request->validate([
             'id_jurusanTingkatKelas' => ['required'],
             'id_mapel' => ['required'],
+            'id_guru' => ['required'],
         ]);
 
         KelasMapel::create([
             'id_jurusanTingkatKelas' => $request->input('id_jurusanTingkatKelas'),
             'id_mapel' => $request->input('id_mapel'),
+            'id_guru' => $request->input('id_guru'),
         ]);
 
         return redirect()->back()->with('success', 'Data berhasil disimpan');
@@ -156,11 +158,13 @@ class MapelController extends Controller
         $request->validate([
             'id_jurusanTingkatKelas' => ['required'],
             'id_mapel' => ['required'],
+            'id_guru' => ['required'],
         ]);
 
         $kelasMapel = KelasMapel::findOrFail($id);
         $kelasMapel->id_jurusanTingkatKelas = $request->input('id_jurusanTingkatKelas');
         $kelasMapel->id_mapel = $request->input('id_mapel');
+        $kelasMapel->id_guru = $request->input('id_guru');
         $kelasMapel->save();
 
         return redirect()->back()->with('success', 'Data berhasil diperbarui');

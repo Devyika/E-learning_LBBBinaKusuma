@@ -21,4 +21,9 @@ class Siswa extends Model
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function kelasSiswa()
+    {
+        return $this->hasMany(KelasSiswa::class, 'id_siswa');
+    }
 }

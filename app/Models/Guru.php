@@ -21,4 +21,9 @@ class Guru extends Model
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function kelasMapel()
+    {
+        return $this->hasMany(KelasMapel::class, 'id_guru');
+    }
 }

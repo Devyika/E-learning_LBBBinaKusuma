@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jurusan;
+use App\Models\JurusanTingkatKelas;
+use App\Models\KelasSiswa;
 use App\Models\Siswa;
+use App\Models\Tingkat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -187,6 +191,63 @@ class UserSiswaController extends Controller
         }
     
         return redirect()->back()->with('success', 'Data siswa, user, dan file foto berhasil dihapus.');
+    }
+
+    public function kelasSiswa_index($t, $j)
+    {
+        $user = User::join('admin', 'users.username', '=', 'admin.username')
+                ->select('users.username', 'admin.*')
+                ->where('users.id', Auth::user()->id)
+                ->first();
+        
+        $jurusanTingkatKelas = JurusanTingkatKelas::with('jurusan', 'tingkat', 'kelas')
+            ->where('id_tingkat', $t)
+            ->where('id_jurusan', $j)
+            ->get();
+
+        $tingkat = Tingkat::find($t);
+        $jurusan = Jurusan::find($j);
+
+        return view('admin.kelasSiswa', ['jurusanTingkatKelas' => $jurusanTingkatKelas, 'tingkat' => $tingkat, 'jurusan' => $jurusan])
+            ->with('user', $user);
+    }
+
+    public function kelasSiswa_store(Request $request)
+    {
+        $request->validate([
+            'id_jurusanTingkatKelas' => ['required'],
+            'id_siswa' => ['required'],
+        ]);
+
+        KelasSiswa::create([
+            'id_jurusanTingkatKelas' => $request->input('id_jurusanTingkatKelas'),
+            'id_siswa' => $request->input('id_siswa'),
+        ]);
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan');
+    }
+
+    public function kelasSiswa_update(Request $request, $id)
+    {
+        $request->validate([
+            'id_jurusanTingkatKelas' => ['required'],
+            'id_siswa' => ['required'],
+        ]);
+
+        $kelasSiswa = KelasSiswa::findOrFail($id);
+        $kelasSiswa->id_jurusanTingkatKelas = $request->input('id_jurusanTingkatKelas');
+        $kelasSiswa->id_siswa = $request->input('id_siswa');
+        $kelasSiswa->save();
+
+        return redirect()->back()->with('success', 'Data berhasil diperbarui');
+    }
+
+    public function kelasSiswa_destroy($id)
+    {
+        $kelasSiswa = KelasSiswa::findOrFail($id);
+        $kelasSiswa->delete();
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
     
 }

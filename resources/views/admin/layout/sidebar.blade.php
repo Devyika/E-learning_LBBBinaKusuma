@@ -111,7 +111,7 @@
               </li>
               <li class="nav-header">SETTING</li>
               <li class="nav-item">
-                <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
+                <a href="{{ url('admin/setting-kelas') }}" class="nav-link">
                   <i class="fas fa-chalkboard pr-2"></i>
                   <p>
                     Kelas
@@ -141,7 +141,7 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
+                <a href="{{ url('admin/setting-mata_pelajaran') }}" class="nav-link">
                   <i class="fa-solid fa-lines-leaning pr-2"></i>
                   <p>
                     Mata Pelajaran
@@ -171,17 +171,17 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
-                  <i class="fas fa-chalkboard-teacher pr-2"></i>
+                <a href="{{ url('admin/setting-siswa') }}" class="nav-link">
+                  <i class="fas fa-user-graduate pr-2"></i>
                   <p>
-                    Guru
+                    Siswa
                     <i class="fa-solid fa-angles-left right"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
                   @foreach($allTingkat as $t)
                   <li class="nav-item">
-                    <a href="{{ url('/admin/setting-guru/'.$t->id) }}" class="nav-link">
+                    <a href="{{ url('/admin/setting-siswa/'.$t->id) }}" class="nav-link">
                       <i class="fa-solid fa-table pr-2"></i>
                       <p>{{ $t->name }}</p>
                       <i class="fa-solid fa-angle-left right"></i>
@@ -189,12 +189,46 @@
                     <ul class="nav nav-treeview">
                       @foreach($allJurusan as $j)
                       <li class="nav-item">
-                        <a href="{{ url('/admin/setting-guru/'.$t->id.'/'.$j->id) }}" class="nav-link">
+                        <a href="{{ url('/admin/setting-siswa/'.$t->id.'/'.$j->id) }}" class="nav-link">
                           <i class="fa-solid fa-table-columns pr-2"></i>
                           <p>{{ $t->name }} {{ $j->name }}</p>
                         </a>
                       </li>
                       @endforeach
+                    </ul>
+                  </li>
+                  @endforeach
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin/setting-pertemuan') }}" class="nav-link">
+                  <i class="fas fa-comment-alt pr-2"></i>
+                  <p>
+                    Pertemuan
+                    <i class="fa-solid fa-angles-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  @foreach($allMapel as $m)
+                  <li class="nav-item">
+                    <a href="{{ url('/admin/setting-pertemuan/'.$m->id) }}" class="nav-link">
+                      <i class="fa-solid fa-table pr-2"></i>
+                      <p>{{ $m->nama }}</p>
+                      <i class="fa-solid fa-angle-left right"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="{{ url('/admin/setting-pertemuan/modul') }}" class="nav-link">
+                          <i class="fa-solid fa-table-columns pr-2"></i>
+                          <p>Modul</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{{ url('/admin/setting-pertemuan/tugas') }}" class="nav-link">
+                          <i class="fa-solid fa-table-columns pr-2"></i>
+                          <p>Tugas</p>
+                        </a>
+                      </li>
                     </ul>
                   </li>
                   @endforeach

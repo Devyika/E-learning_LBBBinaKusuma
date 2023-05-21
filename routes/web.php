@@ -63,6 +63,10 @@ Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
     Route::post('setting-mata_pelajaran/{t}/{j}', [MapelController::class, 'kelasMapel_store']);
     Route::put('setting-mata_pelajaran/{id}', [MapelController::class, 'kelasMapel_update']);
     Route::delete('setting-mata_pelajaran/{id}', [MapelController::class, 'kelasMapel_destroy']);
+    Route::get('setting-siswa/{t}/{j}', [UserSiswaController::class, 'kelasSiswa_index']);
+    Route::post('setting-siswa/{t}/{j}', [UserSiswaController::class, 'kelasSiswa_store']);
+    Route::put('setting-siswa/{id}', [UserSiswaController::class, 'kelasSiswa_update']);
+    Route::delete('setting-siswa/{id}', [UserSiswaController::class, 'kelasSiswa_destroy']);
 });
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
