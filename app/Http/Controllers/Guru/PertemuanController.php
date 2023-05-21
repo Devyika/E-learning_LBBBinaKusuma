@@ -17,7 +17,7 @@ class PertemuanController extends Controller
      */
     public function index()
     {
-        
+       
     }
 
     /**
@@ -41,6 +41,20 @@ class PertemuanController extends Controller
         //
     }
 
+    public function store_pertemuan(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+        ]);
+
+        Pertemuan::create([
+            'nama' => $request->input('nama'),
+            'id_guru_mapel_kelas' => $id
+        ]);
+
+        return redirect('guru/pertemuan/'.$id)->with('success', 'User Berhasil Ditambahkan');
+    }
+
     /**
      * Display the specified resource.
      *
@@ -56,23 +70,25 @@ class PertemuanController extends Controller
             ->select('kelas.nama', 'id_kelas')
             ->where('id_guru', $userId)
             ->groupBy('id_kelas')
+            ->orderBy('nama')
             ->get();
+
 
         foreach($kelas as $k){
             $kls = $k->id_kelas;
         }
         
-        $mapel = DB::table('kelas_mapel_guru')
-            ->join('mapel', 'kelas_mapel_guru.id_mapel', '=', 'mapel.id')
-            ->select('mapel.nama','kelas_mapel_guru.id')
+        $mapel = DB::table('kelas_mapel_guru as a')
+            ->join('mapel as b', 'a.id_mapel', '=', 'b.id')
+            ->select('b.nama as nama','a.id_kelas as kelas', 'a.id_mapel as id_mapel', 'a.id as id')
             ->where('id_guru', $userId)
-            ->where('id_kelas', $kls)
             ->get();
 
-        $mapel2 = DB::table('kelas_mapel_guru')
-        ->join('mapel', 'kelas_mapel_guru.id_mapel', '=', 'mapel.id')
-        ->select('mapel.nama','kelas_mapel_guru.id')
-        ->where('kelas_mapel_guru.id', $id)
+        $mapel2 = DB::table('kelas_mapel_guru as a')
+        ->join('mapel as b', 'a.id_mapel', '=', 'b.id')
+        ->join('kelas as c', 'c.id', '=', 'a.id_kelas')
+        ->select('b.nama','a.id', 'c.nama as kelas')
+        ->where('a.id', $id)
         ->get();
 
         $modul = DB::table('pertemuan')
@@ -96,6 +112,7 @@ class PertemuanController extends Controller
             ->with('pertemuan', $pertemuan)
             ->with('modul', $modul)
             ->with('tugas', $tugas)
+            ->with('id', $id)
         ;
     }
 

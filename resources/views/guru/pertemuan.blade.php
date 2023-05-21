@@ -24,19 +24,16 @@
   <!-- Small boxes (Stat box) -->
   <div class="row">
     <div class="col-12">
-      <a href="" class="btn btn-sm btn-primary">Tambah Pertemuan</a><br><br>
+      <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#addPertemuanModal">
+        <i class="fa-solid fa-plus"></i> Tambah Pertemuan
+      </button><br><br>
       <div class="card">
         <div class="card-header">
-          @if ($kelas->count() == 1)
-          @foreach ($kelas as $k)
-          @endforeach
-          @endif
-
           @if ($mapel2->count() == 1)
           @foreach ($mapel2 as $m)
+          <h3 class="card-title">Kelas : {{$m->kelas}}  |  Pelajaran {{$m->nama}}</h3>
           @endforeach
           @endif
-          <h3 class="card-title">Kelas : {{$k->nama}}  |  Pelajaran {{$m->nama}}</h3>
         </div>
         <!-- ./card-header -->
         <div class="card-body p-0">
@@ -115,4 +112,63 @@
   <!-- /.card-body -->
 </div>
 <!-- /.card -->
+
+<div class="modal fade" id="addPertemuanModal" tabindex="-1" role="dialog" aria-labelledby="addPertemuanModal-label" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addPertemuanModal-label"><strong>Tambah Pertemuan</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addPertemuan" method="POST" action="{{ url('/guru/pertemuan/'.$id) }}" enctype="multipart/form-data">
+          @csrf
+              <div class="form-group">
+                <label for="nama">Nama</label>
+                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
+                @error('nama')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+        <button type="submit" class="btn btn-primary btn-sm" form="addPertemuan"><i class="fa-solid fa-save"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addModulModal" tabindex="-1" role="dialog" aria-labelledby="addModulModal-label" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModulModal-label"><strong>Tambah Modul</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="addModul" method="POST" action="{{ url('/guru/pertemuan/modul/'.$id) }}" enctype="multipart/form-data">
+          @csrf
+              <div class="form-group">
+                <label for="nama">Nama</label>
+                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
+                @error('nama')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+        <button type="submit" class="btn btn-primary btn-sm" form="addModul"><i class="fa-solid fa-save"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection

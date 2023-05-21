@@ -26,6 +26,7 @@
                 </a>
                 @if($mapel->count() > 0)
                 @foreach($mapel as $i => $m)
+                @if ($m->kelas == $k->id_kelas)
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="{{ url('/guru/pertemuan/'.$m->id) }}" class="nav-link">
@@ -34,6 +35,7 @@
                     </a>
                   </li>
                 </ul>
+                @endif
                 @endforeach
                 @else
                 
