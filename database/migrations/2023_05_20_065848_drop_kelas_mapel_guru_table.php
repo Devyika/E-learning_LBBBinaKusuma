@@ -13,9 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('jurusan_tingkat', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('kelas_mapel_guru');
     }
 
     /**
@@ -25,8 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('jurusan_tingkat', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('kelas_mapel_guru');
     }
 };

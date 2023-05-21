@@ -31,4 +31,9 @@ class JurusanTingkatKelas extends Model
     {
         return $this->belongsTo(Kelas::class, 'id_kelas');
     }
+
+    public function kelasMapel()
+    {
+        return $this->hasMany(KelasMapel::class, 'id_jurusanTingkatKelas');
+    }
 }

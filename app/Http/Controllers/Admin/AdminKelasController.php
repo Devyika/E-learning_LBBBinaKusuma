@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jurusan;
 use App\Models\JurusanTingkatKelas;
 use App\Models\Kelas;
+use App\Models\KelasMapel;
 use App\Models\Tingkat;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -116,7 +118,7 @@ class AdminKelasController extends Controller
         return redirect('admin/input-kelas')->with('success', 'Kelas berhasil dihapus.');
     }
 
-    public function jurusanTingkatKelas_index($id)
+    public function jurusanTingkatKelas_index($t, $j)
     {
         $user = User::join('admin', 'users.username', '=', 'admin.username')
                 ->select('users.username', 'admin.*')
@@ -124,12 +126,14 @@ class AdminKelasController extends Controller
                 ->first();
         
         $jurusanTingkatKelas = JurusanTingkatKelas::with('jurusan', 'tingkat', 'kelas')
-            ->where('id_tingkat', $id)
+            ->where('id_tingkat', $t)
+            ->where('id_jurusan', $j)
             ->get();
 
-        $tingkat = Tingkat::find($id);
+        $tingkat = Tingkat::find($t);
+        $jurusan = Jurusan::find($j);
 
-        return view('admin.jurusanTingkatKelas', ['jurusanTingkatKelas' => $jurusanTingkatKelas, 'tingkat' => $tingkat])
+        return view('admin.jurusanTingkatKelas', ['jurusanTingkatKelas' => $jurusanTingkatKelas, 'tingkat' => $tingkat, 'jurusan' => $jurusan])
             ->with('user', $user);
     }
 
@@ -138,12 +142,7 @@ class AdminKelasController extends Controller
         $request->validate([
             'id_jurusan' => ['required'],
             'id_tingkat' => ['required'],
-            'id_kelas' => [
-                'required',
-                Rule::unique('jurusan_tingkat_kelas', 'id_kelas')->where(function ($query) use ($request) {
-                    return $query->where('id_jurusan', $request->input('id_jurusan'));
-                }),
-            ],
+            'id_kelas' => ['required'],
         ]);
 
         JurusanTingkatKelas::create([
@@ -160,13 +159,7 @@ class AdminKelasController extends Controller
         $request->validate([
             'id_jurusan' => ['required'],
             'id_tingkat' => ['required'],
-            'id_kelas' => [
-                'required',
-                Rule::unique('jurusan_tingkat_kelas', 'id_kelas')->where(function ($query) use ($request, $id) {
-                    return $query->where('id_jurusan', $request->input('id_jurusan'))
-                                ->where('id', '!=', $id);
-                }),
-            ],
+            'id_kelas' => ['required'],
         ]);
 
         $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);

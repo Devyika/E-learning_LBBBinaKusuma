@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jurusan;
+use App\Models\JurusanTingkatKelas;
+use App\Models\KelasMapel;
 use App\Models\Mapel;
+use App\Models\Tingkat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -111,5 +115,62 @@ class MapelController extends Controller
         $mapel->delete();
 
         return redirect('admin/input-mata_pelajaran')->with('success', 'Mapel berhasil dihapus.');
+    }
+
+    public function kelasMapel_index($t, $j)
+    {
+        $user = User::join('admin', 'users.username', '=', 'admin.username')
+                ->select('users.username', 'admin.*')
+                ->where('users.id', Auth::user()->id)
+                ->first();
+        
+        $jurusanTingkatKelas = JurusanTingkatKelas::with('jurusan', 'tingkat', 'kelas')
+            ->where('id_tingkat', $t)
+            ->where('id_jurusan', $j)
+            ->get();
+
+        $tingkat = Tingkat::find($t);
+        $jurusan = Jurusan::find($j);
+
+        return view('admin.kelasMapel', ['jurusanTingkatKelas' => $jurusanTingkatKelas, 'tingkat' => $tingkat, 'jurusan' => $jurusan])
+            ->with('user', $user);
+    }
+
+    public function kelasMapel_store(Request $request)
+    {
+        $request->validate([
+            'id_jurusanTingkatKelas' => ['required'],
+            'id_mapel' => ['required'],
+        ]);
+
+        KelasMapel::create([
+            'id_jurusanTingkatKelas' => $request->input('id_jurusanTingkatKelas'),
+            'id_mapel' => $request->input('id_mapel'),
+        ]);
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan');
+    }
+
+    public function kelasMapel_update(Request $request, $id)
+    {
+        $request->validate([
+            'id_jurusanTingkatKelas' => ['required'],
+            'id_mapel' => ['required'],
+        ]);
+
+        $kelasMapel = KelasMapel::findOrFail($id);
+        $kelasMapel->id_jurusanTingkatKelas = $request->input('id_jurusanTingkatKelas');
+        $kelasMapel->id_mapel = $request->input('id_mapel');
+        $kelasMapel->save();
+
+        return redirect()->back()->with('success', 'Data berhasil diperbarui');
+    }
+
+    public function kelasMapel_destroy($id)
+    {
+        $kelasMapel = KelasMapel::findOrFail($id);
+        $kelasMapel->delete();
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
 }

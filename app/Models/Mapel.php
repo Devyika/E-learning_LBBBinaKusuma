@@ -14,4 +14,9 @@ class Mapel extends Model
     protected $fillable = [
         'nama',
     ];
+
+    public function kelasMapel()
+    {
+        return $this->hasMany(KelasMapel::class, 'id_mapel');
+    }
 }

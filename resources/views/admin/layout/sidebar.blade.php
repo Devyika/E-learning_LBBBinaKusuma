@@ -115,20 +115,92 @@
                   <i class="fas fa-chalkboard pr-2"></i>
                   <p>
                     Kelas
-                    <i class="fas fa-angle-left right"></i>
+                    <i class="fa-solid fa-angles-left right"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
                   @foreach($allTingkat as $t)
                   <li class="nav-item">
-                    <a href="{{ url('/admin/kelas/'.$t->id) }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
+                    <a href="{{ url('/admin/setting-kelas/'.$t->id) }}" class="nav-link">
+                      <i class="fa-solid fa-table pr-2"></i>
                       <p>{{ $t->name }}</p>
+                      <i class="fa-solid fa-angle-left right"></i>
                     </a>
+                    <ul class="nav nav-treeview">
+                      @foreach($allJurusan as $j)
+                      <li class="nav-item">
+                        <a href="{{ url('/admin/setting-kelas/'.$t->id.'/'.$j->id) }}" class="nav-link">
+                          <i class="fa-solid fa-table-columns pr-2"></i>
+                          <p>{{ $t->name }} {{ $j->name }}</p>
+                        </a>
+                      </li>
+                      @endforeach
+                    </ul>
                   </li>
                   @endforeach
                 </ul>
               </li>
+              <li class="nav-item">
+                <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
+                  <i class="fa-solid fa-lines-leaning pr-2"></i>
+                  <p>
+                    Mata Pelajaran
+                    <i class="fa-solid fa-angles-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  @foreach($allTingkat as $t)
+                  <li class="nav-item">
+                    <a href="{{ url('/admin/setting-mata_pelajaran/'.$t->id) }}" class="nav-link">
+                      <i class="fa-solid fa-table pr-2"></i>
+                      <p>{{ $t->name }}</p>
+                      <i class="fa-solid fa-angle-left right"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      @foreach($allJurusan as $j)
+                      <li class="nav-item">
+                        <a href="{{ url('/admin/setting-mata_pelajaran/'.$t->id.'/'.$j->id) }}" class="nav-link">
+                          <i class="fa-solid fa-table-columns pr-2"></i>
+                          <p>{{ $t->name }} {{ $j->name }}</p>
+                        </a>
+                      </li>
+                      @endforeach
+                    </ul>
+                  </li>
+                  @endforeach
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
+                  <i class="fas fa-chalkboard-teacher pr-2"></i>
+                  <p>
+                    Guru
+                    <i class="fa-solid fa-angles-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  @foreach($allTingkat as $t)
+                  <li class="nav-item">
+                    <a href="{{ url('/admin/setting-guru/'.$t->id) }}" class="nav-link">
+                      <i class="fa-solid fa-table pr-2"></i>
+                      <p>{{ $t->name }}</p>
+                      <i class="fa-solid fa-angle-left right"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      @foreach($allJurusan as $j)
+                      <li class="nav-item">
+                        <a href="{{ url('/admin/setting-guru/'.$t->id.'/'.$j->id) }}" class="nav-link">
+                          <i class="fa-solid fa-table-columns pr-2"></i>
+                          <p>{{ $t->name }} {{ $j->name }}</p>
+                        </a>
+                      </li>
+                      @endforeach
+                    </ul>
+                  </li>
+                  @endforeach
+                </ul>
+              </li>
+              
               {{-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="fas fa-book-open pr-2"></i>
