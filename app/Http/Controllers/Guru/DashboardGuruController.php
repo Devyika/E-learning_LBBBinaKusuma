@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
+use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\kelas_mapel_guru;
 use Illuminate\Http\Request;
@@ -18,23 +19,26 @@ class DashboardGuruController extends Controller
      */
     public function index()
     {
-        $userId = Auth::user()->id;
+        $id_guru = Auth::user()->username;
+
+        $userId = Guru::all()->where('username', $id_guru)->pluck('id');
     
-        $kelas = DB::table('kelas_mapel_guru')
-            ->join('kelas', 'kelas_mapel_guru.id_kelas', '=', 'kelas.id')
-            ->select('kelas.nama', 'id_kelas')
+        $kelas = DB::table('kelas_mapel_guru as a')
+            ->join('jurusan_tingkat_kelas as b', 'a.id_jurusanTingkatKelas', '=', 'b.id')
+            ->join('kelas as c', 'b.id_kelas', '=', 'c.id')
+            ->join('jurusan as d', 'b.id_jurusan', '=', 'd.id')
+            ->join('tingkat as e', 'b.id_tingkat', '=', 'e.id')
+            ->select('c.nama as kelas','d.name as jurusan','e.name as tingkat', 'b.id as id_kelas')
             ->where('id_guru', $userId)
-            ->groupBy('id_kelas')
+            ->groupBy('id_jurusanTingkatKelas')
             ->orderBy('nama')
             ->get();
 
-        foreach($kelas as $k){
-            $kls = $k->id_kelas;
-        }
+        //dd($kelas);
         
         $mapel = DB::table('kelas_mapel_guru as a')
             ->join('mapel as b', 'a.id_mapel', '=', 'b.id')
-            ->select('b.nama as nama','a.id_kelas as kelas', 'a.id_mapel as id_mapel', 'a.id as id')
+            ->select('b.nama as nama','a.id_jurusanTingkatKelas as kelas', 'a.id_mapel as id_mapel', 'a.id as id')
             ->where('id_guru', $userId)
             ->get();
 

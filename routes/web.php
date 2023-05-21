@@ -73,6 +73,8 @@ Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
     Route::resource('pertemuan', PertemuanController::class);
     Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);
+    Route::post('/pertemuan/modul/{pertemuan}/{id}', [PertemuanController::class, 'store_modul']);
+    Route::post('/pertemuan/tugas/{pertemuan}/{id}', [PertemuanController::class, 'store_tugas']);
 });
 
 Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {

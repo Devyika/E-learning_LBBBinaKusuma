@@ -20,7 +20,7 @@
                 <a href="" class="nav-link">
                   <i class="fas fa-book-open pr-2"></i>
                   <p>
-                    {{$k->nama}}
+                    {{$k->tingkat}} {{$k->jurusan}} {{$k->kelas}}
                     <i class="fas fa-angle-left right"></i>
                   </p>
                 </a>

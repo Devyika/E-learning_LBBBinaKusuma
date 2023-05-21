@@ -14,5 +14,6 @@ class Modul extends Model
     protected $fillable = [
         'nama',
         'id_pertemuan',
+        'file'
     ];
 }
