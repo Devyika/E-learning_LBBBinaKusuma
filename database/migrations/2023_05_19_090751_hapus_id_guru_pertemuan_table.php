@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tingkat', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
+        Schema::table('pertemuan', function (Blueprint $table) {
+            $table->dropColumn('id_guru_mapel_kelas');
         });
     }
 
@@ -27,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tingkat');
+        Schema::table('pertemuan', function (Blueprint $table) {
+            $table->integer('id_guru_mapel_kelas')->unsigned()->index();
+        });
     }
 };

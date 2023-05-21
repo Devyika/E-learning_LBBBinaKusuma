@@ -11,8 +11,10 @@ use App\Http\Controllers\Admin\{
     UserAdminController,
     UserGuruController,
     UserSiswaController,
-    JurusanController,
-    KelasController,
+    AdminJurusanController,
+    AdminKelasController,
+    AdminTingkatController,
+    AdminPertemuanController,
     MapelController,
 };
 
@@ -43,15 +45,24 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardAdminController::class, 'index']);
+    Route::resource('/dashboard', DashboardAdminController::class);
     Route::resource('user', UserController::class);
-    Route::resource('user-admin', UserAdminController::class);
-    Route::resource('user-guru', UserGuruController::class);
-    Route::resource('user-siswa', UserSiswaController::class);
-    Route::resource('sekolah-jurusan', JurusanController::class);
-    Route::resource('sekolah-kelas', KelasController::class);
-    //Route::resource('sekolah-tingkat', TingkatController::class);
-    Route::resource('sekolah-mata_pelajaran', MapelController::class);
+    Route::resource('input-admin', UserAdminController::class);
+    Route::resource('input-guru', UserGuruController::class);
+    Route::resource('input-siswa', UserSiswaController::class);
+    Route::resource('input-jurusan', AdminJurusanController::class);
+    Route::resource('input-kelas', AdminKelasController::class);
+    Route::resource('input-tingkat', AdminTingkatController::class);
+    Route::resource('input-pertemuan', AdminPertemuanController::class);
+    Route::resource('input-mata_pelajaran', MapelController::class);
+    Route::get('setting-kelas/{t}/{j}', [AdminKelasController::class, 'jurusanTingkatKelas_index']);
+    Route::post('setting-kelas/{t}/{j}', [AdminKelasController::class, 'jurusanTingkatKelas_store']);
+    Route::put('setting-kelas/{id}', [AdminKelasController::class, 'jurusanTingkatKelas_update']);
+    Route::delete('setting-kelas/{id}', [AdminKelasController::class, 'jurusanTingkatKelas_destroy']);
+    Route::get('setting-mata_pelajaran/{t}/{j}', [MapelController::class, 'kelasMapel_index']);
+    Route::post('setting-mata_pelajaran/{t}/{j}', [MapelController::class, 'kelasMapel_store']);
+    Route::put('setting-mata_pelajaran/{id}', [MapelController::class, 'kelasMapel_update']);
+    Route::delete('setting-mata_pelajaran/{id}', [MapelController::class, 'kelasMapel_destroy']);
 });
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {

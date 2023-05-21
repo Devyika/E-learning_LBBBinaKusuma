@@ -41,7 +41,21 @@
             <div class="container">
                 <div class="masthead-subheading">Learning Management System</div>
                 <div class="masthead-heading text-uppercase">SMA Negeri 4 Probolinggo</div>
-                <a class="btn btn-primary btn-xl text-uppercase" href="{{ url('/login') }}">Masuk</a>
+                @guest
+                    <a class="btn btn-primary btn-xl text-uppercase" href="{{ url('/login') }}">Masuk</a>
+                @endguest
+
+                @can('admin')
+                    <a class="btn btn-primary btn-xl text-uppercase" href="{{ url('/admin/dashboard') }}">Masuk</a>
+                @endcan
+
+                @can('guru')
+                    <a class="btn btn-primary btn-xl text-uppercase" href="{{ url('/guru/dashboard') }}">Masuk</a>
+                @endcan
+
+                @can('siswa')
+                    <a class="btn btn-primary btn-xl text-uppercase" href="{{ url('/siswa/dashboard') }}">Masuk</a>
+                @endcan
             </div>
         </header>
         <!-- Services-->

@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tingkat', function (Blueprint $table) {
+        Schema::create('jurusan_tingkat_kelas', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedInteger('jurusan_id');
+            $table->unsignedInteger('tingkat_id');
+            $table->unsignedInteger('kelas_id');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tingkat');
+        Schema::dropIfExists('jurusan_tingkat_kelas');
     }
 };

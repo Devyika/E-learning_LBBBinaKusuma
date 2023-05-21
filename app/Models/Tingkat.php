@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Jurusan extends Model
+class Tingkat extends Model
 {
     use HasFactory;
 
-    protected $table = 'jurusan';
+    protected $table = 'tingkat';
 
     protected $fillable = [
         'name',
@@ -17,6 +17,6 @@ class Jurusan extends Model
 
     public function jurusanTingkatKelas()
     {
-        return $this->hasMany(JurusanTingkatKelas::class, 'id_jurusan');
+        return $this->hasMany(JurusanTingkatKelas::class, 'id_tingkat');
     }
 }

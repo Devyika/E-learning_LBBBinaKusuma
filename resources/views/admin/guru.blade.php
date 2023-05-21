@@ -4,12 +4,12 @@
 <div class="container-fluid">
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>USER</h1>
+      <h1>INPUT</h1>
     </div>
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="#">Menu</a></li>
-        <li class="breadcrumb-item active">Dashboard</li>
+        <li class="breadcrumb-item"><a href="#">Input</a></li>
+        <li class="breadcrumb-item active">Guru</li>
       </ol>
     </div>
   </div>
@@ -105,7 +105,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="addGuruForm" method="POST" action="{{ url('admin/user-guru') }}" enctype="multipart/form-data">
+        <form id="addGuruForm" method="POST" action="{{ url('admin/input-guru') }}" enctype="multipart/form-data">
           @csrf
           <div class="row">
             <div class="col-md-4">
@@ -205,7 +205,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="editGuruForm-{{ $a->id }}" method="POST" action="{{ url('/admin/user-guru/'. $a->id) }}" enctype="multipart/form-data">
+        <form id="editGuruForm-{{ $a->id }}" method="POST" action="{{ url('/admin/input-guru/'. $a->id) }}" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <div class="row">
@@ -272,7 +272,7 @@
               <p>Anda yakin ingin menghapus guru ini?</p>
           </div>
           <div class="modal-footer">
-              <form method="POST" action="{{ url('/admin/user-guru/'.$a->id)}}">
+              <form method="POST" action="{{ url('/admin/input-guru/'.$a->id)}}">
                   @csrf
                   @method('DELETE')
                   <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>

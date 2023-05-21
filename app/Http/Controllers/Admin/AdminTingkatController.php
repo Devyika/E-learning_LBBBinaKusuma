@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kelas;
+use App\Models\Tingkat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class KelasController extends Controller
+class AdminTingkatController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +22,9 @@ class KelasController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
         
-        $kelas = Kelas::all();
+        $tingkat = Tingkat::all();
 
-        return view('admin.kelas', ['kelas' => $kelas])
+        return view('admin.tingkat', ['tingkat' => $tingkat])
                 ->with('user', $user);
     }
 
@@ -47,23 +47,23 @@ class KelasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => ['required', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:50'],
         ]);
 
-        Kelas::create([
-            'nama' => $request->input('nama'),
+        Tingkat::create([
+            'name' => $request->input('name'),
         ]);
 
-        return redirect('admin/sekolah-kelas')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/input-tingkat')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Kelas  $kelas
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Kelas $kelas)
+    public function show($id)
     {
         //
     }
@@ -71,10 +71,10 @@ class KelasController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Kelas  $kelas
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Kelas $kelas)
+    public function edit($id)
     {
         //
     }
@@ -83,33 +83,33 @@ class KelasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Kelas  $kelas
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => ['required', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:50'],
         ]);
 
-        $kelas = Kelas::findOrFail($id);
-        $kelas->nama = $request->input('nama');
-        $kelas->save();
+        $tingkat = Tingkat::findOrFail($id);
+        $tingkat->name = $request->input('name');
+        $tingkat->save();
 
-        return redirect('admin/sekolah-kelas')->with('success', 'Kelas berhasil diperbarui.');
+        return redirect('admin/input-tingkat')->with('success', 'Kelas berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Kelas  $kelas
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $kelas = Kelas::findOrFail($id);
-        $kelas->delete();
+        $tingkat = Tingkat::findOrFail($id);
+        $tingkat->delete();
 
-        return redirect('admin/sekolah-kelas')->with('success', 'Kelas berhasil dihapus.');
+        return redirect('admin/input-tingkat')->with('success', 'Kelas berhasil dihapus.');
     }
 }

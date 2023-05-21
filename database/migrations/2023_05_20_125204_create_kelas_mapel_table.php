@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tingkat', function (Blueprint $table) {
+        Schema::create('kelas_mapel', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('id_jurusanTingkatKelas');
+            $table->unsignedBigInteger('id_mapel');
+            $table->foreign('id_jurusanTingkatKelas')->references('id')->on('jurusan_tingkat_kelas');
+            $table->foreign('id_mapel')->references('id')->on('mapel');
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tingkat');
+        Schema::dropIfExists('kelas_mapel');
     }
 };

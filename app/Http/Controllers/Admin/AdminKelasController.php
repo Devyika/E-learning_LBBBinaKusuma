@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Jurusan;
 use App\Models\JurusanTingkatKelas;
+use App\Models\Kelas;
 use App\Models\KelasMapel;
-use App\Models\Mapel;
 use App\Models\Tingkat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
-class MapelController extends Controller
+class AdminKelasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,9 +27,9 @@ class MapelController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
         
-        $mapel = Mapel::all();
+        $kelas = Kelas::all();
 
-        return view('admin.Mapel', ['mapel' => $mapel])
+        return view('admin.kelas', ['kelas' => $kelas])
                 ->with('user', $user);
     }
 
@@ -54,20 +55,20 @@ class MapelController extends Controller
             'nama' => ['required', 'string', 'max:50'],
         ]);
 
-        Mapel::create([
+        Kelas::create([
             'nama' => $request->input('nama'),
         ]);
 
-        return redirect('admin/input-mata_pelajaran')->with('success', 'User Berhasil Ditambahkan');
+        return redirect('admin/input-kelas')->with('success', 'User Berhasil Ditambahkan');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Mapel  $mapel
+     * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function show(Mapel $mapel)
+    public function show(Kelas $kelas)
     {
         //
     }
@@ -75,10 +76,10 @@ class MapelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Mapel  $mapel
+     * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
-    public function edit(Mapel $mapel)
+    public function edit(Kelas $kelas)
     {
         //
     }
@@ -87,7 +88,7 @@ class MapelController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Mapel  $mapel
+     * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -96,28 +97,28 @@ class MapelController extends Controller
             'nama' => ['required', 'string', 'max:50'],
         ]);
 
-        $mapel = Mapel::findOrFail($id);
-        $mapel->nama = $request->input('nama');
-        $mapel->save();
+        $kelas = Kelas::findOrFail($id);
+        $kelas->nama = $request->input('nama');
+        $kelas->save();
 
-        return redirect('admin/input-mata_pelajaran')->with('success', 'Mapel berhasil diperbarui.');
+        return redirect('admin/input-kelas')->with('success', 'Kelas berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Mapel  $mapel
+     * @param  \App\Models\Kelas  $kelas
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $mapel = Mapel::findOrFail($id);
-        $mapel->delete();
+        $kelas = Kelas::findOrFail($id);
+        $kelas->delete();
 
-        return redirect('admin/input-mata_pelajaran')->with('success', 'Mapel berhasil dihapus.');
+        return redirect('admin/input-kelas')->with('success', 'Kelas berhasil dihapus.');
     }
 
-    public function kelasMapel_index($t, $j)
+    public function jurusanTingkatKelas_index($t, $j)
     {
         $user = User::join('admin', 'users.username', '=', 'admin.username')
                 ->select('users.username', 'admin.*')
@@ -132,44 +133,48 @@ class MapelController extends Controller
         $tingkat = Tingkat::find($t);
         $jurusan = Jurusan::find($j);
 
-        return view('admin.kelasMapel', ['jurusanTingkatKelas' => $jurusanTingkatKelas, 'tingkat' => $tingkat, 'jurusan' => $jurusan])
+        return view('admin.jurusanTingkatKelas', ['jurusanTingkatKelas' => $jurusanTingkatKelas, 'tingkat' => $tingkat, 'jurusan' => $jurusan])
             ->with('user', $user);
     }
 
-    public function kelasMapel_store(Request $request)
+    public function jurusanTingkatKelas_store(Request $request)
     {
         $request->validate([
-            'id_jurusanTingkatKelas' => ['required'],
-            'id_mapel' => ['required'],
+            'id_jurusan' => ['required'],
+            'id_tingkat' => ['required'],
+            'id_kelas' => ['required'],
         ]);
 
-        KelasMapel::create([
-            'id_jurusanTingkatKelas' => $request->input('id_jurusanTingkatKelas'),
-            'id_mapel' => $request->input('id_mapel'),
+        JurusanTingkatKelas::create([
+            'id_jurusan' => $request->input('id_jurusan'),
+            'id_tingkat' => $request->input('id_tingkat'),
+            'id_kelas' => $request->input('id_kelas'),
         ]);
 
         return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
 
-    public function kelasMapel_update(Request $request, $id)
+    public function jurusanTingkatKelas_update(Request $request, $id)
     {
         $request->validate([
-            'id_jurusanTingkatKelas' => ['required'],
-            'id_mapel' => ['required'],
+            'id_jurusan' => ['required'],
+            'id_tingkat' => ['required'],
+            'id_kelas' => ['required'],
         ]);
 
-        $kelasMapel = KelasMapel::findOrFail($id);
-        $kelasMapel->id_jurusanTingkatKelas = $request->input('id_jurusanTingkatKelas');
-        $kelasMapel->id_mapel = $request->input('id_mapel');
-        $kelasMapel->save();
+        $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);
+        $jurusanTingkatKelas->id_jurusan = $request->input('id_jurusan');
+        $jurusanTingkatKelas->id_tingkat = $request->input('id_tingkat');
+        $jurusanTingkatKelas->id_kelas = $request->input('id_kelas');
+        $jurusanTingkatKelas->save();
 
         return redirect()->back()->with('success', 'Data berhasil diperbarui');
     }
 
-    public function kelasMapel_destroy($id)
+    public function jurusanTingkatKelas_destroy($id)
     {
-        $kelasMapel = KelasMapel::findOrFail($id);
-        $kelasMapel->delete();
+        $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);
+        $jurusanTingkatKelas->delete();
 
         return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
