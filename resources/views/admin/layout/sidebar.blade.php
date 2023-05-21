@@ -200,40 +200,6 @@
                   @endforeach
                 </ul>
               </li>
-              <li class="nav-item">
-                <a href="{{ url('admin/setting-pertemuan') }}" class="nav-link">
-                  <i class="fas fa-comment-alt pr-2"></i>
-                  <p>
-                    Pertemuan
-                    <i class="fa-solid fa-angles-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  @foreach($allMapel as $m)
-                  <li class="nav-item">
-                    <a href="{{ url('/admin/setting-pertemuan/'.$m->id) }}" class="nav-link">
-                      <i class="fa-solid fa-table pr-2"></i>
-                      <p>{{ $m->nama }}</p>
-                      <i class="fa-solid fa-angle-left right"></i>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="{{ url('/admin/setting-pertemuan/modul') }}" class="nav-link">
-                          <i class="fa-solid fa-table-columns pr-2"></i>
-                          <p>Modul</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="{{ url('/admin/setting-pertemuan/tugas') }}" class="nav-link">
-                          <i class="fa-solid fa-table-columns pr-2"></i>
-                          <p>Tugas</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  @endforeach
-                </ul>
-              </li>
               
               {{-- <li class="nav-item">
                 <a href="#" class="nav-link">

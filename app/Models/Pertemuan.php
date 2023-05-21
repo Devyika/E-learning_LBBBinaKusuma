@@ -10,8 +10,9 @@ class Pertemuan extends Model
     use HasFactory;
 
     protected $table = 'pertemuan';
+
     protected $fillable = [
         'nama',
-        'id_guru_mapel_kelas',
+        'id_kelasMapelGuru',
     ];
 }
