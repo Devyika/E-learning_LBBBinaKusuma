@@ -6,6 +6,7 @@ use App\Models\Guru;
 use App\Models\Modul;
 use App\Models\Pertemuan;
 use App\Models\Tugas;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -149,6 +150,11 @@ class PertemuanController extends Controller
 
         $pertemuan = Pertemuan::all()->where('id_kelasMapelGuru', $id);
         
+        $user = User::join('guru', 'users.username', '=', 'guru.username')
+                ->select('users.username', 'guru.*')
+                ->where('users.id', Auth::user()->id)
+                ->first();
+
         return view('guru.pertemuan')
             ->with('kelas', $kelas)
             ->with('mapel', $mapel)
@@ -157,6 +163,7 @@ class PertemuanController extends Controller
             ->with('modul', $modul)
             ->with('tugas', $tugas)
             ->with('id', $id)
+            ->with('user', $user)
         ;
     }
 

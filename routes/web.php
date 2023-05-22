@@ -72,6 +72,7 @@ Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
+    Route::resource('user', UserController::class);
     Route::resource('pertemuan', PertemuanController::class);
     Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);
     Route::post('/pertemuan/modul/{pertemuan}/{id}', [PertemuanController::class, 'store_modul']);

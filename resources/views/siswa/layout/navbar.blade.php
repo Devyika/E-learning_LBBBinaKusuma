@@ -82,8 +82,11 @@
                             2 => 'Siswa',
                         ];
                     @endphp
-                    {{ $userLevels[Auth::user()->level_user] ?? 'Unknown' }}
+                    {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }}
                 </p>
+                @php
+                    $filteredKelasSiswa = $allKelasSiswa->where('id_siswa', $user->id);
+                @endphp
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
@@ -93,6 +96,20 @@
                                     admin
                                 @else
                                     {{ $user->name }}
+                                @endif
+                            </span>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <b>Kelas</b>
+                            <span>
+                                @if (Auth::user()->username == "admin")
+                                    admin
+                                @else
+                                    @foreach($filteredKelasSiswa as $ks)
+                                        {{ $ks->jurusanTingkatKelas->tingkat->name }} {{ $ks->jurusanTingkatKelas->jurusan->name }} {{ $ks->jurusanTingkatKelas->kelas->nama }}
+                                    @endforeach
                                 @endif
                             </span>
                         </div>
@@ -156,7 +173,7 @@
                     2 => 'siswa',
                 ];
 
-                $level = $userLevels[Auth::user()->level_user] ?? 'unknown';
+                $level = $userLevels[Auth::user()->level_user] ?? 'Developer';
                 @endphp
                 <form  id="editForm-{{ $user->id }}" action="{{ url('/'.$level.'/user/'. $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Admin;
 use App\Models\Guru;
 use App\Models\Jurusan;
+use App\Models\JurusanTingkatKelas;
 use App\Models\Kelas;
 use App\Models\KelasMapel;
 use App\Models\KelasSiswa;
@@ -50,5 +51,6 @@ class AppServiceProvider extends ServiceProvider
         View::share('allSiswa', Siswa::all());
         View::share('allKelasMapel', KelasMapel::all());
         View::share('allKelasSiswa', KelasSiswa::all());
+        View::share('allJurusanTingkatKelas', JurusanTingkatKelas::all());
     }
 }

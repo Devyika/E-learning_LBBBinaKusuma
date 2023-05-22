@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\kelas_mapel_guru;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,11 @@ class DashboardGuruController extends Controller
      */
     public function index()
     {
+        $user = User::join('guru', 'users.username', '=', 'guru.username')
+                ->select('users.username', 'guru.*')
+                ->where('users.id', Auth::user()->id)
+                ->first();
+
         $id_guru = Auth::user()->username;
 
         $userId = Guru::all()->where('username', $id_guru)->pluck('id');
@@ -45,6 +51,7 @@ class DashboardGuruController extends Controller
         return view('guru.dashboard')
             ->with('kelas', $kelas)
             ->with('mapel', $mapel)
+            ->with('user', $user)
         ;
     }
 

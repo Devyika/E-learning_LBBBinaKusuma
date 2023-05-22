@@ -3,7 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LMS | SMA Negeri 4 Probolinggo | Admin | {{ Auth::user()->name }}</title>
+  <title>LMS | SMA Negeri 4 Probolinggo | @php
+    $userLevels = [
+      0 => 'Admin',
+      1 => 'Guru',
+      2 => 'Siswa',
+    ];
+    @endphp
+    {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }} | {{ Auth::user()->username }}</title>
   <link rel="icon" href="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" sizes="32x32" />
 
   <!-- Google Font: Source Sans Pro -->

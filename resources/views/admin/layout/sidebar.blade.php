@@ -2,7 +2,16 @@
     <!-- Brand Logo -->
     <a href="{{ url('/') }}" class="brand-link bg-warning">
       <img src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">LMS | Admin</span>
+      <span class="brand-text font-weight-light">LMS | 
+        @php
+        $userLevels = [
+          0 => 'Admin',
+          1 => 'Guru',
+          2 => 'Siswa',
+        ];
+        @endphp
+        {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }}
+      </span>
     </a>
 
     <!-- Sidebar -->

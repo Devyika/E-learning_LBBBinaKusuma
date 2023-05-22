@@ -82,7 +82,7 @@
                             2 => 'Siswa',
                         ];
                     @endphp
-                    {{ $userLevels[Auth::user()->level_user] ?? 'Unknown' }}
+                    {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }}
                 </p>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -156,7 +156,7 @@
                     2 => 'siswa',
                 ];
 
-                $level = $userLevels[Auth::user()->level_user] ?? 'unknown';
+                $level = $userLevels[Auth::user()->level_user] ?? 'Developer';
                 @endphp
                 <form  id="editForm-{{ $user->id }}" action="{{ url('/'.$level.'/user/'. $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
