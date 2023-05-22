@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class DashboardSiswaController extends Controller
+class MapelSiswaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +22,8 @@ class DashboardSiswaController extends Controller
             ->where('users.id', Auth::user()->id)
             ->first();
 
-        $mapelSiswa = KelasSiswa::with('siswa')
-            ->where('id_siswa', $user)
-            ->get();
+        $mapelSiswa = KelasSiswa::all();
+            
 
         return view('siswa.dashboard', ['user' => $user, 'mapelSiswa' => $mapelSiswa]);
     }
@@ -47,7 +46,7 @@ class DashboardSiswaController extends Controller
      */
     public function store(Request $request)
     {
-        
+        //
     }
 
     /**

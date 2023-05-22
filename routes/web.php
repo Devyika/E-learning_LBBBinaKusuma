@@ -24,6 +24,7 @@ use App\Http\Controllers\Guru\{
 };
 
 use App\Http\Controllers\Siswa\{
+    MapelSiswaController,
     DashboardSiswaController,
 };
 
@@ -79,4 +80,6 @@ Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
 
 Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'index']);
+    Route::resource('user', UserController::class);
+    Route::get('/mata_pelajaran', [MapelSiswaController::class, 'index']);
 });
