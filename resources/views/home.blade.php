@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link rel="icon" href="https://sman4-pbl.sch.id/wp-content/uploads/2023/05/cropped-sma4-32x32.jpg" sizes="32x32" />
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>LMS | SMA Negeri 4 Probolinggo</title>
@@ -207,7 +206,7 @@
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4>2023</h4>
-                                <h4 class="subheading">Versi 1</h4>
+                                <h4 class="subheading">Versi 1.0</h4>
                             </div>
                             <div class="timeline-body"><p class="text-muted">Dalam proses pembuatan LMS, penting untuk memperhatikan aspek desain, fungsionalitas, dan keamanan yang dapat memengaruhi pengalaman belajar pengguna.</p></div>
                         </div>
@@ -239,9 +238,7 @@
                             <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/1.jpg') }}" alt="..." />
                             <h4>Fiki Suganda</h4>
                             <p class="text-muted">Lead Designer</p>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Parveen Anand Twitter Profile"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Parveen Anand Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Parveen Anand LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-dark btn-social mx-2" href="https://github.com/fikisug" aria-label="Fiki Suganda"><i class="fa-brands fa-github"></i></i></a>
                         </div>
                     </div>
                     <div class="col-lg-3">
@@ -249,9 +246,7 @@
                             <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/3.jpg') }}" alt="..." />
                             <h4>Moch. Nadi</h4>
                             <p class="text-muted">Lead Developer</p>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Twitter Profile"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-dark btn-social mx-2" href="https://github.com/MochNad" aria-label="Moch. Nadi"><i class="fa-brands fa-github"></i></a>
                         </div>
                     </div>
                     <div class="col-lg-3">
@@ -259,9 +254,7 @@
                             <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/1.jpg') }}" alt="..." />
                             <h4>Rizaldy Ali</h4>
                             <p class="text-muted">Lead Designer</p>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Parveen Anand Twitter Profile"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Parveen Anand Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Parveen Anand LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-dark btn-social mx-2" href="https://github.com/RizaldyAli" aria-label="Rizaldy Ali"><i class="fa-brands fa-github"></i></a>
                         </div>
                     </div>
                     <div class="col-lg-3">
@@ -269,9 +262,7 @@
                             <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/3.jpg') }}" alt="..." />
                             <h4>Rambimo Regeng</h4>
                             <p class="text-muted">Lead Developer</p>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Twitter Profile"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-dark btn-social mx-2" href="https://github.com/Rambimo" aria-label="Rambimo Regeng"><i class="fa-brands fa-github"></i></a>
                         </div>
                     </div>
                 </div>
@@ -367,15 +358,19 @@
         <footer class="footer py-4">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-4 text-lg-start">Copyright &copy; LMS | SMA Negeri 4 Probolinggo</div>
-                    <div class="col-lg-4 my-3 my-lg-0">
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <div class="col-lg-5 text-lg-start">
+                        <strong>Copyright &copy; Proyek_1 <a href="https://github.com/MochNad/proyek_1">Kelompok 5</a>.</strong>
+                        TI-2B
+                    <div class="float-right d-none d-sm-inline-block">
+                        <b>Version</b> 1.0
                     </div>
-                    <div class="col-lg-4 text-lg-end">
-                        <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
-                        <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                </div>
+                    <div class="col-lg-2 my-3 my-lg-0">
+                        <a class="btn btn-dark btn-social mx-2" href="https://github.com/MochNad/proyek_1" aria-label="Twitter"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                    <div class="col-lg-5 text-lg-end">
+                        <a class="link-dark text-decoration-none me-3" href="#page-top">Privacy Policy</a>
+                        <a class="link-dark text-decoration-none" href="#page-top">Terms of Use</a>
                     </div>
                 </div>
             </div>
