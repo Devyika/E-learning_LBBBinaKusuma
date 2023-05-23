@@ -41,9 +41,10 @@ class PertemuanSiswaController extends Controller
 
         $modul = DB::table('modul as a')
             ->join('pertemuan as b','b.id','=','a.id_pertemuan')
+            ->select('a.*')
             ->where('a.id_pertemuan', $id)
             ->get();
-
+        
         $tugas = DB::table('tugas as a')
             ->join('pertemuan as b','b.id','=','a.id_pertemuan')
             ->where('a.id_pertemuan', $id)
