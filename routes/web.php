@@ -26,6 +26,7 @@ use App\Http\Controllers\Guru\{
 use App\Http\Controllers\Siswa\{
     MapelSiswaController,
     DashboardSiswaController,
+    PertemuanSiswaController,
 };
 
 /*
@@ -72,7 +73,7 @@ Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
-    //Route::resource('user', UserController::class);
+    Route::resource('user', UserController::class);
     Route::resource('pertemuan', PertemuanController::class);
     Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);
     Route::post('/pertemuan/modul/{pertemuan}/{id}', [PertemuanController::class, 'store_modul'])->name('add.modul');
@@ -83,7 +84,7 @@ Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
 
 Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'index']);
-    Route::get('/pertemuan/{id}', [PertemuanController::class, 'pertemuan_siswa']);
-    //Route::resource('user', UserController::class);
+    Route::get('/pertemuan/{id}', [PertemuanSiswaController::class, 'show']);
+    Route::resource('user', UserController::class);
     Route::get('/mata_pelajaran', [MapelSiswaController::class, 'index']);
 });

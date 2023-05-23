@@ -19,6 +19,7 @@ class DashboardSiswaController extends Controller
      */
     public function index()
     {
+        DB::statement("SET SQL_MODE=''");
         $username_siswa = Auth::user()->username;
 
         $userId = Siswa::all()->where('username', $username_siswa)->pluck('id');

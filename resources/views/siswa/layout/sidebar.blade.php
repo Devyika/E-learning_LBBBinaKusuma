@@ -35,7 +35,7 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  @foreach ($pertemuan as $p)
+                  @foreach ($pertemuanSidebar as $p)
                   @if ($p->id_mapel == $m->mapel->id)
                   <li class="nav-item">
                     <a href="{{ url('/siswa/pertemuan/'.$p->id) }}" class="nav-link">
