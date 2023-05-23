@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PertemuanController extends Controller
 {
@@ -75,7 +76,6 @@ class PertemuanController extends Controller
     public function store_modul(Request $request, $pertemuanId, $id)
     {
         $username = Auth::user()->username;
-
         $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'file' => ['required'],
@@ -138,17 +138,20 @@ class PertemuanController extends Controller
 
         $modul = DB::table('pertemuan')
         ->join('modul', 'modul.id_pertemuan', '=', 'pertemuan.id')
-        ->select('modul.nama as nama', 'modul.file', 'modul.id_pertemuan as id_pertemuan')
+        ->select('modul.nama as nama', 'modul.file', 'modul.id_pertemuan as id_pertemuan', 'modul.id as id')
         ->where('pertemuan.id_kelasMapelGuru', $id)
         ->get();
 
         $tugas = DB::table('pertemuan')
         ->join('tugas', 'tugas.id_pertemuan', '=', 'pertemuan.id')
-        ->select('tugas.nama as nama', 'tugas.id_pertemuan as id_pertemuan')
+        ->select('tugas.nama as nama', 'tugas.id_pertemuan as id_pertemuan', 'tugas.id')
         ->where('pertemuan.id_kelasMapelGuru', $id)
         ->get();
 
-        $pertemuan = Pertemuan::all()->where('id_kelasMapelGuru', $id);
+        $pertemuan = DB::table('pertemuan')
+        ->select('*')
+        ->where('id_kelasMapelGuru', $id)
+        ->get();
         
         $user = User::join('guru', 'users.username', '=', 'guru.username')
                 ->select('users.username', 'guru.*')
@@ -199,5 +202,21 @@ class PertemuanController extends Controller
     public function destroy(Pertemuan $pertemuan)
     {
         //
+    }
+
+    public function destroy_modul($id)
+    {
+        $path = 'public/'.Modul::find($id)->file;
+        Storage::delete($path);
+        Modul::where('id', '=', $id)->delete();
+    
+        return redirect()->back()->with('success', 'Data modul berhasil dihapus.');
+    }
+
+    public function destroy_tugas($id)
+    {
+        Tugas::where('id', '=', $id)->delete();
+    
+        return redirect()->back()->with('success', 'Data modul berhasil dihapus.');
     }
 }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Models\KelasSiswa;
+use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardSiswaController extends Controller
 {
@@ -17,6 +19,10 @@ class DashboardSiswaController extends Controller
      */
     public function index()
     {
+        $username_siswa = Auth::user()->username;
+
+        $userId = Siswa::all()->where('username', $username_siswa)->pluck('id');
+
         $user = User::join('siswa', 'users.username', '=', 'siswa.username')
             ->select('users.username', 'siswa.*')
             ->where('users.id', Auth::user()->id)
@@ -26,7 +32,16 @@ class DashboardSiswaController extends Controller
             ->where('id_siswa', $user)
             ->get();
 
-        return view('siswa.dashboard', ['user' => $user, 'mapelSiswa' => $mapelSiswa]);
+        $pertemuan = DB::table('pertemuan as a')
+        ->join('kelas_mapel_guru as b', 'b.id', '=', 'a.id_kelasMapelGuru')
+        ->join('kelas_siswa as c', 'c.id_jurusanTingkatKelas', '=', 'b.id_jurusanTingkatKelas')
+        ->select('a.id', 'a.nama', 'a.id_kelasMapelGuru', 'b.id_jurusanTingkatKelas', 'b.id_mapel', 'c.id_siswa')
+        ->where('id_siswa', $userId)
+        ->orderBy('nama')
+        ->get();
+
+        return view('siswa.dashboard', ['user' => $user, 'mapelSiswa' => $mapelSiswa])
+            ->with('pertemuan', $pertemuan);
     }
 
     /**

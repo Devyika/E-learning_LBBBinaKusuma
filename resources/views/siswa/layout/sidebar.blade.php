@@ -35,18 +35,16 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
+                  @foreach ($pertemuan as $p)
+                  @if ($p->id_mapel == $m->mapel->id)
                   <li class="nav-item">
-                    <a href="{{ url('/mapel/modul/'.$m->id) }}" class="nav-link">
+                    <a href="{{ url('/siswa/pertemuan/'.$p->id) }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
-                      <p>Modul</p>
+                      <p>{{$p->nama}}</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="{{ url('/mapel/tugas/'.$m->id) }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
-                      <p>Tugas</p>
-                    </a>
-                  </li>
+                  @endif
+                  @endforeach
                 </ul>
               </li>
               @endforeach

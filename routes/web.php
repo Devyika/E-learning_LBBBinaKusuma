@@ -72,15 +72,18 @@ Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
-    Route::resource('user', UserController::class);
+    //Route::resource('user', UserController::class);
     Route::resource('pertemuan', PertemuanController::class);
     Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);
-    Route::post('/pertemuan/modul/{pertemuan}/{id}', [PertemuanController::class, 'store_modul']);
+    Route::post('/pertemuan/modul/{pertemuan}/{id}', [PertemuanController::class, 'store_modul'])->name('add.modul');
     Route::post('/pertemuan/tugas/{pertemuan}/{id}', [PertemuanController::class, 'store_tugas']);
+    Route::delete('/pertemuan/deleteModul/{id}', [PertemuanController::class, 'destroy_modul']);
+    Route::delete('/pertemuan/deleteTugas/{id}', [PertemuanController::class, 'destroy_tugas']);
 });
 
 Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'index']);
-    Route::resource('user', UserController::class);
+    Route::get('/pertemuan/{id}', [PertemuanController::class, 'pertemuan_siswa']);
+    //Route::resource('user', UserController::class);
     Route::get('/mata_pelajaran', [MapelSiswaController::class, 'index']);
 });

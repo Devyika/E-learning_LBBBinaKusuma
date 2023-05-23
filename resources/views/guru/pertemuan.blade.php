@@ -46,9 +46,47 @@
               <tr data-widget="expandable-table" aria-expanded="true">
                 <td>
                   <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
-                  Modul &nbsp; | &nbsp; <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModulModal">
+                  Modul &nbsp; | &nbsp; 
+                  <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModulModal{{$p->id}}">
                     <i class="fa-solid fa-plus"></i>
                   </button>
+                  {{-- addmodul modal --}}
+                  <div class="modal fade" id="addModulModal{{$p->id}}" tabindex="-1" role="dialog" aria-labelledby="addModulModal-label" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="addModulModal-label"><strong>Tambah Modul</strong> {{ $p->nama }}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="addModul{{$p->id}}" method="POST" action="{{ route('add.modul', ['pertemuan' => $id, 'id' => $p->id]) }}" enctype="multipart/form-data">            
+                            @csrf
+                                <div class="form-group">
+                                  <label for="nama">Nama</label>
+                                  <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
+                                  @error('nama')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                  @enderror
+                                </div>
+                                <div class="form-group">
+                                  <label for="file">File</label>
+                                  <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" value="{{ old('file') }}" placeholder="Masukkan File">
+                                  @error('file')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                  @enderror
+                                </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+                          <button type="submit" class="btn btn-primary btn-sm" form="addModul{{$p->id}}"><i class="fa-solid fa-save"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {{-- tutup addmodul modal --}}
                 </td>
               </tr>
               <tr class="expandable-body">
@@ -56,20 +94,41 @@
                   <div class="p-0">
                     <table class="table table-hover">
                       <tbody>
-                        @foreach ($modul as $m)
-                        @if ($m->id_pertemuan == $p->id)
+                        @foreach ($modul as $mm)
+                        @if ($mm->id_pertemuan == $p->id)                        
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            &emsp; <a href="{{asset('storage/'.$m->file)}}" target="_blank" rel="noopener noreferrer">{{$m->nama}}</a> &nbsp; &nbsp; | &nbsp; &nbsp; 
-                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModulModal">
-                              Edit
-                            </button>
-                            &nbsp; 
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#addModulModal">
-                              Hapus
+                            &emsp; <a href="{{asset('storage/'.$mm->file)}}" target="_blank" rel="noopener noreferrer">{{$mm->nama}}</a> &nbsp; &nbsp; | &nbsp; &nbsp; 
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModalModul{{$mm->id}}">
+                              <i class="fa-solid fa-minus"></i>
                             </button>
                           </td>
                         </tr>
+                        {{-- modal deletemodul --}}
+                        <div class="modal fade" id="deleteModalModul{{$mm->id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModulModal-label" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="deleteModulModal-label"><strong>Hapus Modul </strong>{{ $mm->nama }}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <p>Anda yakin ingin menghapus admin ini?</p>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <form method="POST" action="{{ url('/guru/pertemuan/deleteModul/'.$mm->id)}}">
+                                          @csrf
+                                          @method('DELETE')
+                                          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+                                          <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+                        {{-- tutup modal deletemodul --}}
                         @endif
                         @endforeach
                       </tbody>
@@ -82,9 +141,39 @@
                 <td>
                   <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
                   Tugas &nbsp; | &nbsp; 
-                  <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModulTugas">
+                  <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModulTugas{{$p->id}}">
                     <i class="fa-solid fa-plus"></i>
                   </button>
+                  {{-- addtugas modal --}}
+                  <div class="modal fade" id="addModulTugas{{$p->id}}" tabindex="-1" role="dialog" aria-labelledby="addModulTugas-label" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="addModulTugas-label"><strong>Tambah Tugas</strong> {{$p->nama}}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form id="addTugas{{$p->id}}" method="POST" action="{{ url('/guru/pertemuan/tugas/'.$id.'/'.$p->id) }}" enctype="multipart/form-data">            
+                            @csrf
+                                <div class="form-group">
+                                  <label for="nama">Nama</label>
+                                  <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
+                                  @error('nama')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                  @enderror
+                                </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+                          <button type="submit" class="btn btn-primary btn-sm" form="addTugas{{$p->id}}"><i class="fa-solid fa-save"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {{-- tutup addtugas modal --}}
                 </td>
               </tr>
               <tr class="expandable-body">
@@ -98,13 +187,36 @@
                           <td>
                             &emsp; {{$t->nama}} &nbsp; &nbsp; | &nbsp; &nbsp; <a href="" class="btn btn-sm btn-primary">Lihat Tugas Siswa</a>
                             &nbsp;
-                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModulModal">
-                              Edit
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteTugasModal{{$t->id}}">
+                              <i class="fa-solid fa-minus"></i>
                             </button>
-                            &nbsp; 
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#addModulModal">
-                              Hapus
-                            </button>
+
+                        {{-- modal deletetugas --}}
+                        <div class="modal fade" id="deleteTugasModal{{$t->id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModulModal-label" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="deleteModulModal-label"><strong>Hapus Tugas </strong> {{ $t->nama }}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <p>Anda yakin ingin menghapus admin ini?</p>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <form method="POST" action="{{ url('/guru/pertemuan/deleteTugas/'.$t->id)}}">
+                                          @csrf
+                                          @method('DELETE')
+                                          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+                                          <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+                        {{-- tutup modal deletetugas --}}
+
                           </td>
                         </tr>
                         @endif
@@ -115,7 +227,6 @@
                 </td>
               </tr>
               @endforeach
-              
             </tbody>
           </table>
         </div>
@@ -161,110 +272,5 @@
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="addModulModal" tabindex="-1" role="dialog" aria-labelledby="addModulModal-label" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addModulModal-label"><strong>Tambah Modul</strong></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        @isset($p)
-        <form id="addModul2" method="POST" action="{{ url('/guru/pertemuan/modul/'.$id.'/'.$p->id) }}" enctype="multipart/form-data">            
-        @endisset
-          @csrf
-              <div class="form-group">
-                <label for="nama">Nama</label>
-                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
-                @error('nama')
-                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                @enderror
-              </div>
-              <div class="form-group">
-                <label for="file">File</label>
-                <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" value="{{ old('file') }}" placeholder="Masukkan File">
-                @error('file')
-                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                @enderror
-              </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
-        <button type="submit" class="btn btn-primary btn-sm" form="addModul2"><i class="fa-solid fa-save"></i></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="addModulTugas" tabindex="-1" role="dialog" aria-labelledby="addModulTugas-label" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addModulTugas-label"><strong>Tambah Tugas</strong></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        @isset($p)
-        <form id="addModul3" method="POST" action="{{ url('/guru/pertemuan/tugas/'.$id.'/'.$p->id) }}" enctype="multipart/form-data">            
-        @endisset
-          @csrf
-              <div class="form-group">
-                <label for="nama">Nama</label>
-                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
-                @error('nama')
-                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                @enderror
-              </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
-        <button type="submit" class="btn btn-primary btn-sm" form="addModul3"><i class="fa-solid fa-save"></i></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-{{-- @foreach ($admin as $a) --}}
-{{-- <div class="modal fade" id="editAdminModal-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="editAdminModal-label-{{ $a->id }}" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editAdminModal-label-{{ $a->id }}"><strong>Edit Admin </strong>{{ $a->name }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="editAdminForm-{{ $a->id }}" method="POST" action="{{ url('/admin/input-admin/'. $a->id) }}" enctype="multipart/form-data">
-          @csrf
-          @method('PUT')
-          <div class="row">
-            <div class="col-md-8">
-              <div class="form-group">
-                <label for="name">Nama</label>
-                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $a->name) }}" placeholder="Masukkan Nama">
-                @error('name')
-                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                @enderror
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
-        <button type="submit" class="btn btn-primary btn-sm" form="editAdminForm-{{ $a->id }}"><i class="fa-solid fa-save"></i></button>
-      </div>
-    </div>                              
-  </div>
-</div>    --}}
-{{-- @endforeach --}}
 
 @endsection
