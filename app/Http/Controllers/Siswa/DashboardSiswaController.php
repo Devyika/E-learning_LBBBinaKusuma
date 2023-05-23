@@ -33,6 +33,14 @@ class DashboardSiswaController extends Controller
             ->where('id_siswa', $user)
             ->get();
 
+        $pertemuanSidebar = DB::table('pertemuan as a')
+        ->join('kelas_mapel_guru as b', 'b.id', '=', 'a.id_kelasMapelGuru')
+        ->join('kelas_siswa as c', 'c.id_jurusanTingkatKelas', '=', 'b.id_jurusanTingkatKelas')
+        ->select('a.id', 'a.nama', 'a.id_kelasMapelGuru', 'b.id_jurusanTingkatKelas', 'b.id_mapel', 'c.id_siswa')
+        ->where('id_siswa', $userId)
+        ->orderBy('nama')
+        ->get();
+
         $pertemuan = DB::table('pertemuan as a')
         ->join('kelas_mapel_guru as b', 'b.id', '=', 'a.id_kelasMapelGuru')
         ->join('kelas_siswa as c', 'c.id_jurusanTingkatKelas', '=', 'b.id_jurusanTingkatKelas')
@@ -42,7 +50,8 @@ class DashboardSiswaController extends Controller
         ->get();
 
         return view('siswa.dashboard', ['user' => $user, 'mapelSiswa' => $mapelSiswa])
-            ->with('pertemuan', $pertemuan);
+            ->with('pertemuan', $pertemuan)
+            ->with('pertemuanSidebar', $pertemuanSidebar);
     }
 
     /**
