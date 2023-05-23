@@ -235,33 +235,33 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/1.jpg') }}" alt="..." />
+                            <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/fiki.jpg') }}" alt="..." />
                             <h4>Fiki Suganda</h4>
-                            <p class="text-muted">Lead Designer</p>
+                            <p class="text-muted">Project Manager</p>
                             <a class="btn btn-dark btn-social mx-2" href="https://github.com/fikisug" aria-label="Fiki Suganda"><i class="fa-brands fa-github"></i></i></a>
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/3.jpg') }}" alt="..." />
+                            <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/nadi.jpg') }}" alt="..." />
                             <h4>Moch. Nadi</h4>
-                            <p class="text-muted">Lead Developer</p>
+                            <p class="text-muted">Programmer Front End</p>
                             <a class="btn btn-dark btn-social mx-2" href="https://github.com/MochNad" aria-label="Moch. Nadi"><i class="fa-brands fa-github"></i></a>
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/1.jpg') }}" alt="..." />
+                            <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/rizaldy.jpg') }}" alt="..." />
                             <h4>Rizaldy Ali</h4>
-                            <p class="text-muted">Lead Designer</p>
+                            <p class="text-muted">Designer</p>
                             <a class="btn btn-dark btn-social mx-2" href="https://github.com/RizaldyAli" aria-label="Rizaldy Ali"><i class="fa-brands fa-github"></i></a>
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/3.jpg') }}" alt="..." />
+                            <img class="mx-auto rounded-circle" src="{{ asset('home/assets/img/team/rambimo.jpg') }}" alt="..." />
                             <h4>Rambimo Regeng</h4>
-                            <p class="text-muted">Lead Developer</p>
+                            <p class="text-muted">Programmer Back End</p>
                             <a class="btn btn-dark btn-social mx-2" href="https://github.com/Rambimo" aria-label="Rambimo Regeng"><i class="fa-brands fa-github"></i></a>
                         </div>
                     </div>
