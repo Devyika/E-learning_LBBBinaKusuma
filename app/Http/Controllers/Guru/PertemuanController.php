@@ -105,6 +105,7 @@ class PertemuanController extends Controller
      */
     public function show($id)
     {
+        DB::statement("SET SQL_MODE=''");
         $id_guru = Auth::user()->username;
 
         $userId = Guru::all()->where('username', $id_guru)->pluck('id');

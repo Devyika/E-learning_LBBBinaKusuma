@@ -20,6 +20,7 @@ class DashboardGuruController extends Controller
      */
     public function index()
     {
+        DB::statement("SET SQL_MODE=''");
         $user = User::join('guru', 'users.username', '=', 'guru.username')
                 ->select('users.username', 'guru.*')
                 ->where('users.id', Auth::user()->id)
@@ -36,7 +37,7 @@ class DashboardGuruController extends Controller
             ->join('tingkat as e', 'b.id_tingkat', '=', 'e.id')
             ->select('c.nama as kelas','d.name as jurusan','e.name as tingkat', 'b.id as id_kelas')
             ->where('id_guru', $userId)
-            ->groupBy('id_jurusanTingkatKelas')
+            ->groupBy('a.id_jurusanTingkatKelas')
             ->orderBy('nama')
             ->get();
 
