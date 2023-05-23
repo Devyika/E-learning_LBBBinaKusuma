@@ -144,16 +144,25 @@ class AdminKelasController extends Controller
             'id_tingkat' => ['required'],
             'id_kelas' => ['required'],
         ]);
-
+    
+        $existingEntry = JurusanTingkatKelas::where('id_jurusan', $request->input('id_jurusan'))
+            ->where('id_tingkat', $request->input('id_tingkat'))
+            ->where('id_kelas', $request->input('id_kelas'))
+            ->exists();
+    
+        if ($existingEntry) {
+            return redirect()->back()->with('error', 'Kombinasi id_jurusan, id_tingkat, dan id_kelas sudah ada');
+        }
+    
         JurusanTingkatKelas::create([
             'id_jurusan' => $request->input('id_jurusan'),
             'id_tingkat' => $request->input('id_tingkat'),
             'id_kelas' => $request->input('id_kelas'),
         ]);
-
+    
         return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
-
+    
     public function jurusanTingkatKelas_update(Request $request, $id)
     {
         $request->validate([
@@ -161,13 +170,24 @@ class AdminKelasController extends Controller
             'id_tingkat' => ['required'],
             'id_kelas' => ['required'],
         ]);
-
+    
         $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);
+    
+        $existingEntry = JurusanTingkatKelas::where('id_jurusan', $request->input('id_jurusan'))
+            ->where('id_tingkat', $request->input('id_tingkat'))
+            ->where('id_kelas', $request->input('id_kelas'))
+            ->where('id', '!=', $id)
+            ->exists();
+    
+        if ($existingEntry) {
+            return redirect()->back()->with('error', 'Kombinasi id_jurusan, id_tingkat, dan id_kelas sudah ada');
+        }
+    
         $jurusanTingkatKelas->id_jurusan = $request->input('id_jurusan');
         $jurusanTingkatKelas->id_tingkat = $request->input('id_tingkat');
         $jurusanTingkatKelas->id_kelas = $request->input('id_kelas');
         $jurusanTingkatKelas->save();
-
+    
         return redirect()->back()->with('success', 'Data berhasil diperbarui');
     }
 

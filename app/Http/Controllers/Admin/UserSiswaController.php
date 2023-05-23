@@ -219,6 +219,12 @@ class UserSiswaController extends Controller
             'id_siswa' => ['required'],
         ]);
 
+        // Pemeriksaan apakah siswa sudah terdaftar di kelas lain
+        $siswaTerdaftar = KelasSiswa::where('id_siswa', $request->input('id_siswa'))->exists();
+        if ($siswaTerdaftar) {
+            return redirect()->back()->with('error', 'Siswa sudah terdaftar di kelas lain');
+        }
+
         KelasSiswa::create([
             'id_jurusanTingkatKelas' => $request->input('id_jurusanTingkatKelas'),
             'id_siswa' => $request->input('id_siswa'),
@@ -235,6 +241,15 @@ class UserSiswaController extends Controller
         ]);
 
         $kelasSiswa = KelasSiswa::findOrFail($id);
+
+        // Pemeriksaan apakah siswa sudah terdaftar di kelas lain selain kelas saat ini
+        $siswaTerdaftar = KelasSiswa::where('id_siswa', $request->input('id_siswa'))
+                                    ->where('id', '!=', $id)
+                                    ->exists();
+        if ($siswaTerdaftar) {
+            return redirect()->back()->with('error', 'Siswa sudah terdaftar di kelas lain');
+        }
+
         $kelasSiswa->id_jurusanTingkatKelas = $request->input('id_jurusanTingkatKelas');
         $kelasSiswa->id_siswa = $request->input('id_siswa');
         $kelasSiswa->save();

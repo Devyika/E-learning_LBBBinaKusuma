@@ -109,15 +109,6 @@
                   </p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="{{ url('admin/input-pertemuan') }}" class="nav-link">
-                  <i class="fas fa-comment-alt pr-2"></i>
-                  <p>
-                    Pertemuan
-                    <span class="badge badge-info right">{{ $countPertemuan }}</span>
-                  </p>
-                </a>
-              </li>
               <li class="nav-header">SETTING</li>
               <li class="nav-item">
                 <a href="{{ url('admin/setting-kelas') }}" class="nav-link">
