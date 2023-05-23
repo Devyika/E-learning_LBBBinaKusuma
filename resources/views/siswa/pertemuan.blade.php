@@ -38,7 +38,7 @@
             <tbody>
               @foreach ($pertemuan as $p)
               <tr>
-                <td class="border-0">{{$p->nama}}</td>
+                <td class="border-0">{{$p->mapel}}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="true">
                 <td>
