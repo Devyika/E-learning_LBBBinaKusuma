@@ -10,6 +10,7 @@ use App\Models\Kelas;
 use App\Models\KelasMapel;
 use App\Models\KelasSiswa;
 use App\Models\Mapel;
+use App\Models\PengumpulanTugas;
 use App\Models\Pertemuan;
 use App\Models\Siswa;
 use App\Models\Tingkat;
@@ -51,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
         View::share('allSiswa', Siswa::all());
         View::share('allKelasMapel', KelasMapel::all());
         View::share('allKelasSiswa', KelasSiswa::all());
+        View::share('allPengumpulanTugas', PengumpulanTugas::all());
         View::share('allJurusanTingkatKelas', JurusanTingkatKelas::all());
     }
 }

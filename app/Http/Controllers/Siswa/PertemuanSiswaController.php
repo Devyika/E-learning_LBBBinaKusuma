@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
+use App\Models\PengumpulanTugas;
 use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class PertemuanSiswaController extends Controller
         DB::statement("SET SQL_MODE=''");
         $username_siswa = Auth::user()->username;
 
-        $userId = Siswa::all()->where('username', $username_siswa)->pluck('id');
+        $userId = Siswa::all()->where('username', $username_siswa)->pluck('id')->first();
 
         $pertemuanSidebar = DB::table('pertemuan as a')
         ->join('kelas_mapel_guru as b', 'b.id', '=', 'a.id_kelasMapelGuru')
@@ -48,8 +49,9 @@ class PertemuanSiswaController extends Controller
         $tugas = DB::table('tugas as a')
             ->join('pertemuan as b','b.id','=','a.id_pertemuan')
             ->where('a.id_pertemuan', $id)
+            ->select('a.*')
             ->get();
-        
+
         $user = User::join('siswa', 'users.username', '=', 'siswa.username')
                 ->select('users.username', 'siswa.*')
                 ->where('users.id', Auth::user()->id)
@@ -60,6 +62,36 @@ class PertemuanSiswaController extends Controller
             ->with('pertemuanSidebar', $pertemuanSidebar)
             ->with('modul', $modul)
             ->with('user', $user)
-            ->with('tugas', $tugas);
+            ->with('tugas', $tugas)
+            ->with('userId', $userId);
     }
+
+    public function store(Request $request, $id)
+{
+    $request->validate([
+        'file' => ['required', 'file', 'mimes:pdf'], // Menambahkan validasi mime type untuk hanya menerima file PDF
+    ]);
+
+    $username_siswa = Auth::user()->username;
+    $userId = Siswa::where('username', $username_siswa)->pluck('id')->first(); // Menggunakan "first()" untuk mendapatkan ID siswa tunggal
+
+    $file_name = null; // Menginisialisasi variabel $file_name dengan nilai null
+
+    if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+        $filename = 'tugas-' . $id . '.' . $extension;
+        $file_name = $file->storeAs('file/tugas', $filename, 'public');
+    }
+
+    PengumpulanTugas::create([
+        'id_siswa' => $userId,
+        'id_tugas' => $id,
+        'nilai' => 'Belum Dinilai',
+        'file' => $file_name,
+    ]);
+
+    return redirect()->back()->with('success', 'File berhasil dikumpulkan');
+}
+
 }

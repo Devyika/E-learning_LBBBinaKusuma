@@ -81,10 +81,48 @@
                         @if ($t->id_pertemuan == $p->id)
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            &emsp; {{$t->nama}}
+                            &emsp; <a href="{{ url('/siswa/pengumpulan-tugas/'.$t->id) }}" data-toggle="modal" data-target="#modal{{$t->id}}">{{$t->nama}}</a>
                             &nbsp;
                           </td>
                         </tr>
+                        {{-- modal --}}
+                        <div class="modal fade" id="modal{{$t->id}}" tabindex="-1" role="dialog" aria-labelledby="modal-label{{$t->id}}" aria-hidden="true">
+                          <div class="modal-dialog modal-md" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="modal-label{{$t->id}}"><strong>Pengumpulan Tugas</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="text-center" id="preview">
+                                </div>
+                                <form id="modalForm{{$t->id}}" method="POST" action="{{ url('siswa/pengumpulan-tugas/'.$t->id) }}" enctype="multipart/form-data">
+                                  @csrf
+                                  <div class="form-group">
+                                    <label for="file">File Tugas</label>
+                                    <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" accept="application/pdf" onchange="previewPDF()" style="padding: 0; height: 100%;">
+                                    @error('file')
+                                      <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                    @enderror
+                                  </div>
+                                </form>
+                                @foreach($allPengumpulanTugas as $pt)
+                                  @if($pt->id_siswa == $userId && $pt->id_tugas == $t->id)
+                                    <button class="btn btn-primary btn-block" onclick="openFile('{{ asset('storage/'.$pt->file) }}')">Tugas</button>
+                                  @endif
+                                @endforeach
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
+                                <button type="submit" class="btn btn-primary btn-sm" form="modalForm{{$t->id}}"><i class="fa-solid fa-save"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                  </div>                     
                         @endif
                         @endforeach
                       </tbody>

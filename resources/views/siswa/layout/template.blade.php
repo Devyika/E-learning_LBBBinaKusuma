@@ -102,6 +102,7 @@
 </div>
 <!-- ./wrapper -->
 <!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.min.js"></script>
 <script src="{{ asset('/assets/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('/assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -207,6 +208,49 @@
           document.getElementById('photo').click();
         }
         
+        function previewPDF() {
+    var file = document.querySelector('#file').files[0];
+    var previewContainer = document.querySelector('#preview');
+
+    if (file) {
+      var fileReader = new FileReader();
+
+      fileReader.onload = function () {
+        var typedarray = new Uint8Array(this.result);
+
+        pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
+          pdf.getPage(1).then(function (page) {
+            var scale = 0.5;
+            var viewport = page.getViewport({ scale: scale });
+
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            var renderContext = {
+              canvasContext: context,
+              viewport: viewport
+            };
+
+            page.render(renderContext).promise.then(function () {
+              var dataURL = canvas.toDataURL();
+
+              var image = new Image();
+              image.src = dataURL;
+              image.height = viewport.height * scale; // Set the desired height for the preview image
+              image.title = file.name;
+
+              previewContainer.innerHTML = '';
+              previewContainer.appendChild(image);
+            });
+          });
+        });
+      };
+
+      fileReader.readAsArrayBuffer(file);
+    }
+  }
 </script>
 </body>
 </html>
