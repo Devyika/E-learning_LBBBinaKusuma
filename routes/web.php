@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\{
 
 use App\Http\Controllers\Guru\{
     DashboardGuruController,
+    PengumpulanTugasController,
     PertemuanController,
 };
 
@@ -73,6 +74,7 @@ Route::middleware(['auth', 'IsAdmin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
+    Route::get('/tugas-siswa/{id_tugas}/{id_kelasMapelGuru}/{id_pertemuan}', [PengumpulanTugasController::class, 'index']);
     Route::resource('user', UserController::class);
     Route::resource('pertemuan', PertemuanController::class);
     Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);

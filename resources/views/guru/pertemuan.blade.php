@@ -185,7 +185,7 @@
                         @if ($t->id_pertemuan == $p->id)
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            &emsp; {{$t->nama}} &nbsp; &nbsp; | &nbsp; &nbsp; <a href="" class="btn btn-sm btn-primary">Lihat Tugas Siswa</a>
+                            &emsp; {{$t->nama}} &nbsp; &nbsp; | &nbsp; &nbsp; <a href="{{ url('/guru/tugas-siswa/'.$t->id.'/'.$id.'/'.$t->id_pertemuan)}}" class="btn btn-sm btn-primary">Lihat Tugas Siswa</a>
                             &nbsp;
                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteTugasModal{{$t->id}}">
                               <i class="fa-solid fa-minus"></i>
