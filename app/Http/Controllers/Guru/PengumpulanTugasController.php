@@ -31,10 +31,10 @@ class PengumpulanTugasController extends Controller
                 ->get();
 
         $data = DB::table('pengumpulan_tugas as a')
-        ->join('siswa as b', 'b.id', '=', 'a.id_siswa')
-        ->select('b.name as nama', DB::raw("REPLACE(a.file, 'file/tugas/', '') as tugas"), 'a.file')
-        ->where('a.id_tugas', $id_tgs)
-        ->get();
+                ->join('siswa as b', 'b.id', '=', 'a.id_siswa')
+                ->select('b.name as nama', DB::raw("REPLACE(a.file, 'file/tugas/', '') as tugas"), 'a.file', 'a.nilai', 'a.id')
+                ->where('a.id_tugas', $id_tgs)
+                ->get();        
 
         $kelas = DB::table('kelas_mapel_guru as a')
             ->join('jurusan_tingkat_kelas as b', 'a.id_jurusanTingkatKelas', '=', 'b.id')
@@ -69,4 +69,18 @@ class PengumpulanTugasController extends Controller
             ->with('mapel', $mapel)
             ->with('user', $user);
     }
+
+    public function nilai(Request $request, $id)
+        {
+        $request->validate([
+                'nilai' => ['required', 'integer'], // Menambahkan validasi agar nilai harus berupa integer
+        ]);
+
+        $nilai = PengumpulanTugas::find($id);
+
+        $nilai->nilai = $request->input('nilai');
+        $nilai->save();
+
+        return redirect()->back();
+        }
 }

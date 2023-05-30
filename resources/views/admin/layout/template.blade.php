@@ -72,9 +72,11 @@
 <div class="wrapper">
 
   <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="AdminLTELogo" width="75" height="75">
-  </div>
+  <div class="preloader d-flex justify-content-center align-items-center">
+    <div class="spinner-border text-warning" role="status">
+      <span class="visually-hidden"></span>
+    </div>
+  </div>   
 
   <!-- Navbar -->
   @include('admin.layout.navbar')

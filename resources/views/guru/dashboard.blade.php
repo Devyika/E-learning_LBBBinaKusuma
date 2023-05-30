@@ -18,7 +18,21 @@
 
 <!-- Main content -->
 <section class="content">
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script>
+    $(document).ready(function () {
+        @php
+            $userLevels = [
+            0 => 'Admin',
+            1 => 'Guru',
+            2 => 'Siswa',
+            ];
+        @endphp
+        toastr.success('Selamat Datang {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }}!<br>Halo, {{ $user->name }}!');
+    });
+  </script>
 <!-- Default box -->
 <div class="container-fluid">
   <!-- Small boxes (Stat box) -->

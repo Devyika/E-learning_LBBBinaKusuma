@@ -14,5 +14,6 @@ class Tugas extends Model
     protected $fillable = [
         'nama',
         'id_pertemuan',
+        'deadline',
     ];
 }

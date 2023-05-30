@@ -24,6 +24,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
   <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">    
   <style>
     .image-preview {
         width: 250px;
@@ -72,8 +73,10 @@
 <div class="wrapper">
 
   <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="AdminLTELogo" width="75" height="75">
+  <div class="preloader d-flex justify-content-center align-items-center">
+    <div class="spinner-border text-warning" role="status">
+      <span class="visually-hidden"></span>
+    </div>
   </div>
 
   <!-- Navbar -->
@@ -124,6 +127,8 @@
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="{{ asset('/assets/dist/js/demo.js') }}"></script> --}}
 <!-- Page specific script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
   $(function () {
     $("#example1").DataTable({

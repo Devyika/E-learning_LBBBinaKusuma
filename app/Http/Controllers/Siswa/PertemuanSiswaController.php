@@ -67,31 +67,52 @@ class PertemuanSiswaController extends Controller
     }
 
     public function store(Request $request, $id)
-{
-    $request->validate([
-        'file' => ['required', 'file', 'mimes:pdf'], // Menambahkan validasi mime type untuk hanya menerima file PDF
-    ]);
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:pdf'], // Menambahkan validasi mime type untuk hanya menerima file PDF
+        ]);
 
-    $username_siswa = Auth::user()->username;
-    $userId = Siswa::where('username', $username_siswa)->pluck('id')->first(); // Menggunakan "first()" untuk mendapatkan ID siswa tunggal
+        $username_siswa = Auth::user()->username;
+        $userId = Siswa::where('username', $username_siswa)->pluck('id')->first(); // Menggunakan "first()" untuk mendapatkan ID siswa tunggal
 
-    $file_name = null; // Menginisialisasi variabel $file_name dengan nilai null
+        $existingSubmission = PengumpulanTugas::where('id_siswa', $userId)
+            ->where('id_tugas', $id)
+            ->first();
 
-    if ($request->hasFile('file')) {
-        $file = $request->file('file');
-        $extension = $file->getClientOriginalExtension();
-        $filename = 'tugas-' . $id . '.' . $extension;
-        $file_name = $file->storeAs('file/tugas', $filename, 'public');
+        if ($existingSubmission) {
+            // Jika sudah ada pengumpulan sebelumnya oleh $userId, lakukan update file
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $extension = $file->getClientOriginalExtension();
+                $originalFilename = $file->getClientOriginalName();
+                $file_name = $file->storeAs('file/tugas', $originalFilename, 'public');
+
+                $existingSubmission->update([
+                    'file' => $file_name,
+                ]);
+
+                return redirect()->back()->with('success', 'File berhasil diperbarui');
+            }
+        } else {
+            // Jika belum ada pengumpulan sebelumnya oleh $userId, buat entri baru
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $extension = $file->getClientOriginalExtension();
+                $originalFilename = $file->getClientOriginalName();
+                $file_name = $file->storeAs('file/tugas', $originalFilename, 'public');
+
+                PengumpulanTugas::create([
+                    'id_siswa' => $userId,
+                    'id_tugas' => $id,
+                    'nilai' => 0,
+                    'file' => $file_name,
+                ]);
+
+                return redirect()->back()->with('success', 'File berhasil dikumpulkan');
+            }
+        }
+
+        return redirect()->back()->with('error', 'Terjadi kesalahan dalam mengunggah file');
     }
-
-    PengumpulanTugas::create([
-        'id_siswa' => $userId,
-        'id_tugas' => $id,
-        'nilai' => 'Belum Dinilai',
-        'file' => $file_name,
-    ]);
-
-    return redirect()->back()->with('success', 'File berhasil dikumpulkan');
-}
 
 }

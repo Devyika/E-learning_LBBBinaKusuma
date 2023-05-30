@@ -115,7 +115,7 @@
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <p>Anda yakin ingin menghapus admin ini?</p>
+                                      <p>Anda yakin ingin menghapus modul ini?</p>
                                   </div>
                                   <div class="modal-footer">
                                       <form method="POST" action="{{ url('/guru/pertemuan/deleteModul/'.$mm->id)}}">
@@ -155,16 +155,23 @@
                           </button>
                         </div>
                         <div class="modal-body">
-                          <form id="addTugas{{$p->id}}" method="POST" action="{{ url('/guru/pertemuan/tugas/'.$id.'/'.$p->id) }}" enctype="multipart/form-data">            
+                          <form id="addTugas{{$p->id}}" method="POST" action="{{ url('/guru/pertemuan/tugas/'.$id.'/'.$p->id) }}" enctype="multipart/form-data">
                             @csrf
-                                <div class="form-group">
-                                  <label for="nama">Nama</label>
-                                  <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
-                                  @error('nama')
+                            <div class="form-group">
+                                <label for="nama">Nama</label>
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
+                                @error('nama')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                  @enderror
-                                </div>
-                          </form>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="deadline">Deadline</label>
+                                <input type="datetime-local" class="form-control @error('deadline') is-invalid @enderror" id="deadline" name="deadline" value="{{ old('deadline') }}" placeholder="Masukkan Deadline">
+                                @error('deadline')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </form>                        
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
@@ -185,11 +192,27 @@
                         @if ($t->id_pertemuan == $p->id)
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            &emsp; {{$t->nama}} &nbsp; &nbsp; | &nbsp; &nbsp; <a href="{{ url('/guru/tugas-siswa/'.$t->id.'/'.$id.'/'.$t->id_pertemuan)}}" class="btn btn-sm btn-primary">Lihat Tugas Siswa</a>
-                            &nbsp;
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteTugasModal{{$t->id}}">
-                              <i class="fa-solid fa-minus"></i>
-                            </button>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <span>{{$t->nama}}</span>
+                              <div>
+                                  <?php
+                                      date_default_timezone_set('Asia/Jakarta');
+                                      $currentTime = date('Y-m-d H:i:s');
+                                      $deadline = $t->deadline; // Contoh nilai deadline
+                                      $textColorClass = ($currentTime < $deadline) ? 'text-success' : 'text-danger';
+                                  ?>
+                                  <span class="text-muted">Deadline: </span>
+                                  @if ($currentTime < $deadline)
+                                      <span class="{{ $textColorClass }}">{{ $currentTime }}</span>
+                                  @else
+                                      <span class="{{ $textColorClass }}">{{ $deadline }}</span>
+                                  @endif
+                                  <a href="{{ url('/guru/tugas-siswa/'.$t->id.'/'.$id.'/'.$t->id_pertemuan)}}" class="btn btn-sm btn-primary ml-2">Lihat Tugas Siswa</a>
+                                  <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteTugasModal{{$t->id}}">
+                                      <i class="fa-solid fa-minus"></i>
+                                  </button>
+                              </div>
+                          </div>                                                                                                
 
                         {{-- modal deletetugas --}}
                         <div class="modal fade" id="deleteTugasModal{{$t->id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModulModal-label" aria-hidden="true">
@@ -202,7 +225,7 @@
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <p>Anda yakin ingin menghapus admin ini?</p>
+                                      <p>Anda yakin ingin menghapus tugas ini?</p>
                                   </div>
                                   <div class="modal-footer">
                                       <form method="POST" action="{{ url('/guru/pertemuan/deleteTugas/'.$t->id)}}">

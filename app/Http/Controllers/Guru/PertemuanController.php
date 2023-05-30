@@ -63,14 +63,16 @@ class PertemuanController extends Controller
     {
         $request->validate([
             'nama' => ['required', 'string', 'max:255'],
+            'deadline' => ['required', 'date'],
         ]);
 
         Tugas::create([
             'nama' => $request->input('nama'),
+            'deadline' => $request->input('deadline'),
             'id_pertemuan' => $id
         ]);
 
-        return redirect('guru/pertemuan/'.$pertemuan)->with('success', 'User Berhasil Ditambahkan');
+        return redirect('guru/pertemuan/'.$pertemuan)->with('success', 'Tugas Berhasil Ditambahkan');
     }
 
     public function store_modul(Request $request, $pertemuanId, $id)
@@ -145,7 +147,7 @@ class PertemuanController extends Controller
 
         $tugas = DB::table('pertemuan')
         ->join('tugas', 'tugas.id_pertemuan', '=', 'pertemuan.id')
-        ->select('tugas.nama as nama', 'tugas.id_pertemuan as id_pertemuan', 'tugas.id')
+        ->select('tugas.nama as nama', 'tugas.id_pertemuan as id_pertemuan', 'tugas.id', 'tugas.deadline') // tambahkan 'tugas.deadline' dalam select
         ->where('pertemuan.id_kelasMapelGuru', $id)
         ->get();
 

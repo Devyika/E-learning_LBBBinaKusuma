@@ -79,12 +79,39 @@
                       <tbody>
                         @foreach ($tugas as $t)
                         @if ($t->id_pertemuan == $p->id)
-                        <tr data-widget="expandable-table" aria-expanded="false">
-                          <td>
-                            &emsp; <a href="{{ url('/siswa/pengumpulan-tugas/'.$t->id) }}" data-toggle="modal" data-target="#modal{{$t->id}}">{{$t->nama}}</a>
-                            &nbsp;
-                          </td>
-                        </tr>
+                        @php
+                          date_default_timezone_set('Asia/Jakarta');
+                          $deadline = strtotime($t->deadline);
+                          $currentTime = time();
+                          $diffSeconds = $deadline - $currentTime;
+                                
+                          $hours = floor($diffSeconds / 3600);
+                          $minutes = floor(($diffSeconds % 3600) / 60);
+                          $seconds = $diffSeconds % 60;
+                                            
+                          $textColorClass = ($currentTime > $deadline) ? 'text-danger' : 'text-success';
+                        @endphp
+                            <tr data-widget="expandable-table" aria-expanded="false">
+                                <td>
+                                    &emsp; <a href="{{ url('/siswa/pengumpulan-tugas/'.$t->id) }}" onclick="{{ ($diffSeconds <= 0) ? 'event.preventDefault(); toastr.error(\'Deadline telah berlalu\');' : '' }}" data-toggle="modal" data-target="{{ ($diffSeconds > 0) ? '#modal'.$t->id : '' }}">
+                                      {{ $t->nama }}
+                                    </a>                                                             
+                                    &nbsp;
+                                </td>
+                                <td class="text-right">
+                                  @if ($t->deadline)
+                                      <span class="{{ $textColorClass }}">
+                                          @if ($diffSeconds > 0)
+                                              Sisa waktu: {{ $hours }} jam, {{ $minutes }} menit, {{ $seconds }} detik
+                                          @else
+                                              Deadline telah berlalu
+                                          @endif
+                                      </span>
+                                  @else
+                                      Tidak ada deadline
+                                  @endif
+                              </td>                                        
+
                         {{-- modal --}}
                         <div class="modal fade" id="modal{{$t->id}}" tabindex="-1" role="dialog" aria-labelledby="modal-label{{$t->id}}" aria-hidden="true">
                           <div class="modal-dialog modal-md" role="document">

@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   <style>
     .btn-warning {
       color: #ffffff!important;
@@ -30,7 +31,7 @@
       </a>      
     </div>
     <div class="card-body">
-      <form action="{{ url('/login')}}" method="post">
+      <form action="{{ route('login') }}" method="post">
         @csrf
         <div class="input-group mb-3">
           <div class="input-group-append">
@@ -50,12 +51,10 @@
         </div>
         <button type="submit" class="btn btn-warning btn-block">Login</button>
         <div class="text-center mt-2" style="opacity: 0.75;">
-          <small>Masukkan Username dan Password<br>(Menggunakan username & password)</small>
-        </div>
-          <!-- /.col -->
+          <small>Masukkan Username dan Password (Menggunakan username & password)</small>
         </div>
       </form>
-    </div>
+    </div>    
     <!-- /.card-body -->
   </div>
   <!-- /.card -->
@@ -66,7 +65,12 @@
 <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset('assets/dist/js/adminlte.min.js') }}"></script>
+<!-- Toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+@if ($errors->any())
+  <script>
+    toastr.error('Username dan Password yang kamu masukkan SALAH');
+  </script>
+@endif
 </body>
 </html>
