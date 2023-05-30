@@ -72,10 +72,10 @@
                                 </div>
                                 <div class="form-group">
                                   <label for="file">File</label>
-                                  <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" value="{{ old('file') }}" placeholder="Masukkan File">
-                                  @error('file')
-                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                  @enderror
+                                  <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file"value="{{ old('file') }}" placeholder="Masukkan File" style="padding: 0; height: 100%;">
+                                    @error('file')
+                                      <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                    @enderror
                                 </div>
                           </form>
                         </div>
