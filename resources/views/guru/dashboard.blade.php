@@ -30,7 +30,7 @@
             2 => 'Siswa',
             ];
         @endphp
-        toastr.success('Selamat Datang {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }}!<br>Halo, {{ $user->name }}!');
+        toastr.success('Selamat Datang {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }}!<br>Halo, {{ $user->name ?? 'admin' }}!');
     });
   </script>
 <!-- Default box -->
