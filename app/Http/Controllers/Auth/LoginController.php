@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\JsonResponse as HttpFoundationJsonResponse;
 
 class LoginController extends Controller
@@ -84,6 +85,8 @@ class LoginController extends Controller
         }
 
         $level_user = Auth::user()->level_user;
+
+        Session::flash('success', 'Login Berhasil');
 
         switch ($level_user) {
             case 0:
