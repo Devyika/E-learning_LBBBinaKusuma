@@ -25,4 +25,12 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function getCurrentTime()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $currentTime = date('H:i:s');
+
+        return response()->json(['current_time' => $currentTime]);
+    }
 }

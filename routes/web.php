@@ -45,6 +45,8 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index']);
 
+Route::get('/get-current-time', [HomeController::class, 'getCurrentTime']);
+
 Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::fallback(function () {

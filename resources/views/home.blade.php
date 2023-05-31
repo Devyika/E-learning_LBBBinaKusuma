@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>LMS | SMA Negeri 4 Probolinggo</title>
+        <title id="current-time"></title>
         <link rel="icon" href="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" sizes="32x32" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -40,6 +40,7 @@
             <div class="container">
                 <div class="masthead-subheading">Learning Management System</div>
                 <div class="masthead-heading text-uppercase">SMA Negeri 4 Probolinggo</div>
+                <span id="current-time" class="navbar-brand"></span>
                 @guest
                     <a class="btn btn-primary btn-xl text-uppercase" href="{{ url('/login') }}">Masuk</a>
                 @endguest
@@ -591,5 +592,28 @@
         <!-- Core theme JS-->
         <script src="{{ asset('home/js/scripts.js') }}"></script>
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                getCurrentTime();
+    
+                setInterval(function() {
+                    getCurrentTime();
+                }, 1000);
+            });
+    
+            function getCurrentTime() {
+                $.ajax({
+                    url: "{{ url('/get-current-time') }}",
+                    type: "GET",
+                    success: function(response) {
+                        $('#current-time').text("LMS | SMA Negeri 4 Probolinggo | " + response.current_time);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+        </script>
     </body>
 </html>
