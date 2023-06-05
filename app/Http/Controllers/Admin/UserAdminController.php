@@ -54,7 +54,7 @@ class UserAdminController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:admin'],
-            'foto' => ['required', 'image', 'max:2048'],
+            'foto' => ['nullable', 'image', 'max:2048'],
         ]);
 
         $prefix = '00'; // Prefix with 00
@@ -68,12 +68,16 @@ class UserAdminController extends Controller
             $username = $prefix . $uniqueId;
         }
 
+        $image_name = null; // Default value for image_name
+
         if ($request->file('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
             $filename = 'admin-foto-' . $username . '.' . $extension;
             $image_name = $file->storeAs('file/img/admin', $filename, 'public');
-        }        
+        } else {
+            $image_name = 'file/img/default/profile.png';
+        }
 
         $hashedPassword = Hash::make($username);
 
@@ -125,44 +129,47 @@ class UserAdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-{
-    // Validasi inputan
-    $validated = $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($id)],
-        'password' => ['nullable', 'string', 'min:4'],
-        'foto' => ['nullable', 'image', 'max:2048'],
-    ]);
+    {
+        // Validasi inputan
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($id)],
+            'password' => ['nullable', 'string', 'min:4'],
+            'foto' => ['nullable', 'image', 'max:2048'],
+        ]);
 
-    // Cari data admin berdasarkan ID
-    $admin = Admin::find($id);
+        // Cari data admin berdasarkan ID
+        $admin = Admin::find($id);
 
-    // Update data admin
-    $admin->name = $validated['name'];
-    $admin->email = $validated['email'];
+        // Update data admin
+        $admin->name = $validated['name'];
+        $admin->email = $validated['email'];
 
-    // Proses upload dan update foto ke dalam server jika ada
-    if ($request->hasFile('foto')) {
-        $foto = $request->file('foto');
-        $fotoName = 'admin-foto-' . $admin->username . '.' . $foto->getClientOriginalExtension();
-        Storage::disk('public')->delete($admin->foto);
+        // Proses upload dan update foto ke dalam server jika ada
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $fotoName = 'admin-foto-' . $admin->username . '.' . $foto->getClientOriginalExtension();
 
-        // Simpan foto baru
-        $foto->storeAs('file/img/admin', $fotoName, 'public');
-        $admin->foto = 'file/img/admin/' . $fotoName;
+            if ($admin->foto !== 'file/img/default/profile.png') {
+                Storage::disk('public')->delete($admin->foto);
+            }
+
+            // Simpan foto baru
+            $foto->storeAs('file/img/admin', $fotoName, 'public');
+            $admin->foto = 'file/img/admin/' . $fotoName;
+        }
+
+        $admin->save();
+
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            $user = User::where('username', $admin->username)->first();
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+        }
+
+        return redirect()->back()->with('success', 'Data admin berhasil diperbarui.');
     }
-
-    $admin->save();
-
-    // Update password jika diisi
-    if ($request->filled('password')) {
-        $user = User::where('username', $admin->username)->first();
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
-    }
-
-    return redirect()->back()->with('success', 'Data admin berhasil diperbarui.');
-}
 
     /**
      * Remove the specified resource from storage.
@@ -171,22 +178,22 @@ class UserAdminController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy($id)
-    {
-        $admin = Admin::find($id);
-        $user = User::where('username', $admin->username)->first();
-
-        if ($admin->foto) {
-            Storage::disk('public')->delete($admin->foto);
-        }
-    
-        $admin->delete();
-
-        if ($user) {
-            $user->delete();
-        }
-    
-        return redirect()->back()->with('success', 'Data admin, user, dan file foto berhasil dihapus.');
-    }
+     public function destroy($id)
+     {
+         $admin = Admin::find($id);
+         $user = User::where('username', $admin->username)->first();
+     
+         if ($admin->foto && $admin->foto !== 'file/img/default/profile.png') {
+             Storage::disk('public')->delete($admin->foto);
+         }
+     
+         $admin->delete();
+     
+         if ($user) {
+             $user->delete();
+         }
+     
+         return redirect()->back()->with('success', 'Data admin, user, dan file foto berhasil dihapus.');
+     }     
     
 }

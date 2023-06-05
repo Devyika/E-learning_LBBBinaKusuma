@@ -58,26 +58,30 @@ class UserSiswaController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:siswa'],
-            'foto' => ['required', 'image', 'max:2248'],
+            'foto' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        $prefix = '22'; // Prefix with 22
+        $prefix = '22'; // Prefix with 00
         $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Generate a 4-digit unique ID
 
         $username = $prefix . $uniqueId;
 
-        // Check if the generated username already exists in the siswa model
+        // Check if the generated username already exists in the Siswa model
         while (Siswa::where('username', $username)->exists()) {
             $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Regenerate the unique ID
             $username = $prefix . $uniqueId;
         }
+
+        $image_name = null; // Default value for image_name
 
         if ($request->file('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
             $filename = 'siswa-foto-' . $username . '.' . $extension;
             $image_name = $file->storeAs('file/img/siswa', $filename, 'public');
-        }        
+        } else {
+            $image_name = 'file/img/default/profile.png';
+        }
 
         $hashedPassword = Hash::make($username);
 
@@ -129,44 +133,47 @@ class UserSiswaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-{
-    // Validasi inputan
-    $validated = $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', Rule::unique('siswa')->ignore($id)],
-        'password' => ['nullable', 'string', 'min:4'],
-        'foto' => ['nullable', 'image', 'max:2248'],
-    ]);
+    {
+        // Validasi inputan
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('siswa')->ignore($id)],
+            'password' => ['nullable', 'string', 'min:4'],
+            'foto' => ['nullable', 'image', 'max:2048'],
+        ]);
 
-    // Cari data siswa berdasarkan ID
-    $siswa = Siswa::find($id);
+        // Cari data siswa berdasarkan ID
+        $siswa = Siswa::find($id);
 
-    // Update data siswa
-    $siswa->name = $validated['name'];
-    $siswa->email = $validated['email'];
+        // Update data siswa
+        $siswa->name = $validated['name'];
+        $siswa->email = $validated['email'];
 
-    // Proses upload dan update foto ke dalam server jika ada
-    if ($request->hasFile('foto')) {
-        $foto = $request->file('foto');
-        $fotoName = 'siswa-foto-' . $siswa->username . '.' . $foto->getClientOriginalExtension();
-        Storage::disk('public')->delete($siswa->foto);
+        // Proses upload dan update foto ke dalam server jika ada
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $fotoName = 'siswa-foto-' . $siswa->username . '.' . $foto->getClientOriginalExtension();
 
-        // Simpan foto baru
-        $foto->storeAs('file/img/siswa', $fotoName, 'public');
-        $siswa->foto = 'file/img/siswa/' . $fotoName;
+            if ($siswa->foto !== 'file/img/default/profile.png') {
+                Storage::disk('public')->delete($siswa->foto);
+            }
+
+            // Simpan foto baru
+            $foto->storeAs('file/img/siswa', $fotoName, 'public');
+            $siswa->foto = 'file/img/siswa/' . $fotoName;
+        }
+
+        $siswa->save();
+
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            $user = User::where('username', $siswa->username)->first();
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+        }
+
+        return redirect()->back()->with('success', 'Data siswa berhasil diperbarui.');
     }
-
-    $siswa->save();
-
-    // Update password jika diisi
-    if ($request->filled('password')) {
-        $user = User::where('username', $siswa->username)->first();
-        $siswa->password = Hash::make($validated['password']);
-        $user->save();
-    }
-
-    return redirect()->back()->with('success', 'Data siswa berhasil diperbarui.');
-}
 
     /**
      * Remove the specified resource from storage.

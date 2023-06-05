@@ -77,50 +77,60 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-{
-    // Validasi inputan
-    $validated = $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($id)],
-        'password' => ['nullable', 'string', 'min:4'],
-        'foto' => ['nullable', 'image', 'max:2048'],
-    ]);
+    {
+        $users = [
+            0 => 'admin',
+            1 => 'guru',
+            2 => 'siswa',
+        ];
 
-    $userLevels = [
-        0 => Admin::find($id),
-        1 => Guru::find($id),
-        2 => Siswa::find($id),
-    ];
+        $levels = $users[Auth::user()->level_user] ?? 'unknown';
+        // Validasi inputan
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique($levels)->ignore($id)],
+            'password' => ['nullable', 'string', 'min:4'],
+            'foto' => ['nullable', 'image', 'max:2048'],
+        ]);
 
-    $level = $userLevels[Auth::user()->level_user] ?? 'unknown';
+        $userLevels = [
+            0 => Admin::find($id),
+            1 => Guru::find($id),
+            2 => Siswa::find($id),
+        ];
 
-    // Update data admin
-    $level->name = $validated['name'];
-    $level->email = $validated['email'];
+        $level = $userLevels[Auth::user()->level_user] ?? 'unknown';
 
-    // Proses upload dan update foto ke dalam server jika ada
-    if ($request->hasFile('foto')) {
-        $foto = $request->file('foto');
-        $fotoName = 'admin-foto-' . $level->username . '.' . $foto->getClientOriginalExtension();
-        Storage::disk('public')->delete($level->foto);
+        // Update data admin
+        $level->name = $validated['name'];
+        $level->email = $validated['email'];
 
-        // Simpan foto baru
-        $foto->storeAs('file/img/admin', $fotoName, 'public');
-        $level->foto = 'file/img/admin/' . $fotoName;
+        // Proses upload dan update foto ke dalam server jika ada
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $fotoName = $levels.'-foto-' . $level->username . '.' . $foto->getClientOriginalExtension();
+            
+            // Hapus foto lama jika bukan file/img/default/profile.png
+            if ($level->foto !== 'file/img/default/profile.png') {
+                Storage::disk('public')->delete($level->foto);
+            }
+
+            // Simpan foto baru
+            $foto->storeAs('file/img/'.$levels, $fotoName, 'public');
+            $level->foto = 'file/img/'.$levels.'/'. $fotoName;
+        }
+
+        $level->save();
+
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            $user = User::where('username', $level->username)->first();
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+        }
+
+        return redirect()->back()->with('success', 'Data '.$levels.' berhasil diperbarui.');
     }
-
-    $level->save();
-
-    // Update password jika diisi
-    if ($request->filled('password')) {
-        $user = User::where('username', $level->username)->first();
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
-    }
-
-    // return dd($request->all())
-    return redirect()->back()->with('success', 'Data admin berhasil diperbarui.');
-}
 
     /**
      * Remove the specified resource from storage.

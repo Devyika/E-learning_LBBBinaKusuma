@@ -6,7 +6,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title id="current-time"></title>
-        <link rel="icon" href="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" sizes="32x32" />
+        <link rel="icon" href="{{ asset('storage/file/img/default/logo.png') }}" sizes="32x32" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->

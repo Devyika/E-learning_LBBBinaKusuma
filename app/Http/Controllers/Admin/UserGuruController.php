@@ -54,26 +54,30 @@ class UserGuruController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:guru'],
-            'foto' => ['required', 'image', 'max:2148'],
+            'foto' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        $prefix = '11'; // Prefix with 11
+        $prefix = '11'; // Prefix with 00
         $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Generate a 4-digit unique ID
 
         $username = $prefix . $uniqueId;
 
-        // Check if the generated username already exists in the guru model
+        // Check if the generated username already exists in the Guru model
         while (Guru::where('username', $username)->exists()) {
             $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Regenerate the unique ID
             $username = $prefix . $uniqueId;
         }
+
+        $image_name = null; // Default value for image_name
 
         if ($request->file('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
             $filename = 'guru-foto-' . $username . '.' . $extension;
             $image_name = $file->storeAs('file/img/guru', $filename, 'public');
-        }        
+        } else {
+            $image_name = 'file/img/default/profile.png';
+        }
 
         $hashedPassword = Hash::make($username);
 
@@ -83,7 +87,7 @@ class UserGuruController extends Controller
             'level_user' => 1,
         ]);
 
-        guru::create([
+        Guru::create([
             'username' => $username,
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -125,43 +129,47 @@ class UserGuruController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-{
-    // Validasi inputan
-    $validated = $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', Rule::unique('guru')->ignore($id)],
-        'password' => ['nullable', 'string', 'min:4'],
-        'foto' => ['nullable', 'image', 'max:2148'],
-    ]);
+    {
+        // Validasi inputan
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('guru')->ignore($id)],
+            'password' => ['nullable', 'string', 'min:4'],
+            'foto' => ['nullable', 'image', 'max:2048'],
+        ]);
 
-    // Cari data guru berdasarkan ID
-    $guru = Guru::find($id);
+        // Cari data guru berdasarkan ID
+        $guru = Guru::find($id);
 
-    // Update data guru
-    $guru->name = $validated['name'];
-    $guru->email = $validated['email'];
+        // Update data guru
+        $guru->name = $validated['name'];
+        $guru->email = $validated['email'];
 
-    // Proses upload dan update foto ke dalam server jika ada
-    if ($request->hasFile('foto')) {
-        $foto = $request->file('foto');
-        $fotoName = 'guru-foto-' . $guru->username . '.' . $foto->getClientOriginalExtension();
-        Storage::disk('public')->delete($guru->foto);
-        // Simpan foto baru
-        $foto->storeAs('file/img/guru', $fotoName, 'public');
-        $guru->foto = 'file/img/guru/' . $fotoName;
+        // Proses upload dan update foto ke dalam server jika ada
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $fotoName = 'guru-foto-' . $guru->username . '.' . $foto->getClientOriginalExtension();
+
+            if ($guru->foto !== 'file/img/default/profile.png') {
+                Storage::disk('public')->delete($guru->foto);
+            }
+
+            // Simpan foto baru
+            $foto->storeAs('file/img/guru', $fotoName, 'public');
+            $guru->foto = 'file/img/guru/' . $fotoName;
+        }
+
+        $guru->save();
+
+        // Update password jika diisi
+        if ($request->filled('password')) {
+            $user = User::where('username', $guru->username)->first();
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+        }
+
+        return redirect()->back()->with('success', 'Data guru berhasil diperbarui.');
     }
-
-    $guru->save();
-
-    // Update password jika diisi
-    if ($request->filled('password')) {
-        $user = User::where('username', $guru->username)->first();
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
-    }
-
-    return redirect()->back()->with('success', 'Data guru berhasil diperbarui.');
-}
 
     /**
      * Remove the specified resource from storage.

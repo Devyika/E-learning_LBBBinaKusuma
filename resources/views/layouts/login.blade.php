@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LMS | SMA Negeri 4 Probolinggo</title>
-  <link rel="icon" href="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" sizes="32x32" />
+  <link rel="icon" href="{{ asset('storage/file/img/default/logo.png') }}" sizes="32x32" />
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -27,7 +27,7 @@
   <div class="card card-outline card-warning p-3">
     <div class="card-header text-center">
       <a href="{{ url('/') }}">
-        <img src="http://siakad.polinema.ac.id/assets/global/img/logo-polinema.png" alt="Logo" style="cursor: pointer;">
+        <img src="{{ asset('storage/file/img/default/logo.png') }}" alt="Logo" style="cursor: pointer;">
       </a>      
     </div>
     <div class="card-body">
