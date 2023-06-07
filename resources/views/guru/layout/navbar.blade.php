@@ -23,7 +23,7 @@
                 <div class="mt-1 d-flex" role="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="profile rounded-circle mr-2">
                         @if (Auth::user()->username == "admin")
-                            <img src="https://static.vecteezy.com/system/resources/thumbnails/019/900/322/small/happy-young-cute-illustration-face-profile-png.png" class="elevation-2 img-fluid img-thumbnail rounded-circle" alt="User Image">
+                        <img src="{{ asset('storage/file/img/default/profile.png') }}" class="elevation-2 img-fluid img-thumbnail rounded-circle" alt="User Image">
                         @else
                             <img src="{{ asset('storage/'.$user->foto) }}" class="elevation-2 img-fluid img-thumbnail rounded-circle" alt="User Image">
                         @endif
@@ -68,7 +68,7 @@
                 <div class="d-flex justify-content-center">
                     <div class="image-preview">
                         @if (Auth::user()->username == "admin")
-                            <img src="https://static.vecteezy.com/system/resources/thumbnails/019/900/322/small/happy-young-cute-illustration-face-profile-png.png" class="img-thumbnail rounded-circle" alt="User Image">
+                        <img src="{{ asset('storage/file/img/default/profile.png') }}" class="img-thumbnail rounded-circle" alt="User Image">
                         @else
                             <img src="{{ asset('storage/'.$user->foto) }}" class="img-thumbnail rounded-circle" alt="User Image">
                         @endif
@@ -143,7 +143,7 @@
                 <div class="d-flex justify-content-center">
                     <div class="image-preview">
                         @if (Auth::user()->username == "admin")
-                            <img  id="photo-preview" src="https://static.vecteezy.com/system/resources/thumbnails/019/900/322/small/happy-young-cute-illustration-face-profile-png.png" class="img-thumbnail rounded-circle" alt="User Image">
+                        <img  id="photo-preview" src="{{ asset('storage/file/img/default/profile.png') }}" class="img-thumbnail rounded-circle" alt="User Image">
                         @else
                             <img id="photo-preview-{{ $user->id }}" src="{{ asset('storage/'.$user->foto) }}" class="img-thumbnail rounded-circle" alt="User Image">
                         @endif
