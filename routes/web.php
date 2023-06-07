@@ -88,7 +88,7 @@ Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::get('/dashboard', [DashboardGuruController::class, 'index']);
     Route::get('/tugas-siswa/{id_tugas}/{id_kelasMapelGuru}/{id_pertemuan}', [PengumpulanTugasController::class, 'index']);
     Route::put('/tugas-siswa/{id}', [PengumpulanTugasController::class, 'nilai']);
-    // Route::resource('user', UserController::class);
+    Route::resource('user', UserController::class);
     Route::resource('pertemuan', PertemuanController::class);
     Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);
     Route::post('/pertemuan/modul/{pertemuan}/{id}', [PertemuanController::class, 'store_modul'])->name('add.modul');
@@ -104,7 +104,7 @@ Route::middleware(['auth', 'IsSiswa'])->prefix('siswa')->group(function () {
     Route::get('/dashboard', [DashboardSiswaController::class, 'index']);
     Route::get('/pertemuan/{id}', [PertemuanSiswaController::class, 'show']);
     Route::post('/pengumpulan-tugas/{id}', [PertemuanSiswaController::class, 'store']);
-    // Route::resource('user', UserController::class);
+    Route::resource('user', UserController::class);
     Route::get('/mata_pelajaran', [MapelSiswaController::class, 'index']);
     Route::fallback(function () {
         return redirect()->back();
