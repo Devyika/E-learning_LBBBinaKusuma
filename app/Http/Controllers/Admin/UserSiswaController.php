@@ -33,7 +33,7 @@ class UserSiswaController extends Controller
                 ->first();
 
         $siswa = User::join('siswa', 'users.username', '=', 'siswa.username')
-            ->where('users.level_user', 1)
+            ->where('users.level_user', 2)
             ->get();
 
         return view('admin.siswa', ['user' => $user])
@@ -73,7 +73,7 @@ class UserSiswaController extends Controller
             ]);
         }
 
-        $prefix = '11'; // Prefix with 11
+        $prefix = '22'; // Prefix with 22
         $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Generate a 4-digit unique ID
 
         $username = $prefix . $uniqueId;
@@ -101,7 +101,7 @@ class UserSiswaController extends Controller
         User::create([
             'username' => $username,
             'password' => $hashedPassword,
-            'level_user' => 1,
+            'level_user' => 2,
         ]);
 
         Siswa::create([

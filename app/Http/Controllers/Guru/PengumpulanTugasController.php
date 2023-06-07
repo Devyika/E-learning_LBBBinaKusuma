@@ -37,15 +37,15 @@ class PengumpulanTugasController extends Controller
                 ->get();        
 
         $kelas = DB::table('kelas_mapel_guru as a')
-            ->join('jurusan_tingkat_kelas as b', 'a.id_jurusanTingkatKelas', '=', 'b.id')
-            ->join('kelas as c', 'b.id_kelas', '=', 'c.id')
-            ->join('jurusan as d', 'b.id_jurusan', '=', 'd.id')
-            ->join('tingkat as e', 'b.id_tingkat', '=', 'e.id')
-            ->select('c.nama as kelas','d.name as jurusan','e.name as tingkat', 'b.id as id_kelas')
-            ->where('id_guru', $userId)
-            ->groupBy('a.id_jurusanTingkatKelas')
-            ->orderBy('nama')
-            ->get();
+                ->join('jurusan_tingkat_kelas as b', 'a.id_jurusanTingkatKelas', '=', 'b.id')
+                ->join('kelas as c', 'b.id_kelas', '=', 'c.id')
+                ->join('jurusan as d', 'b.id_jurusan', '=', 'd.id')
+                ->join('tingkat as e', 'b.id_tingkat', '=', 'e.id')
+                ->select('c.nama as kelas', 'd.name as jurusan', 'e.name as tingkat', 'b.id as id_kelas')
+                ->where('id_guru', $userId)
+                ->groupBy('c.nama', 'd.name', 'e.name', 'b.id')
+                ->orderBy('c.nama')
+                ->get();
 
         $kelas2 = DB::table('kelas_mapel_guru as a')
         ->join('jurusan_tingkat_kelas as b', 'b.id', '=', 'a.id_jurusanTingkatKelas')
