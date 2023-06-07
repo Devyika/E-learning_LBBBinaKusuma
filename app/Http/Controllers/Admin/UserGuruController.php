@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Jurusan;
-use App\Models\JurusanTingkatKelas;
 use App\Models\Guru;
-use App\Models\Tingkat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +23,8 @@ class UserGuruController extends Controller
      */
     public function index()
     {
-        $user = User::join('guru', 'users.username', '=', 'guru.username')
-                ->select('users.username', 'guru.*')
+        $user = User::join('admin', 'users.username', '=', 'admin.username')
+                ->select('users.username', 'admin.*')
                 ->where('users.id', Auth::user()->id)
                 ->first();
 

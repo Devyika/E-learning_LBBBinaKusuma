@@ -27,8 +27,8 @@ class UserSiswaController extends Controller
      */
     public function index()
     {
-        $user = User::join('siswa', 'users.username', '=', 'siswa.username')
-                ->select('users.username', 'siswa.*')
+        $user = User::join('admin', 'users.username', '=', 'admin.username')
+                ->select('users.username', 'admin.*')
                 ->where('users.id', Auth::user()->id)
                 ->first();
 
