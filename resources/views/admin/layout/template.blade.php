@@ -11,6 +11,7 @@
     ];
     @endphp
     {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }} | {{ Auth::user()->username }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="icon" href="{{ asset('storage/file/img/default/logo.png') }}" sizes="32x32" />
 
   <!-- Google Font: Source Sans Pro -->
@@ -126,89 +127,44 @@
 {{-- <script src="{{ asset('/assets/dist/js/demo.js') }}"></script> --}}
 <!-- Page specific script -->
 <script>
-  $(function () {
-    $("#example1").DataTable({
-        "responsive": true,
-        "lengthChange": false,
-        "autoWidth": false,
-        "buttons": [
-            {
-                extend: 'copy',
-                exportOptions: {
-                    columns: ':not(:last-child)' // Menyertakan semua kolom kecuali kolom terakhir
-                }
-            },
-            {
-                extend: 'csv',
-                exportOptions: {
-                    columns: ':not(:last-child)' // Menyertakan semua kolom kecuali kolom terakhir
-                }
-            },
-            {
-                extend: 'excel',
-                exportOptions: {
-                    columns: ':not(:last-child)' // Menyertakan semua kolom kecuali kolom terakhir
-                }
-            },
-            {
-                extend: 'pdf',
-                exportOptions: {
-                    columns: ':not(:last-child)' // Menyertakan semua kolom kecuali kolom terakhir
-                }
-            },
-            {
-                extend: 'print',
-                exportOptions: {
-                    columns: ':not(:last-child)' // Menyertakan semua kolom kecuali kolom terakhir
-                }
-            },
-            "colvis"
-        ]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-    $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
-  });
-
-        function previewPhotoCreate() {
-          const photo = document.getElementById('photo').files[0];
-          const photoPreview = document.getElementById('photo-preview');
-          const reader = new FileReader();
+  function previewPhotoCreate() {
+    const photo = document.getElementById('photo-add').files[0];
+    const photoPreview = document.getElementById('photo-preview-add');
+    const reader = new FileReader();
           
-          reader.addEventListener('load', function () {
-            photoPreview.src = reader.result;
-          }, false);
+    reader.addEventListener('load', function () {
+      photoPreview.src = reader.result;
+    }, false);
           
-          if (photo) {
-            reader.readAsDataURL(photo);
-          }
-        }
+    if (photo) {
+      reader.readAsDataURL(photo);
+    }
+  }
 
-        function previewPhotoEdit(id) {
-        const photo = document.getElementById('photo-' + id).files[0];
-        const photoPreview = document.getElementById('photo-preview-' + id);
-        const reader = new FileReader();
+  function previewPhotoEdit() {
+    const photo = document.getElementById('photo-edit').files[0];
+    const photoPreview = document.getElementById('photo-preview-edit');
+    const reader = new FileReader();
 
-        reader.addEventListener('load', function () {
-            photoPreview.src = reader.result;
-        }, false);
+    reader.addEventListener('load', function () {
+      photoPreview.src = reader.result;
+    }, false);
+    
+    if (photo) {
+      reader.readAsDataURL(photo);
+    }
+  }
 
-        if (photo) {
-            reader.readAsDataURL(photo);
-        }
-        }
-
-        function triggerFileInput() {
-          document.getElementById('photo').click();
-        }
+  function triggerFileInput() {
+    document.getElementById('photo-edit').click();
+  }
         
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': '{{csrf_token()}}'
+    }
+  });
 </script>
+@stack('scripts')
 </body>
 </html>

@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Str;
 
 class UserAdminController extends Controller
 {
@@ -51,11 +54,20 @@ class UserAdminController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:admin'],
             'foto' => ['nullable', 'image', 'max:2048'],
         ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'modal_close' => false,
+                'message' => 'Data gagal ditambahkan. ' .$validator->errors()->first(),
+                'data' => $validator->errors()
+            ]);
+        }
 
         $prefix = '00'; // Prefix with 00
         $uniqueId = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT); // Generate a 4-digit unique ID
@@ -70,14 +82,15 @@ class UserAdminController extends Controller
 
         $image_name = null; // Default value for image_name
 
-        if ($request->file('foto')) {
+        if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'admin-foto-' . $username . '.' . $extension;
+            $randomString = Str::random(3);
+            $filename = 'admin-foto-' . $username . '-' . $randomString . '.' . $extension;
             $image_name = $file->storeAs('file/img/admin', $filename, 'public');
         } else {
             $image_name = 'file/img/default/profile.png';
-        }
+        }        
 
         $hashedPassword = Hash::make($username);
 
@@ -94,8 +107,15 @@ class UserAdminController extends Controller
             'foto' => $image_name,
         ]);
 
-        return redirect('admin/input-admin')->with('success', 'User Berhasil Ditambahkan');
+        return response()->json([
+            'status' => true,
+            'modal_close' => false,
+            'message' => 'Data berhasil ditambahkan',
+            'data' => null
+        ]);
     }
+
+
 
     /**
      * Display the specified resource.
@@ -105,7 +125,19 @@ class UserAdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $admin = Admin::find($id);
+
+        if ($admin) {
+            $user = User::where('username', $admin->username)->first();
+            if ($user) {
+                $admin->level_user = $user->level_user;
+            } else {
+                $admin->level_user = null;
+            }
+            return response()->json($admin);
+        } else {
+            return response()->json(['error' => 'Data not found'], 404);
+        }
     }
 
     /**
@@ -131,33 +163,47 @@ class UserAdminController extends Controller
     public function update(Request $request, $id)
     {
         // Validasi inputan
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($id)],
-            'password' => ['nullable', 'string', 'min:4'],
             'foto' => ['nullable', 'image', 'max:2048'],
         ]);
 
-        // Cari data admin berdasarkan ID
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'modal_close' => false,
+                'message' => 'Data gagal diubah. ' .$validator->errors()->first(),
+                'data' => $validator->errors()
+            ]);
+        }
+
+        // Cari data Admin berdasarkan ID
         $admin = Admin::find($id);
 
-        // Update data admin
-        $admin->name = $validated['name'];
-        $admin->email = $validated['email'];
+        if (!$admin) {
+            return response()->json(['error' => 'Admin tidak ditemukan.'], 404);
+        }
+
+        // Update data Admin
+        $admin->name = $request->input('name');
+        $admin->email = $request->input('email');
 
         // Proses upload dan update foto ke dalam server jika ada
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
-            $fotoName = 'admin-foto-' . $admin->username . '.' . $foto->getClientOriginalExtension();
-
+            $extension = $foto->getClientOriginalExtension();
+            $randomString = Str::random(3); // Menghasilkan string acak sepanjang 3 karakter
+            $fotoName = 'admin-foto-' . $admin->username . '-' . $randomString . '.' . $extension;
+        
             if ($admin->foto !== 'file/img/default/profile.png') {
                 Storage::disk('public')->delete($admin->foto);
             }
-
+        
             // Simpan foto baru
             $foto->storeAs('file/img/admin', $fotoName, 'public');
             $admin->foto = 'file/img/admin/' . $fotoName;
-        }
+        }        
 
         $admin->save();
 
@@ -168,7 +214,12 @@ class UserAdminController extends Controller
             $user->save();
         }
 
-        return redirect()->back()->with('success', 'Data admin berhasil diperbarui.');
+        return response()->json([
+            'status' => true,
+            'modal_close' => false,
+            'message' => 'Data berhasil diubah',
+            'data' => null
+        ]);
     }
 
     /**
@@ -178,22 +229,35 @@ class UserAdminController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function destroy($id)
-     {
-         $admin = Admin::find($id);
-         $user = User::where('username', $admin->username)->first();
-     
-         if ($admin->foto && $admin->foto !== 'file/img/default/profile.png') {
-             Storage::disk('public')->delete($admin->foto);
-         }
-     
-         $admin->delete();
-     
-         if ($user) {
-             $user->delete();
-         }
-     
-         return redirect()->back()->with('success', 'Data admin, user, dan file foto berhasil dihapus.');
-     }     
+    public function destroy($id)
+    {
+        $admin = Admin::find($id);
+        $user = User::where('username', $admin->username)->first();
+
+        if ($admin->foto && $admin->foto !== 'file/img/default/profile.png') {
+            Storage::disk('public')->delete($admin->foto);
+        }
+
+        $admin->delete();
+
+        if ($user) {
+            $user->delete();
+        }
+
+        return response()->json([
+            'status' => true,
+            'modal_close' => false,
+            'message' => 'Data berhasil dihapus',
+            'data' => null
+        ]);
+    }
     
+    public function data()
+    {
+        $data = Admin::selectRaw('id, username, name, email, foto');
+
+        return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->make(true);
+    }
 }
