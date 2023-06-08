@@ -10947,7 +10947,7 @@ header.masthead {
   padding-bottom: 6rem;
   text-align: center;
   color: #fff;
-  background-image: url("https://cdnb.artstation.com/p/assets/images/images/020/170/947/large/roksana-smirnova-defence-against-the-dark-arts-classroom-by-bluefoxstudio-ddbamb4.jpg?1566676696");
+  background-image: url("{{ asset('home/assets/img/header-bg.jpg') }}");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;

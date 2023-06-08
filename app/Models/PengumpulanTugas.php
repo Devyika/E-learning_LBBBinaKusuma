@@ -16,4 +16,9 @@ class PengumpulanTugas extends Model
         'file',
         'nilai'
     ];
+
+    public function tugas()
+    {
+        return $this->belongsTo(Tugas::class, 'id_tugas');
+    }
 }

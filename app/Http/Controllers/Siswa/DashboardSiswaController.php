@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
 use App\Models\KelasSiswa;
+use App\Models\PengumpulanTugas;
 use App\Models\Siswa;
+use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,23 +36,40 @@ class DashboardSiswaController extends Controller
             ->get();
 
         $pertemuanSidebar = DB::table('pertemuan as a')
-        ->join('kelas_mapel_guru as b', 'b.id', '=', 'a.id_kelasMapelGuru')
-        ->join('kelas_siswa as c', 'c.id_jurusanTingkatKelas', '=', 'b.id_jurusanTingkatKelas')
-        ->select('a.id', 'a.nama', 'a.id_kelasMapelGuru', 'b.id_jurusanTingkatKelas', 'b.id_mapel', 'c.id_siswa')
-        ->where('id_siswa', $userId)
-        ->orderBy('nama')
-        ->get();
+            ->join('kelas_mapel_guru as b', 'b.id', '=', 'a.id_kelasMapelGuru')
+            ->join('kelas_siswa as c', 'c.id_jurusanTingkatKelas', '=', 'b.id_jurusanTingkatKelas')
+            ->select('a.id', 'a.nama', 'a.id_kelasMapelGuru', 'b.id_jurusanTingkatKelas', 'b.id_mapel', 'c.id_siswa')
+            ->where('id_siswa', $userId)
+            ->orderBy('nama')
+            ->get();
 
         $pertemuan = DB::table('pertemuan as a')
-        ->join('kelas_mapel_guru as b', 'b.id', '=', 'a.id_kelasMapelGuru')
-        ->join('kelas_siswa as c', 'c.id_jurusanTingkatKelas', '=', 'b.id_jurusanTingkatKelas')
-        ->select('a.id', 'a.nama', 'a.id_kelasMapelGuru', 'b.id_jurusanTingkatKelas', 'b.id_mapel', 'c.id_siswa')
-        ->where('id_siswa', $userId)
-        ->orderBy('nama')
-        ->get();
+            ->join('kelas_mapel_guru as b', 'b.id', '=', 'a.id_kelasMapelGuru')
+            ->join('kelas_siswa as c', 'c.id_jurusanTingkatKelas', '=', 'b.id_jurusanTingkatKelas')
+            ->select('a.id', 'a.nama', 'a.id_kelasMapelGuru', 'b.id_jurusanTingkatKelas', 'b.id_mapel', 'c.id_siswa')
+            ->where('id_siswa', $userId)
+            ->orderBy('nama')
+            ->get();
+
+        // Periksa apakah id dari Tugas ada di kolom id_tugas pada tabel PengumpulanTugas
+        $tugasBelumDikumpulkan = Tugas::whereNotExists(function ($query) use ($userId) {
+            $query->select(DB::raw(1))
+                ->from('pengumpulan_tugas')
+                ->whereColumn('tugas.id', 'pengumpulan_tugas.id_tugas')
+                ->where('pengumpulan_tugas.id_siswa', $userId);
+        })->get();
+
+        $tugasSudahDikumpulkan = Tugas::whereExists(function ($query) use ($userId) {
+            $query->select(DB::raw(1))
+                ->from('pengumpulan_tugas')
+                ->whereColumn('tugas.id', 'pengumpulan_tugas.id_tugas')
+                ->where('pengumpulan_tugas.id_siswa', $userId);
+        })->get();
 
         return view('siswa.dashboard', ['user' => $user, 'mapelSiswa' => $mapelSiswa])
             ->with('pertemuan', $pertemuan)
+            ->with('tugasBelumDikumpulkan', $tugasBelumDikumpulkan)
+            ->with('tugasSudahDikumpulkan', $tugasSudahDikumpulkan)
             ->with('pertemuanSidebar', $pertemuanSidebar);
     }
 

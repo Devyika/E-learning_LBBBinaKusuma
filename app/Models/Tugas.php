@@ -16,4 +16,9 @@ class Tugas extends Model
         'id_pertemuan',
         'deadline',
     ];
+
+    public function pengumpulanTugas()
+    {
+        return $this->hasMany(PengumpulanTugas::class, 'id');
+    }
 }

@@ -22,11 +22,20 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+               <li class="nav-item menu-open">
+                <a href="{{ url('guru/dashboard') }}" class="nav-link active bg-warning">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Dashboard
+                    {{-- <i class="right fas fa-angle-left"></i> --}}
+                  </p>
+                </a>
+               </li>
               @if($kelas->count() > 0)
               @foreach($kelas as $i => $k)
               <li class="nav-item">
                 <a href="" class="nav-link">
-                  <i class="fas fa-book-open pr-2"></i>
+                  <i class="fas fa-chalkboard pr-2"></i>
                   <p>
                     {{$k->tingkat}} {{$k->jurusan}} {{$k->kelas}}
                     <i class="fas fa-angle-left right"></i>

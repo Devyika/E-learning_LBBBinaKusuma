@@ -22,6 +22,15 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+               <li class="nav-item menu-open">
+                <a href="{{ url('siswa/dashboard') }}" class="nav-link active bg-warning">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Dashboard
+                    {{-- <i class="right fas fa-angle-left"></i> --}}
+                  </p>
+                </a>
+               </li>
               @php
               $kelas = $allKelasSiswa->where('id_siswa', $user->id)->pluck('id_jurusanTingkatKelas')->first();
               $mapel = $allKelasMapel->where('id_jurusanTingkatKelas', '=', $kelas);
@@ -29,7 +38,7 @@
               @foreach ($mapel as $m)
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="fas fa-book-open pr-2"></i>
+                  <i class="fas fa-book pr-2"></i>
                   <p>{{ $m->mapel->nama }}
                     <i class="fas fa-angle-left right"></i>
                   </p>
@@ -39,7 +48,7 @@
                   @if ($p->id_mapel == $m->mapel->id)
                   <li class="nav-item">
                     <a href="{{ url('/siswa/pertemuan/'.$p->id) }}" class="nav-link">
-                      <i class="fas fa-book pr-2"></i>
+                      <i class="fas fa-book-open pr-2"></i>
                       <p>{{$p->nama}}</p>
                     </a>
                   </li>

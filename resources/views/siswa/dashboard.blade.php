@@ -35,8 +35,276 @@
   @endif
 <!-- Default box -->
 <div class="container-fluid">
-  <!-- Small boxes (Stat box) -->
+  <div class="row mb-2">
+    <div class="col-sm-6">
+      <ol class="breadcrumb float-sm-left">
+        <li class="breadcrumb-item"><strong>Belum</strong></li>
+        <li class="breadcrumb-item">Mengumpulkan</li>
+      </ol> 
+    </div>
+    <div class="col-sm-6">
+      <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item">Deadline</li>
+        <li class="breadcrumb-item"><strong>Masih</strong></li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+    @php
+    date_default_timezone_set('Asia/Jakarta');
+    $currentTime = time();
+    $counttbs = 0;
+    $countShown = 0;
+    @endphp
+
+    @foreach ($tugasBelumDikumpulkan as $tbd)
+      @php
+      $deadline = strtotime($tbd->deadline);
+      $diffSeconds = $deadline - $currentTime;
+
+      $hours = floor($diffSeconds / 3600);
+      $minutes = floor(($diffSeconds % 3600) / 60);
+      $seconds = $diffSeconds % 60;
+
+      if ($currentTime <= $deadline) {
+        $counttbs++;
+      }
+      @endphp
+    @endforeach
+
+    @foreach ($tugasBelumDikumpulkan as $tbd)
+      @php
+      $deadline = strtotime($tbd->deadline);
+      $diffSeconds = $deadline - $currentTime;
+
+      $hours = floor($diffSeconds / 3600);
+      $minutes = floor(($diffSeconds % 3600) / 60);
+      $seconds = $diffSeconds % 60;
+
+      if ($currentTime <= $deadline) {
+        $countShown++;
+      }
+      @endphp
+       
+      @if ($currentTime <= $deadline)
+        <div class="col-xl-{{ $counttbs % 3 == 0 ? ($countShown % 3 == 0 ? '12' : '6') : ($counttbs % 2 == 0 ? '6' : '12') }} col-md-6 mb-4">
+          <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
+            <div class="card border-left-info shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-warning">
+                      Belum Mengumpulkan
+                    </div>
+                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
+                    @if ($hours > 0 || $minutes > 0 || $seconds > 0)
+                      <div class="small mb-0 font-weight-bold text-info">Sisa Waktu: 
+                        @if ($hours > 0)
+                          {{ $hours }} Jam 
+                        @endif
+                        @if ($minutes > 0)
+                          {{ $minutes }} Menit 
+                        @endif
+                        @if ($seconds > 0)
+                          {{ $seconds }} Detik 
+                        @endif
+                      </div>
+                    @endif
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-book-open fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      @endif
+    @endforeach 
+
+    @if ($countShown == 0)
+    <div class="col-12 text-center">
+      <p>Tidak ada tugas</p>
+    </div>
+    @endif
+
+  </div>
+  <div class="row mb-2">
+    <div class="col-sm-6">
+      <ol class="breadcrumb float-sm-left">
+        <li class="breadcrumb-item"><strong>Sudah</strong></li>
+        <li class="breadcrumb-item">Mengumpulkan</li>
+      </ol> 
+    </div>
+    <div class="col-sm-6">
+      <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item">Deadline</li>
+        <li class="breadcrumb-item"><strong>Masih</strong></li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+    @php
+    date_default_timezone_set('Asia/Jakarta');
+    $currentTime = time();
+    $counttbs = 0;
+    $countShown = 0;
+    $totalCount = count($tugasSudahDikumpulkan);
+    @endphp
   
+    @foreach ($tugasSudahDikumpulkan as $tbd)
+      @php
+      $deadline = strtotime($tbd->deadline);
+      $diffSeconds = $deadline - $currentTime;
+  
+      $hours = floor($diffSeconds / 3600);
+      $minutes = floor(($diffSeconds % 3600) / 60);
+      $seconds = $diffSeconds % 60;
+  
+      if ($currentTime <= $deadline) {
+        $counttbs++;
+      }
+      @endphp
+    @endforeach
+  
+    @foreach ($tugasSudahDikumpulkan as $tbd)
+      @php
+      $deadline = strtotime($tbd->deadline);
+      $diffSeconds = $deadline - $currentTime;
+  
+      $hours = floor($diffSeconds / 3600);
+      $minutes = floor(($diffSeconds % 3600) / 60);
+      $seconds = $diffSeconds % 60;
+  
+      if ($currentTime <= $deadline) {
+        $countShown++;
+      }
+      @endphp
+       
+      @if ($currentTime <= $deadline)
+        <div class="col-xl-{{ $counttbs % 3 == 0 ? ($countShown % 3 == 0 ? '12' : '6') : ($counttbs % 2 == 0 ? '6' : '12') }} col-md-6 mb-4">
+          <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
+            <div class="card border-left-info shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-success">
+                      Sudah Mengumpulkan
+                    </div>
+                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
+                    @if ($hours > 0 || $minutes > 0 || $seconds > 0)
+                      <div class="small mb-0 font-weight-bold text-info">Sisa Waktu: 
+                        @if ($hours > 0)
+                          {{ $hours }} Jam 
+                        @endif
+                        @if ($minutes > 0)
+                          {{ $minutes }} Menit 
+                        @endif
+                        @if ($seconds > 0)
+                          {{ $seconds }} Detik 
+                        @endif
+                      </div>
+                    @endif
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-book-open fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      @endif
+    @endforeach 
+  
+    @if ($countShown == 0)
+    <div class="col-12 text-center">
+      <p>Tidak ada tugas</p>
+    </div>
+    @endif
+  
+  </div> 
+  <div class="row mb-2">
+    <div class="col-sm-6">
+      <ol class="breadcrumb float-sm-left">
+        <li class="breadcrumb-item"><strong>Belum</strong></li>
+        <li class="breadcrumb-item">Mengumpulkan</li>
+      </ol> 
+    </div>
+    <div class="col-sm-6">
+      <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item">Deadline</li>
+        <li class="breadcrumb-item"><strong>Habis</strong></li>
+      </ol>
+    </div>
+  </div>
+  
+  <div class="row">
+    @php
+    date_default_timezone_set('Asia/Jakarta');
+    $currentTime = time();
+    $counttbs = 0;
+    $countShown = 0;
+    @endphp
+  
+    {{-- Tugas Belum Dikumpulkan --}}
+    @foreach ($tugasBelumDikumpulkan as $tbd)
+      @php
+      $deadline = strtotime($tbd->deadline);
+      $diffSeconds = $deadline - $currentTime;
+  
+      if ($currentTime >= $deadline) {
+        $counttbs++;
+      }
+      @endphp
+    @endforeach
+  
+    {{-- Tugas Belum Dikumpulkan --}}
+    @foreach ($tugasBelumDikumpulkan as $tbd)
+      @php
+      $deadline = strtotime($tbd->deadline);
+      $diffSeconds = $deadline - $currentTime;
+  
+      if ($currentTime >= $deadline) {
+        $countShown++;
+      }
+      @endphp
+       
+      @if ($currentTime >= $deadline)
+        <div class="col-xl-{{ $counttbs % 3 == 0 ? ($countShown % 3 == 0 ? '12' : '6') : ($counttbs % 2 == 0 ? '6' : '12') }} col-md-6 mb-4">
+          <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
+            <div class="card border-left-info shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-danger">
+                      Belum Mengumpulkan
+                    </div>
+                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
+                      <div class="small mb-0 font-weight-bold text-info">
+                        Deadline Sudah Habis
+                      </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-book-open fa-2x"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      @endif
+    @endforeach 
+  
+    @if ($countShown == 0 && $tugasDeadlineHabis->isEmpty())
+      <div class="col-12 text-center">
+        <p>Tidak ada tugas</p>
+      </div>
+    @endif
+  
+  </div>  
+</div>
+
   <!-- /.row -->
   <!-- Main row -->
   
