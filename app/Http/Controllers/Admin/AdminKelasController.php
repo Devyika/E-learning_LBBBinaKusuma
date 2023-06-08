@@ -113,6 +113,10 @@ class AdminKelasController extends Controller
     public function destroy($id)
     {
         $kelas = Kelas::findOrFail($id);
+
+        // Delete related records in the "jurusan_tingkat_kelas" table
+        $kelas->jurusanTingkatKelas()->delete();
+
         $kelas->delete();
 
         return redirect('admin/input-kelas')->with('success', 'Kelas berhasil dihapus.');

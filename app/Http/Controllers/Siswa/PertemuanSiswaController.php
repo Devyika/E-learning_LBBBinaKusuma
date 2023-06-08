@@ -104,7 +104,7 @@ class PertemuanSiswaController extends Controller
                 PengumpulanTugas::create([
                     'id_siswa' => $userId,
                     'id_tugas' => $id,
-                    'nilai' => 0,
+                    'nilai' => -1,
                     'file' => $file_name,
                 ]);
 

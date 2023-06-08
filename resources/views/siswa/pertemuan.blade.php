@@ -55,7 +55,7 @@
                         @if ($mm->id_pertemuan == $p->id)                        
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            &emsp; <a href="{{asset('storage/'.$mm->file)}}" target="_blank" rel="noopener noreferrer">{{$mm->nama}}</a>
+                            &emsp; <a href="{{asset('storage/'.$mm->file)}}" target="_blank" rel="noopener noreferrer">{{$mm->nama}} <i class="far fa-file float-right"></i></a>
                           </td>
                         </tr>
                         @endif
@@ -84,34 +84,76 @@
                           $deadline = strtotime($t->deadline);
                           $currentTime = time();
                           $diffSeconds = $deadline - $currentTime;
-                                
+
                           $hours = floor($diffSeconds / 3600);
                           $minutes = floor(($diffSeconds % 3600) / 60);
                           $seconds = $diffSeconds % 60;
-                                            
+
                           $textColorClass = ($currentTime > $deadline) ? 'text-danger' : 'text-success';
                         @endphp
-                            <tr data-widget="expandable-table" aria-expanded="false">
-                                <td>
-                                    &emsp; <a href="{{ url('/siswa/pengumpulan-tugas/'.$t->id) }}" onclick="{{ ($diffSeconds <= 0) ? 'event.preventDefault(); toastr.error(\'Deadline telah berlalu\');' : '' }}" data-toggle="modal" data-target="{{ ($diffSeconds > 0) ? '#modal'.$t->id : '' }}">
-                                      {{ $t->nama }}
-                                    </a>                                                             
-                                    &nbsp;
-                                </td>
-                                <td class="text-right">
-                                  @if ($t->deadline)
-                                      <span class="{{ $textColorClass }}">
-                                          @if ($diffSeconds > 0)
-                                              Sisa waktu: {{ $hours }} jam, {{ $minutes }} menit, {{ $seconds }} detik
-                                          @else
-                                              Deadline telah berlalu
-                                          @endif
-                                      </span>
-                                  @else
-                                      Tidak ada deadline
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                          <td>
+                            <a href="{{ url('/siswa/pengumpulan-tugas/'.$t->id) }}" onclick="{{ ($diffSeconds <= 0) ? 'event.preventDefault(); toastr.error(\'Deadline telah berlalu\');' : '' }}" data-toggle="modal" data-target="{{ ($diffSeconds > 0) ? '#modal'.$t->id : '' }}">
+                              {{ $t->nama }} <i class="far fa-file float-right"></i>
+                            </a>                                                             
+                          </td>
+                          <td>
+                            @php $found = false; @endphp
+                            @foreach($allPengumpulanTugas as $pt)
+                              @if($pt->id_siswa == $userId && $pt->id_tugas == $t->id)
+                                @php
+                                  $found = true;
+                                @endphp
+                                <span class="{{ $pt->nilai != -1 ? 'text-success' : 'text-warning' }}">
+                                  {{ $pt->nilai != -1 ? $pt->nilai : 'Belum Dinilai' }}
+                                  @if ($pt->nilai == -1)
+                                    <i class="far fa-pause-circle float-right"></i>
+                                  @elseif ($pt->nilai != -1)
+                                    <i class="far fa-check-circle float-right"></i>
                                   @endif
-                              </td>                                        
-
+                                </span>                                
+                                @break
+                              @endif
+                            @endforeach
+                            @if(!$found)
+                              <span class="text-danger">0 <i class="far fa-times-circle float-right"></i></span>
+                            @endif
+                          </td>                          
+                          <td>
+                            @if ($t->deadline)
+                              <span class="{{ $textColorClass }}">
+                                @if ($diffSeconds > 0)
+                                  @if ($hours > 0)
+                                    {{ $hours }} jam,
+                                  @endif
+                                  @if ($minutes > 0)
+                                    {{ $minutes }} menit,
+                                  @endif
+                                  {{ $seconds }} detik <i class="far fa-clock float-right"></i>
+                                @else
+                                  Deadline telah berlalu <i class="far fa-times-circle float-right"></i>
+                                @endif
+                              </span>
+                            @else
+                              Tidak ada deadline
+                            @endif
+                          </td>                                                                
+                          <td>
+                            @php $found = false; @endphp
+                            @foreach($allPengumpulanTugas as $pt)
+                              @if($pt->id_siswa == $userId && $pt->id_tugas == $t->id)
+                                @php
+                                  $found = true;
+                                @endphp
+                                <a href="{{ asset('storage/'.$pt->file) }}" target="_blank" class="text-success">Sudah Mengumpulkan<i class="far fa-file-pdf float-right"></i></a>
+                                @break
+                              @endif
+                            @endforeach
+                            @if(!$found)
+                              <span class="text-danger">Belum Mengumpulkan<i class="far fa-times-circle float-right"></i></span>
+                            @endif
+                          </td>                          
+                          
                         {{-- modal --}}
                         <div class="modal fade" id="modal{{$t->id}}" tabindex="-1" role="dialog" aria-labelledby="modal-label{{$t->id}}" aria-hidden="true">
                           <div class="modal-dialog modal-md" role="document">
@@ -135,20 +177,13 @@
                                     @enderror
                                   </div>
                                 </form>
-                                @foreach($allPengumpulanTugas as $pt)
-                                  @if($pt->id_siswa == $userId && $pt->id_tugas == $t->id)
-                                    <button class="btn btn-primary btn-block" onclick="openFile('{{ asset('storage/'.$pt->file) }}')">Tugas</button>
-                                  @endif
-                                @endforeach
                               </div>
                               <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                                 <button type="submit" class="btn btn-primary btn-sm" form="modalForm{{$t->id}}"><i class="fa-solid fa-save"></i></button>
                               </div>
                             </div>
                           </div>
                         </div>
-                        
                   </div>                     
                         @endif
                         @endforeach

@@ -24,8 +24,8 @@
   <!-- Small boxes (Stat box) -->
   <div class="row">
     <div class="col-12">
-      <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addPertemuanModal">
-        <i class="fa-solid fa-plus"></i> Tambah Pertemuan
+      <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#addPertemuanModal">
+        <i class="fa-solid fa-plus mr-2"></i> Tambah Pertemuan
       </button><br><br>
       <div class="card">
         <div class="card-header">
@@ -46,8 +46,8 @@
               <tr data-widget="expandable-table" aria-expanded="true">
                 <td>
                   <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
-                  Modul &nbsp; | &nbsp; 
-                  <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModulModal{{$p->id}}">
+                  Modul
+                  <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#addModulModal{{$p->id}}">
                     <i class="fa-solid fa-plus"></i>
                   </button>
                   {{-- addmodul modal --}}
@@ -80,7 +80,6 @@
                           </form>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                           <button type="submit" class="btn btn-primary btn-sm" form="addModul{{$p->id}}"><i class="fa-solid fa-save"></i></button>
                         </div>
                       </div>
@@ -98,9 +97,9 @@
                         @if ($mm->id_pertemuan == $p->id)                        
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            &emsp; <a href="{{asset('storage/'.$mm->file)}}" target="_blank" rel="noopener noreferrer">{{$mm->nama}}</a> &nbsp; &nbsp; | &nbsp; &nbsp; 
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModalModul{{$mm->id}}">
-                              <i class="fa-solid fa-minus"></i>
+                            &emsp; <a href="{{asset('storage/'.$mm->file)}}" target="_blank" rel="noopener noreferrer">{{$mm->nama}}</a>
+                            <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#deleteModalModul{{$mm->id}}">
+                              <i class="fa-solid fa-trash"></i>
                             </button>
                           </td>
                         </tr>
@@ -121,7 +120,6 @@
                                       <form method="POST" action="{{ url('/guru/pertemuan/deleteModul/'.$mm->id)}}">
                                           @csrf
                                           @method('DELETE')
-                                          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                                           <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                                       </form>
                                   </div>
@@ -140,8 +138,8 @@
               <tr data-widget="expandable-table" aria-expanded="true">
                 <td>
                   <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
-                  Tugas &nbsp; | &nbsp; 
-                  <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModulTugas{{$p->id}}">
+                  Tugas
+                  <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#addModulTugas{{$p->id}}">
                     <i class="fa-solid fa-plus"></i>
                   </button>
                   {{-- addtugas modal --}}
@@ -174,7 +172,6 @@
                         </form>                        
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                           <button type="submit" class="btn btn-primary btn-sm" form="addTugas{{$p->id}}"><i class="fa-solid fa-save"></i></button>
                         </div>
                       </div>
@@ -198,19 +195,22 @@
                                   <?php
                                       date_default_timezone_set('Asia/Jakarta');
                                       $currentTime = date('Y-m-d H:i:s');
-                                      $deadline = $t->deadline; // Contoh nilai deadline
+                                      $deadline = $t->deadline;
                                       $textColorClass = ($currentTime < $deadline) ? 'text-success' : 'text-danger';
                                   ?>
                                   <span class="text-muted">Deadline: </span>
                                   @if ($currentTime < $deadline)
-                                      <span class="{{ $textColorClass }}">{{ $currentTime }}</span>
+                                      <span class="{{ $textColorClass }}">{{ $deadline }}</span>
                                   @else
                                       <span class="{{ $textColorClass }}">{{ $deadline }}</span>
                                   @endif
                                   <a href="{{ url('/guru/tugas-siswa/'.$t->id.'/'.$id.'/'.$t->id_pertemuan)}}" class="btn btn-sm btn-primary ml-2">Lihat Tugas Siswa</a>
-                                  <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteTugasModal{{$t->id}}">
-                                      <i class="fa-solid fa-minus"></i>
+                                  <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#editTugasModal{{$t->id}}">
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                   </button>
+                                  <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteTugasModal{{$t->id}}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                               </div>
                           </div>                                                                                                
 
@@ -231,7 +231,6 @@
                                       <form method="POST" action="{{ url('/guru/pertemuan/deleteTugas/'.$t->id)}}">
                                           @csrf
                                           @method('DELETE')
-                                          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                                           <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                                       </form>
                                   </div>
@@ -239,6 +238,41 @@
                           </div>
                         </div>
                         {{-- tutup modal deletetugas --}}
+                        <div class="modal fade" id="editTugasModal{{$t->id}}" tabindex="-1" role="dialog" aria-labelledby="editTugasModal-label{{$t->id}}" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="editTugasModal-label{{$t->id}}"><strong>Edit Tugas </strong>{{ $t->nama }}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <form id="editTugasForm{{$t->id}}" method="POST" action="{{ url('/guru/pertemuan/tugas/'.$id.'/'.$t->id) }}" enctype="multipart/form-data">
+                                          @csrf
+                                          @method('PUT')
+                                          <div class="form-group">
+                                              <label for="nama">Nama</label>
+                                              <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ $t->nama }}" placeholder="Masukkan Nama">
+                                              @error('nama')
+                                                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                              @enderror
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="deadline">Deadline</label>
+                                            <input type="datetime-local" class="form-control @error('deadline') is-invalid @enderror" id="deadline" name="deadline" value="{{ $t->deadline ? \Carbon\Carbon::parse($t->deadline)->format('Y-m-d\TH:i') : '' }}" placeholder="Masukkan Deadline">
+                                            @error('deadline')
+                                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                            @enderror
+                                        </div>                                        
+                                      </form>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary btn-sm" form="editTugasForm{{$t->id}}"><i class="fa-solid fa-save"></i></button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>                      
 
                           </td>
                         </tr>
@@ -289,7 +323,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="addPertemuan"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>

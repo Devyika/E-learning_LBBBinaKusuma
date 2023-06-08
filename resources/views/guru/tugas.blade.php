@@ -36,7 +36,7 @@
             <tbody>
               @foreach ($pertemuan as $p)
               <tr>
-                <td class="border-0">{{$p->nama}}</td>
+                <td class="border-0">{{$p->pertemuan_nama}} - {{$p->tugas_nama}}</td>
               </tr>
               
               <tr class="expandable-body">
@@ -47,8 +47,9 @@
                       <tr>
                         <th style="width: 5%;">No.</th>
                         <th style="width: 30%;">Nama</th>
-                        <th style="width: 55%;">Tugas</th>
-                        <th style="width: 10%;">Nilai</th>
+                        <th style="width: 45%;">Tugas</th>
+                        <th style="width: 15%;">Nilai</th>
+                        <th style="width: 5%;">Action</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -58,11 +59,18 @@
                             <td class="text-center">{{++$i}}</td>
                             <td>{{$d->nama}}</td>
                             <td><a href="{{asset('storage/'.$d->file)}}" target="_blank" rel="noopener noreferrer">{{$d->tugas}}</a></td>
+                            <td>
+                              @if ($d->nilai == -1)
+                                Belum dinilai
+                              @else
+                                {{$d->nilai}}
+                              @endif
+                            </td>
                             <td class="d-flex justify-content-around">
                               <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#nilai-{{$d->id}}">
                                 <i class="fa-solid fa-pen-to-square"></i>
                               </button>
-                            </td>
+                            </td>                            
                           </tr>
                           <!-- Modal -->
                           <div class="modal fade" id="nilai-{{ $d->id }}" tabindex="-1" role="dialog" aria-labelledby="nilai-label-{{ $d->id }}" aria-hidden="true">
@@ -83,14 +91,13 @@
                                               {{ $d->nama }}
                                             </div>
                                             <div class="form-group">
-                                                <label for="nilai">Nilai</label>
-                                                <input type="text" class="form-control @error('nilai') is-invalid @enderror" id="nilai" name="nilai" value="{{ old('nilai', $d->nilai) }}" placeholder="Masukkan Nilai">
-                                                @error('nilai')
-                                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                                @enderror
-                                            </div>
+                                              <label for="nilai">Nilai</label>
+                                              <input type="text" class="form-control @error('nilai') is-invalid @enderror" id="nilai" name="nilai" value="{{ $d->nilai != -1 ? old('nilai', $d->nilai) : '' }}" placeholder="{{ $d->nilai != -1 ? 'Masukkan Nilai' : 'Belum dinilai' }}">
+                                              @error('nilai')
+                                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                              @enderror
+                                            </div>                                            
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                                                 <button type="submit" class="btn btn-primary btn-sm" form="form-nilai-{{ $d->id }}"><i class="fa-solid fa-save"></i></button>
                                             </div>
                                         </form>
@@ -98,7 +105,6 @@
                                 </div>                              
                             </div>
                         </div>
-                        
                           @endforeach
                         @else
                           <tr><td colspan="6" class="text-center">No matching records found</td></tr>

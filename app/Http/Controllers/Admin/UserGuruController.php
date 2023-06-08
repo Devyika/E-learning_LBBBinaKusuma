@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
+use App\Models\KelasMapel;
+use App\Models\Modul;
+use App\Models\PengumpulanTugas;
+use App\Models\Pertemuan;
+use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -229,37 +234,70 @@ class UserGuruController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy($id)
-    {
-        try {
-            $guru = Guru::find($id);
-            $user = User::where('username', $guru->username)->first();
+public function destroy($id)
+{
+    $guru = Guru::find($id);
+    $user = User::where('username', $guru->username)->first();
 
-            if ($guru->foto && $guru->foto !== 'file/img/default/profile.png') {
-                Storage::disk('public')->delete($guru->foto);
-            }
+    if ($guru->foto && $guru->foto !== 'file/img/default/profile.png') {
+        Storage::disk('public')->delete($guru->foto);
+    }
 
-            $guru->delete();
+    // Delete related records in the "pengumpulan_tugas" table
+    $tugasIds = Tugas::whereIn('id_pertemuan', function ($query) use ($id) {
+        $query->select('id')->from('pertemuan')->whereIn('id_kelasMapelGuru', function ($subQuery) use ($id) {
+            $subQuery->select('id')->from('kelas_mapel_guru')->where('id_guru', $id);
+        });
+    })->pluck('id');
 
-            if ($user) {
-                $user->delete();
-            }
-
-            return response()->json([
-                'status' => true,
-                'modal_close' => false,
-                'message' => 'Data berhasil dihapus',
-                'data' => null
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'modal_close' => false,
-                'message' => 'Gagal menghapus data',
-                'data' => null
-            ]);
+    // Delete related files in the "PengumpulanTugas" model
+    $pengumpulanTugas = PengumpulanTugas::whereIn('id_tugas', $tugasIds)->get();
+    foreach ($pengumpulanTugas as $tugas) {
+        if ($tugas->file) {
+            Storage::disk('public')->delete($tugas->file);
         }
     }
+
+    PengumpulanTugas::whereIn('id_tugas', $tugasIds)->delete();
+
+    // Delete related records in the "modul" table and delete associated files
+    $pertemuanIds = Pertemuan::whereIn('id_kelasMapelGuru', function ($query) use ($id) {
+        $query->select('id')->from('kelas_mapel_guru')->where('id_guru', $id);
+    })->pluck('id');
+    
+    $moduls = Modul::whereIn('id_pertemuan', $pertemuanIds)->get();
+    foreach ($moduls as $modul) {
+        if ($modul->file) {
+            Storage::disk('public')->delete($modul->file);
+        }
+        $modul->delete();
+    }
+
+    // Delete related records in the "tugas" table
+    Tugas::whereIn('id_pertemuan', $pertemuanIds)->delete();
+
+    // Delete related records in the "pertemuan" table
+    Pertemuan::whereIn('id_kelasMapelGuru', function ($query) use ($id) {
+        $query->select('id')->from('kelas_mapel_guru')->where('id_guru', $id);
+    })->delete();
+
+    // Delete related records in the "kelas_mapel_guru" table
+    KelasMapel::where('id_guru', $id)->delete();
+
+    $guru->delete();
+
+    if ($user) {
+        $user->delete();
+    }
+
+    return response()->json([
+        'status' => true,
+        'modal_close' => false,
+        'message' => 'Data berhasil dihapus',
+        'data' => null
+    ]);
+}
+
     
     public function data()
     {

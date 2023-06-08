@@ -7,7 +7,10 @@ use App\Models\Jurusan;
 use App\Models\JurusanTingkatKelas;
 use App\Models\KelasMapel;
 use App\Models\Mapel;
+use App\Models\Modul;
+use App\Models\Pertemuan;
 use App\Models\Tingkat;
+use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +31,7 @@ class MapelController extends Controller
         
         $mapel = Mapel::all();
 
-        return view('admin.Mapel', ['mapel' => $mapel])
+        return view('admin.mapel', ['mapel' => $mapel])
                 ->with('user', $user);
     }
 
@@ -110,12 +113,27 @@ class MapelController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        $mapel = Mapel::findOrFail($id);
-        $mapel->delete();
+{
+    $mapel = Mapel::findOrFail($id);
 
-        return redirect('admin/input-mata_pelajaran')->with('success', 'Mapel berhasil dihapus.');
-    }
+    // Delete related records in the "pertemuan" table
+    $kelasMapelIds = $mapel->kelasMapel()->pluck('id');
+    $pertemuanIds = Pertemuan::whereIn('id_kelasMapelGuru', $kelasMapelIds)->pluck('id');
+
+    // Delete related records in the "tugas" table
+    Tugas::whereIn('id_pertemuan', $pertemuanIds)->delete();
+
+    // Delete related records in the "pertemuan" table
+    Pertemuan::whereIn('id_kelasMapelGuru', $kelasMapelIds)->delete();
+
+    // Delete related records in the "kelas_mapel_guru" table
+    $mapel->kelasMapel()->delete();
+
+    $mapel->delete();
+
+    return redirect('admin/input-mata_pelajaran')->with('success', 'Mapel berhasil dihapus.');
+}
+
 
     public function kelasMapel_index($t, $j)
     {

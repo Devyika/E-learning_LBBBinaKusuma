@@ -106,10 +106,14 @@ class AdminJurusanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        $jurusan = Jurusan::findOrFail($id);
-        $jurusan->delete();
+{
+    $jurusan = Jurusan::findOrFail($id);
 
-        return redirect('admin/input-jurusan')->with('success', 'Data Jurusan Berhasil Dihapus');
-    }
+    // Delete related records in the "jurusan_tingkat_kelas" table
+    $jurusan->jurusanTingkatKelas()->delete();
+
+    $jurusan->delete();
+
+    return redirect('admin/input-jurusan')->with('success', 'Data Jurusan Berhasil Dihapus');
+}
 }

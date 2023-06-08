@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Jurusan;
 use App\Models\JurusanTingkatKelas;
 use App\Models\KelasSiswa;
+use App\Models\PengumpulanTugas;
 use App\Models\Siswa;
 use App\Models\Tingkat;
 use App\Models\User;
@@ -233,37 +234,41 @@ class UserSiswaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy($id)
-    {
-        try {
-            $siswa = Siswa::find($id);
-            $user = User::where('username', $siswa->username)->first();
-    
-            if ($siswa->foto && $siswa->foto !== 'file/img/default/profile.png') {
-                Storage::disk('public')->delete($siswa->foto);
-            }
-    
-            $siswa->delete();
-    
-            if ($user) {
-                $user->delete();
-            }
-    
-            return response()->json([
-                'status' => true,
-                'modal_close' => false,
-                'message' => 'Data berhasil dihapus',
-                'data' => null
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'modal_close' => false,
-                'message' => 'Gagal menghapus data',
-                'data' => null
-            ]);
+public function destroy($id)
+{
+    $siswa = Siswa::find($id);
+    $user = User::where('username', $siswa->username)->first();
+
+    if ($siswa->foto && $siswa->foto !== 'file/img/default/profile.png') {
+        Storage::disk('public')->delete($siswa->foto);
+    }
+
+    // Delete related records in the "pengumpulan_tugas" table and delete associated files
+    $pengumpulanTugas = PengumpulanTugas::where('id_siswa', $id)->get();
+    foreach ($pengumpulanTugas as $tugas) {
+        if ($tugas->file) {
+            Storage::disk('public')->delete($tugas->file);
         }
-    }    
+        $tugas->delete();
+    }
+
+    // Delete related records in the "kelas_siswa" table
+    $siswa->kelasSiswa()->delete();
+
+    $siswa->delete();
+
+    if ($user) {
+        $user->delete();
+    }
+
+    return response()->json([
+        'status' => true,
+        'modal_close' => false,
+        'message' => 'Data berhasil dihapus',
+        'data' => null
+    ]);
+}
+      
     
     public function data()
     {

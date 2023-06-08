@@ -112,7 +112,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <div class="image-preview img-fluid rounded img-thumbnail">
-                  <img id="photo-preview-add" src="https://fakeimg.pl/250x250?text=Photo&font=lobster" alt="Foto Profile">
+                  <img id="photo-preview-add" src="{{ asset('storage/file/img/default/foto.png') }}" alt="Foto Profile">
                 </div>
               </div>
             </div>
@@ -143,7 +143,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="GuruForm-add"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>
@@ -179,7 +178,6 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
       </div>
     </div>
   </div>
@@ -243,7 +241,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="GuruForm-edit"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>                              
@@ -264,11 +261,10 @@
             <form id="GuruForm-delete" method="POST" action="{{ url('admin/input-guru') }}" enctype="multipart/form-data">
               @csrf
               @method('DELETE')
-                <p>Anda yakin ingin menghapus guru ini?</p>
+              <p>Anda yakin ingin menghapus guru <strong><span id="show_nama"></span></strong> ?</p>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
             <button type="submit" class="btn btn-danger btn-sm" form="GuruForm-delete"><i class="fa-solid fa-trash"></i></button>
           </div>
       </div>
@@ -284,6 +280,7 @@
     function tambahData() {
         $('#addGuruModal').modal('show');
 
+        $('#photo-preview-add').attr('src', '{{ asset('storage/file/img/default/foto.png') }}');
         $('#addGuruModal #name-add').val('');
         $('#addGuruModal #email-add').val('');
         $('#addGuruModal #photo-add').val('');
@@ -329,6 +326,7 @@
 
     function deleteData(th) {
         $('#deleteGuruModal').modal('show');
+        $('#show_nama').text($(th).data('name'));
         $('#deleteGuruModal #GuruForm-delete').attr('action', $(th).data('url'));
     }
 
@@ -351,7 +349,7 @@
                     var btn = `<div class="d-flex justify-content-around">` +
                         `<button data-url="{{ url('/admin/input-guru/') }}/` + data + `" class="btn btn-info btn-sm" data-toggle="modal" onclick="updateData(this)" data-id="` + row.id + `" data-username="` + row.username + `" data-name="` + row.name + `" data-email="` + row.email + `" data-foto="` + row.foto + `" data-level_user="` + row.level_user + `"><i class="fa-solid fa-pen-to-square"></i></button>` +
                         `<button href="{{ url('/admin/input-guru/') }}/` + data + `" onclick="showData(` + data + `)" class="btn btn-primary btn-sm" data-toggle="modal"><i class="fa-solid fa-circle-info"></i></button>` +
-                        `<button data-url="{{ url('/admin/input-guru/') }}/` + data + `" class="btn btn-danger btn-sm" data-toggle="modal" onclick="deleteData(this)" data-id="` + row.id + `"><i class="fa-solid fa-trash"></i></button>` +
+                        `<button data-url="{{ url('/admin/input-guru/') }}/` + data + `" class="btn btn-danger btn-sm" data-toggle="modal" onclick="deleteData(this)" data-id="` + row.id + `" data-name="` + row.name + `"><i class="fa-solid fa-trash"></i></button>` +
                         `</div>`;
                     return btn;
                 }
@@ -376,9 +374,10 @@
                 success: function(data) {
                     if (data.status) {
                       toastr.success(data.message);
+                      $('#GuruForm-add')[0].reset();
                       dataGuru.draw(false); // Reload tabel sesuai dengan halaman pagination yang sedang aktif
                       $('#GuruForm-add').attr('action');
-                      $('#photo-preview-add').attr('src', 'https://fakeimg.pl/250x250?text=Photo&font=lobster');
+                      $('#photo-preview-add').attr('src', '{{ asset('storage/file/img/default/foto.png') }}');
                     } else {
                         toastr.error(data.message);
                     }

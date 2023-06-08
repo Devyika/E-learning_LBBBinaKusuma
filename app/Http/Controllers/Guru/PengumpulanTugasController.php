@@ -57,7 +57,10 @@ class PengumpulanTugasController extends Controller
         ->where('a.id', $id_kmg)
         ->get();
 
-        $pertemuan = Pertemuan::all()->where('id',$id_pertemuan);
+        $pertemuan = Pertemuan::join('tugas', 'tugas.id_pertemuan', '=', 'pertemuan.id')
+        ->where('tugas.id', $id_tgs)
+        ->select('tugas.nama as tugas_nama', 'pertemuan.nama as pertemuan_nama')
+        ->get();
 
         //dd($data);
 

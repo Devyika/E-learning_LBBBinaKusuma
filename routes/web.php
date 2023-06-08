@@ -93,6 +93,7 @@ Route::middleware(['auth', 'IsGuru'])->prefix('guru')->group(function () {
     Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);
     Route::post('/pertemuan/modul/{pertemuan}/{id}', [PertemuanController::class, 'store_modul'])->name('add.modul');
     Route::post('/pertemuan/tugas/{pertemuan}/{id}', [PertemuanController::class, 'store_tugas']);
+    Route::put('/pertemuan/tugas/{pertemuan}/{id}', [PertemuanController::class, 'update_tugas']);
     Route::delete('/pertemuan/deleteModul/{id}', [PertemuanController::class, 'destroy_modul']);
     Route::delete('/pertemuan/deleteTugas/{id}', [PertemuanController::class, 'destroy_tugas']);
     Route::fallback(function () {

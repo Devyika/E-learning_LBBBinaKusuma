@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\Modul;
+use App\Models\PengumpulanTugas;
 use App\Models\Pertemuan;
 use App\Models\Tugas;
 use App\Models\User;
@@ -75,9 +76,28 @@ class PertemuanController extends Controller
         return redirect('guru/pertemuan/'.$pertemuan)->with('success', 'Tugas Berhasil Ditambahkan');
     }
 
+    public function update_tugas(Request $request, $pertemuan, $id)
+    {
+        $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            'deadline' => ['required', 'date'],
+        ]);
+
+        $tugas = Tugas::find($id);
+
+        if (!$tugas) {
+            return redirect('guru/pertemuan/tugas/'.$pertemuan.$id)->with('error', 'Tugas tidak ditemukan');
+        }
+
+        $tugas->nama = $request->input('nama');
+        $tugas->deadline = $request->input('deadline');
+        $tugas->save();
+
+        return redirect('guru/pertemuan/'.$pertemuan)->with('success', 'Tugas berhasil diperbarui');
+    }
+
     public function store_modul(Request $request, $pertemuanId, $id)
     {
-        $username = Auth::user()->username;
         $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'file' => ['required'],
@@ -86,7 +106,7 @@ class PertemuanController extends Controller
         if ($request->file('file')) {
             $file = $request->file('file');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'modul-'. $username . '-' . $request->input('nama') . '.' . $extension;
+            $filename = 'modul-' . $request->input('nama') . '.' . $extension;
             $image_name = $file->storeAs('file/modul', $filename, 'public');
         }        
 
@@ -218,8 +238,20 @@ class PertemuanController extends Controller
 
     public function destroy_tugas($id)
     {
-        Tugas::where('id', '=', $id)->delete();
-    
+        // Get the file path
+        $filePath = 'public/'.PengumpulanTugas::where('id_tugas', $id)->value('file');
+
+        // Delete the related file
+        if ($filePath) {
+            Storage::delete($filePath);
+        }
+
+        // Delete the related records in the 'pengumpulan_tugas' table
+        PengumpulanTugas::where('id_tugas', $id)->delete();
+
+        // Delete the 'Tugas' record
+        Tugas::where('id', $id)->delete();
+
         return redirect()->back()->with('success', 'Data modul berhasil dihapus.');
     }
 }

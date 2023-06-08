@@ -114,7 +114,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="addKelasForm"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>
@@ -136,7 +135,6 @@
         <p>{{$k->nama}}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
       </div>
     </div>
   </div>
@@ -167,7 +165,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="editKelasForm-{{ $k->id }}"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>                              
@@ -192,7 +189,6 @@
               <form method="POST" action="{{ url('/admin/input-kelas/'.$k->id)}}">
                   @csrf
                   @method('DELETE')
-                  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                   <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
               </form>
           </div>

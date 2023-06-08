@@ -141,7 +141,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="addForm{{ $ju->id }}"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>
@@ -168,7 +167,6 @@
         <p>{{$km->guru->name}}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
       </div>
     </div>
   </div>
@@ -218,7 +216,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="editKelasForm-{{ $km->id }}"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>                              
@@ -243,7 +240,6 @@
               <form method="POST" action="{{ url('/admin/setting-mata_pelajaran/'.$km->id)}}">
                   @csrf
                   @method('DELETE')
-                  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                   <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
               </form>
           </div>
