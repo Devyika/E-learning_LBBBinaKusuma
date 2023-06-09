@@ -7,11 +7,13 @@ use App\Models\Jurusan;
 use App\Models\JurusanTingkatKelas;
 use App\Models\Kelas;
 use App\Models\KelasMapel;
+use App\Models\KelasSiswa;
+use App\Models\Pertemuan;
 use App\Models\Tingkat;
+use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class AdminKelasController extends Controller
 {
@@ -197,9 +199,22 @@ class AdminKelasController extends Controller
 
     public function jurusanTingkatKelas_destroy($id)
     {
+        // Menghapus entri dalam model Pertemuan
+        $kelasMapelGuruIds = KelasMapel::where('id_jurusanTingkatKelas', $id)->pluck('id');
+        $pertemuanIds = Pertemuan::whereIn('id_kelasMapelGuru', $kelasMapelGuruIds)->pluck('id');
+        Tugas::whereIn('id_pertemuan', $pertemuanIds)->delete();
+        Pertemuan::whereIn('id_kelasMapelGuru', $kelasMapelGuruIds)->delete();
+
+        // Menghapus entri dalam model KelasMapelGuru
+        KelasMapel::where('id_jurusanTingkatKelas', $id)->delete();
+
+        // Menghapus entri dalam model KelasSiswa
+        KelasSiswa::where('id_jurusanTingkatKelas', $id)->delete();
+
+        // Menghapus entri dalam model JurusanTingkatKelas
         $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);
         $jurusanTingkatKelas->delete();
 
-        return redirect()->back()->with('success', 'Data berhasil disimpan');
+        return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
 }

@@ -15,4 +15,9 @@ class Pertemuan extends Model
         'nama',
         'id_kelasMapelGuru',
     ];
+
+    public function kelasMapel()
+    {
+        return $this->belongsTo(KelasMapel::class, 'id_kelasMapelGuru');
+    }
 }

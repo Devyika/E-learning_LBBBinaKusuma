@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PengumpulanTugasController extends Controller
 {
@@ -85,5 +86,21 @@ class PengumpulanTugasController extends Controller
         $nilai->save();
 
         return redirect()->back();
+        }
+        
+        public function destroy_tugas($id)
+        {
+            // Get the file path
+            $filePath = 'public/'.PengumpulanTugas::where('id', $id)->value('file');
+    
+            // Delete the related file
+            if ($filePath) {
+                Storage::delete($filePath);
+            }
+    
+            // Delete the related records in the 'pengumpulan_tugas' table
+            PengumpulanTugas::where('id', $id)->delete();
+    
+            return redirect()->back()->with('success', 'Data modul berhasil dihapus.');
         }
 }

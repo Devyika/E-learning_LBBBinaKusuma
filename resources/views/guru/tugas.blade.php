@@ -9,7 +9,7 @@
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="#">Menu</a></li>
-        <li class="breadcrumb-item active">Dashboard</li>
+        <li class="breadcrumb-item active">Tugas</li>
       </ol>
     </div>
   </div>
@@ -47,9 +47,9 @@
                       <tr>
                         <th style="width: 5%;">No.</th>
                         <th style="width: 30%;">Nama</th>
-                        <th style="width: 45%;">Tugas</th>
+                        <th style="width: 40%;">Tugas</th>
                         <th style="width: 15%;">Nilai</th>
-                        <th style="width: 5%;">Action</th>
+                        <th style="width: 10%;">Action</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -66,10 +66,13 @@
                                 {{$d->nilai}}
                               @endif
                             </td>
-                            <td class="d-flex justify-content-around">
+                            <td class="d-flex justify-content-around align-items-center">
                               <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#nilai-{{$d->id}}">
                                 <i class="fa-solid fa-pen-to-square"></i>
                               </button>
+                              <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hapus-{{$d->id}}">
+                                <i class="fa-solid fa-trash"></i>
+                              </button>                              
                             </td>                            
                           </tr>
                           <!-- Modal -->
@@ -104,6 +107,29 @@
                                     </div>
                                 </div>                              
                             </div>
+                        </div>
+                        <!-- Modal Hapus -->
+                        <div class="modal fade" id="hapus-{{ $d->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-label-{{ $d->id }}" aria-hidden="true">
+                          <div class="modal-dialog modal-sm" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="deleteModal-label-{{ $d->id }}"><strong>Hapus Tugas </strong>{{ $d->nama }}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <p>Anda yakin ingin menghapus Tugas ini ?</p>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <form method="POST" action="{{ url('/guru/tugas-siswa/'.$d->id)}}">
+                                          @csrf
+                                          @method('DELETE')
+                                          <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
                         </div>
                           @endforeach
                         @else

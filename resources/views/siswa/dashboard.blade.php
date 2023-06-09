@@ -62,8 +62,15 @@
       $deadline = strtotime($tbd->deadline);
       $diffSeconds = $deadline - $currentTime;
 
+      $years = floor($diffSeconds / (3600 * 24 * 365));
+      $diffSeconds %= 3600 * 24 * 365;
+      $months = floor($diffSeconds / (3600 * 24 * 30));
+      $diffSeconds %= 3600 * 24 * 30;
+      $days = floor($diffSeconds / (3600 * 24));
+      $diffSeconds %= 3600 * 24;
       $hours = floor($diffSeconds / 3600);
-      $minutes = floor(($diffSeconds % 3600) / 60);
+      $diffSeconds %= 3600;
+      $minutes = floor($diffSeconds / 60);
       $seconds = $diffSeconds % 60;
 
       if ($currentTime <= $deadline) {
@@ -77,17 +84,24 @@
       $deadline = strtotime($tbd->deadline);
       $diffSeconds = $deadline - $currentTime;
 
+      $years = floor($diffSeconds / (3600 * 24 * 365));
+      $diffSeconds %= 3600 * 24 * 365;
+      $months = floor($diffSeconds / (3600 * 24 * 30));
+      $diffSeconds %= 3600 * 24 * 30;
+      $days = floor($diffSeconds / (3600 * 24));
+      $diffSeconds %= 3600 * 24;
       $hours = floor($diffSeconds / 3600);
-      $minutes = floor(($diffSeconds % 3600) / 60);
+      $diffSeconds %= 3600;
+      $minutes = floor($diffSeconds / 60);
       $seconds = $diffSeconds % 60;
 
       if ($currentTime <= $deadline) {
         $countShown++;
       }
       @endphp
-       
+      
       @if ($currentTime <= $deadline)
-        <div class="col-xl-{{ $counttbs % 3 == 0 ? ($countShown % 3 == 0 ? '12' : '6') : ($counttbs % 2 == 0 ? '6' : '12') }} col-md-6 mb-4">
+      <div class="col-xl-{{ $counttbs % 2 == 0 ? '6' : ($countShown == $counttbs ? '12' : '6') }} col-md-6 mb-4">
           <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
             <div class="card border-left-info shadow h-100 py-2">
               <div class="card-body">
@@ -97,19 +111,26 @@
                       Belum Mengumpulkan
                     </div>
                     <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
-                    @if ($hours > 0 || $minutes > 0 || $seconds > 0)
                       <div class="small mb-0 font-weight-bold text-info">Sisa Waktu: 
-                        @if ($hours > 0)
-                          {{ $hours }} Jam 
-                        @endif
-                        @if ($minutes > 0)
-                          {{ $minutes }} Menit 
-                        @endif
-                        @if ($seconds > 0)
-                          {{ $seconds }} Detik 
-                        @endif
+                        @if ($years > 0)
+                            {{ $years }} tahun
+                          @endif
+                          @if ($months > 0)
+                            {{ $months }} bulan
+                          @endif
+                          @if ($days > 0)
+                            {{ $days }} hari
+                          @endif
+                          @if ($hours > 0)
+                            {{ $hours }} jam
+                          @endif
+                          @if ($minutes > 0)
+                            {{ $minutes }} menit
+                          @endif
+                          @if ($seconds > 0)
+                            {{ $seconds }} detik
+                          @endif
                       </div>
-                    @endif
                   </div>
                   <div class="col-auto">
                     <i class="fas fa-book-open fa-2x"></i>
@@ -129,6 +150,7 @@
     @endif
 
   </div>
+
   <div class="row mb-2">
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-left">
@@ -157,8 +179,15 @@
       $deadline = strtotime($tbd->deadline);
       $diffSeconds = $deadline - $currentTime;
   
+      $years = floor($diffSeconds / (3600 * 24 * 365));
+      $diffSeconds %= 3600 * 24 * 365;
+      $months = floor($diffSeconds / (3600 * 24 * 30));
+      $diffSeconds %= 3600 * 24 * 30;
+      $days = floor($diffSeconds / (3600 * 24));
+      $diffSeconds %= 3600 * 24;
       $hours = floor($diffSeconds / 3600);
-      $minutes = floor(($diffSeconds % 3600) / 60);
+      $diffSeconds %= 3600;
+      $minutes = floor($diffSeconds / 60);
       $seconds = $diffSeconds % 60;
   
       if ($currentTime <= $deadline) {
@@ -172,8 +201,15 @@
       $deadline = strtotime($tbd->deadline);
       $diffSeconds = $deadline - $currentTime;
   
+      $years = floor($diffSeconds / (3600 * 24 * 365));
+      $diffSeconds %= 3600 * 24 * 365;
+      $months = floor($diffSeconds / (3600 * 24 * 30));
+      $diffSeconds %= 3600 * 24 * 30;
+      $days = floor($diffSeconds / (3600 * 24));
+      $diffSeconds %= 3600 * 24;
       $hours = floor($diffSeconds / 3600);
-      $minutes = floor(($diffSeconds % 3600) / 60);
+      $diffSeconds %= 3600;
+      $minutes = floor($diffSeconds / 60);
       $seconds = $diffSeconds % 60;
   
       if ($currentTime <= $deadline) {
@@ -182,7 +218,7 @@
       @endphp
        
       @if ($currentTime <= $deadline)
-        <div class="col-xl-{{ $counttbs % 3 == 0 ? ($countShown % 3 == 0 ? '12' : '6') : ($counttbs % 2 == 0 ? '6' : '12') }} col-md-6 mb-4">
+      <div class="col-xl-{{ $counttbs % 2 == 0 ? '6' : ($countShown == $counttbs ? '12' : '6') }} col-md-6 mb-4">
           <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
             <div class="card border-left-info shadow h-100 py-2">
               <div class="card-body">
@@ -194,15 +230,24 @@
                     <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
                     @if ($hours > 0 || $minutes > 0 || $seconds > 0)
                       <div class="small mb-0 font-weight-bold text-info">Sisa Waktu: 
-                        @if ($hours > 0)
-                          {{ $hours }} Jam 
-                        @endif
-                        @if ($minutes > 0)
-                          {{ $minutes }} Menit 
-                        @endif
-                        @if ($seconds > 0)
-                          {{ $seconds }} Detik 
-                        @endif
+                        @if ($years > 0)
+                            {{ $years }} tahun
+                          @endif
+                          @if ($months > 0)
+                            {{ $months }} bulan
+                          @endif
+                          @if ($days > 0)
+                            {{ $days }} hari
+                          @endif
+                          @if ($hours > 0)
+                            {{ $hours }} jam
+                          @endif
+                          @if ($minutes > 0)
+                            {{ $minutes }} menit
+                          @endif
+                          @if ($seconds > 0)
+                            {{ $seconds }} detik
+                          @endif
                       </div>
                     @endif
                   </div>
@@ -271,7 +316,7 @@
       @endphp
        
       @if ($currentTime >= $deadline)
-        <div class="col-xl-{{ $counttbs % 3 == 0 ? ($countShown % 3 == 0 ? '12' : '6') : ($counttbs % 2 == 0 ? '6' : '12') }} col-md-6 mb-4">
+        <div class="col-xl-{{ $counttbs % 2 == 0 ? '6' : ($countShown == $counttbs ? '12' : '6') }} col-md-6 mb-4">
           <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
             <div class="card border-left-info shadow h-100 py-2">
               <div class="card-body">
@@ -296,7 +341,7 @@
       @endif
     @endforeach 
   
-    @if ($countShown == 0 && $tugasDeadlineHabis->isEmpty())
+    @if ($countShown == 0)
       <div class="col-12 text-center">
         <p>Tidak ada tugas</p>
       </div>

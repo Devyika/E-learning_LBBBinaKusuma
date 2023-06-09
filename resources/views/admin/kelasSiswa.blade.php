@@ -211,7 +211,7 @@
               </button>
           </div>
           <div class="modal-body">
-              <p>Anda yakin ingin menghapus Kelas ini?</p>
+              <p>Anda yakin ingin menghapus Siswa ini ?</p>
           </div>
           <div class="modal-footer">
               <form method="POST" action="{{ url('/admin/setting-siswa/'.$ks->id)}}">

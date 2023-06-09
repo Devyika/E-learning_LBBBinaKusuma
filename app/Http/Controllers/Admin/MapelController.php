@@ -8,12 +8,14 @@ use App\Models\JurusanTingkatKelas;
 use App\Models\KelasMapel;
 use App\Models\Mapel;
 use App\Models\Modul;
+use App\Models\PengumpulanTugas;
 use App\Models\Pertemuan;
 use App\Models\Tingkat;
 use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class MapelController extends Controller
 {
@@ -190,9 +192,43 @@ class MapelController extends Controller
 
     public function kelasMapel_destroy($id)
     {
+        // Menghapus entri dalam model Pertemuan
         $kelasMapel = KelasMapel::findOrFail($id);
+        $idPertemuan = $kelasMapel->pertemuan->pluck('id');
+    
+        // Menghapus entri dalam model PengumpulanTugas
+        PengumpulanTugas::whereIn('id_tugas', function ($query) use ($idPertemuan) {
+            $query->select('id')->from('tugas')->whereIn('id_pertemuan', $idPertemuan);
+        })->get()->each(function ($pengumpulanTugas) {
+            // Hapus file terkait
+            Storage::disk('public')->delete($pengumpulanTugas->file);
+    
+            // Hapus entri dalam model PengumpulanTugas
+            $pengumpulanTugas->delete();
+        });
+    
+        // Menghapus entri dalam model Tugas
+        Tugas::whereIn('id_pertemuan', $idPertemuan)->delete();
+    
+        // Menghapus file dan entri dalam model Modul
+        Modul::whereIn('id_pertemuan', $idPertemuan)->get()->each(function ($modul) {
+            // Hapus file terkait
+            Storage::disk('public')->delete($modul->file);
+    
+            // Hapus entri dalam model Modul
+            $modul->delete();
+        });
+    
+        // Menghapus entri dalam model Pertemuan
+        Pertemuan::whereIn('id', $idPertemuan)->delete();
+    
+        // Menghapus entri dalam model KelasMapel
         $kelasMapel->delete();
-
-        return redirect()->back()->with('success', 'Data berhasil disimpan');
+    
+        return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
+    
+
+
+
 }

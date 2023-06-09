@@ -124,7 +124,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times"></i></button>            </div>
+            </div>
         </div>
     </div>
 </div>
@@ -158,7 +158,7 @@
 
                 $level = $userLevels[Auth::user()->level_user] ?? 'Developer';
                 @endphp
-                <form  id="editForm-{{ $user->id }}" action="{{ url('/'.$level.'/user/'. $user->id) }}" method="POST" enctype="multipart/form-data">
+                <form  id="editForm-{{ $user->id }}" action="{{ url('/user/'. $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
@@ -184,14 +184,13 @@
                     </div>
                     <div class="form-group">
                         <label for="foto">Foto Profile</label>
-                        <input type="file" class="form-control @error('foto') is-invalid @enderror" id="photo-{{ $user->id }}" name="foto" accept="image/*" onchange="previewPhotoEdit({{ $user->id }})" style="padding: 0; height: 100%;">
+                        <input type="file" class="form-control @error('foto') is-invalid @enderror" id="photo-{{ $user->id }}" name="foto" accept="image/*" onchange="previewPhotoEditUser({{ $user->id }})" style="padding: 0; height: 100%;">
                         @error('foto')
                           <span class="invalid-feedback" role="alert">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                 <button type="submit" class="btn btn-primary btn-sm" form="editForm-{{ $user->id }}"><i class="fa-solid fa-save"></i></button>
             </div>
             </form>

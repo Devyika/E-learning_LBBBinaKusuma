@@ -195,6 +195,20 @@
           }
         }
 
+        function previewPhotoEditUser(id) {
+        const photo = document.getElementById('photo-' + id).files[0];
+        const photoPreview = document.getElementById('photo-preview-' + id);
+        const reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+            photoPreview.src = reader.result;
+        }, false);
+
+        if (photo) {
+            reader.readAsDataURL(photo);
+        }
+        }
+
         function previewPhotoEdit(id) {
         const photo = document.getElementById('photo-' + id).files[0];
         const photoPreview = document.getElementById('photo-preview-' + id);

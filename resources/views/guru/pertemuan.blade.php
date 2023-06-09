@@ -9,7 +9,7 @@
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="#">Menu</a></li>
-        <li class="breadcrumb-item active">Dashboard</li>
+        <li class="breadcrumb-item active">Pertemuan</li>
       </ol>
     </div>
   </div>
@@ -189,9 +189,14 @@
                         @if ($t->id_pertemuan == $p->id)
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            <div class="d-flex justify-content-between align-items-center">
-                              <span>{{$t->nama}}</span>
-                              <div>
+                            <div class="row">
+                              <div class="col-sm-8 d-flex align-items-center">
+                                  <span>{{$t->nama}}</span>
+                              </div>
+                              <div class="col-sm-4 d-flex justify-content-center align-items-center">
+                                <a href="{{ url('/guru/tugas-siswa/'.$t->id.'/'.$id.'/'.$t->id_pertemuan)}}" class="btn btn-sm btn-primary btn-block">Lihat Tugas Siswa</a>
+                              </div>                            
+                              <div class="col-sm-8">
                                   <?php
                                       date_default_timezone_set('Asia/Jakarta');
                                       $currentTime = date('Y-m-d H:i:s');
@@ -199,20 +204,23 @@
                                       $textColorClass = ($currentTime < $deadline) ? 'text-success' : 'text-danger';
                                   ?>
                                   <span class="text-muted">Deadline: </span>
+                                  <br>
                                   @if ($currentTime < $deadline)
                                       <span class="{{ $textColorClass }}">{{ $deadline }}</span>
                                   @else
                                       <span class="{{ $textColorClass }}">{{ $deadline }}</span>
                                   @endif
-                                  <a href="{{ url('/guru/tugas-siswa/'.$t->id.'/'.$id.'/'.$t->id_pertemuan)}}" class="btn btn-sm btn-primary ml-2">Lihat Tugas Siswa</a>
-                                  <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#editTugasModal{{$t->id}}">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                  </button>
-                                  <button type="button" class="btn btn-danger btn-sm ml-2" data-toggle="modal" data-target="#deleteTugasModal{{$t->id}}">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
                               </div>
-                          </div>                                                                                                
+                              <div class="col-sm-4 d-flex justify-content-around align-items-center">
+                                <button type="button" class="btn btn-primary btn-sm w-100 mr-1" data-toggle="modal" data-target="#editTugasModal{{$t->id}}">
+                                  <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm w-100 ml-1" data-toggle="modal" data-target="#deleteTugasModal{{$t->id}}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>                               
+                            </div>                                                                                 
+                          </div>
+                                                                                                                                                 
 
                         {{-- modal deletetugas --}}
                         <div class="modal fade" id="deleteTugasModal{{$t->id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModulModal-label" aria-hidden="true">
