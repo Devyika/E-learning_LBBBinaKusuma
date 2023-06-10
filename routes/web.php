@@ -106,6 +106,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('siswa')->middleware(['IsSiswa'])->group(function () {
         Route::get('/dashboard', [DashboardSiswaController::class, 'index']);
+        Route::get('/nilai', [DashboardSiswaController::class, 'nilai']);
         Route::get('/pertemuan/{id}', [PertemuanSiswaController::class, 'show']);
         Route::post('/pengumpulan-tugas/{id}', [PertemuanSiswaController::class, 'store']);
         Route::get('/mata_pelajaran', [MapelSiswaController::class, 'index']);
