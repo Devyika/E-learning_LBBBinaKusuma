@@ -20,4 +20,9 @@ class Pertemuan extends Model
     {
         return $this->belongsTo(KelasMapel::class, 'id_kelasMapelGuru');
     }
+
+    public function tugas()
+    {
+        return $this->hasMany(Pertemuan::class, 'id_pertemuan');
+    }
 }

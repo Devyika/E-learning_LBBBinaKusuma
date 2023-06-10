@@ -21,4 +21,9 @@ class Tugas extends Model
     {
         return $this->hasMany(PengumpulanTugas::class, 'id');
     }
+
+    public function pertemuan()
+    {
+        return $this->belongsTo(Pertemuan::class, 'id_pertemuan');
+    }
 }

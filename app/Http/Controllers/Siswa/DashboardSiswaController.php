@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
+use App\Models\KelasMapel;
 use App\Models\KelasSiswa;
 use App\Models\PengumpulanTugas;
+use App\Models\Pertemuan;
 use App\Models\Siswa;
 use App\Models\Tugas;
 use App\Models\User;
@@ -51,23 +53,39 @@ class DashboardSiswaController extends Controller
             ->orderBy('nama')
             ->get();
 
-        // Periksa apakah id dari Tugas ada di kolom id_tugas pada tabel PengumpulanTugas
-        $tugasBelumDikumpulkan = Tugas::whereNotExists(function ($query) use ($userId) {
-            $query->select(DB::raw(1))
-                ->from('pengumpulan_tugas')
-                ->whereColumn('tugas.id', 'pengumpulan_tugas.id_tugas')
-                ->where('pengumpulan_tugas.id_siswa', $userId);
-        })->get();
+        $jurusanTingkatKelasId = KelasSiswa::where('id_siswa', $userId)->pluck('id_jurusanTingkatKelas')->all();
 
-        $tugasSudahDikumpulkan = Tugas::whereExists(function ($query) use ($userId) {
-            $query->select(DB::raw(1))
-                ->from('pengumpulan_tugas')
-                ->whereColumn('tugas.id', 'pengumpulan_tugas.id_tugas')
-                ->where('pengumpulan_tugas.id_siswa', $userId);
-        })->get();
+        $kelasMapelId = KelasMapel::where('id_jurusanTingkatKelas', $jurusanTingkatKelasId)->pluck('id')->all();
+
+        $pertemuanId = Pertemuan::where('id_kelasMapelGuru', $kelasMapelId)->pluck('id')->all();
+
+        $tugasId = Tugas::where('id_pertemuan', $pertemuanId)->pluck('id')->all();  
+        
+        // Periksa apakah id dari Tugas ada di kolom id_tugas pada tabel PengumpulanTugas
+
+        $tugasBelumDikumpulkan = Tugas::where('id_pertemuan', $pertemuanId)
+            ->whereNotIn('id', function ($query) use ($tugasId, $userId) {
+                $query->select('id_tugas')
+                    ->from('pengumpulan_tugas')
+                    ->where('id_siswa', $userId)
+                    ->whereIn('id_tugas', $tugasId);
+            })
+            ->get();
+
+        $tugasSudahDikumpulkan = Tugas::where('id_pertemuan', $pertemuanId)
+            ->whereIn('id', function ($query) use ($tugasId, $userId) {
+                $query->select('id_tugas')
+                    ->from('pengumpulan_tugas')
+                    ->where('id_siswa', $userId)
+                    ->whereIn('id_tugas', $tugasId);
+            })
+            ->get();  
+
+        $kelasSiswa = KelasSiswa::where('id_siswa', $userId)->get();
 
         return view('siswa.dashboard', ['user' => $user, 'mapelSiswa' => $mapelSiswa])
             ->with('pertemuan', $pertemuan)
+            ->with('kelasSiswa', $kelasSiswa)
             ->with('tugasBelumDikumpulkan', $tugasBelumDikumpulkan)
             ->with('tugasSudahDikumpulkan', $tugasSudahDikumpulkan)
             ->with('pertemuanSidebar', $pertemuanSidebar);

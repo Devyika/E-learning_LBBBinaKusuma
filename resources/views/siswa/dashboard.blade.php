@@ -53,103 +53,95 @@
     @php
     date_default_timezone_set('Asia/Jakarta');
     $currentTime = time();
-    $counttbs = 0;
-    $countShown = 0;
+    $countTugasBelum = 0;
+    $TugasCounterBelum = 0;
+    $tugasBelumIDs = array();
     @endphp
 
-    @foreach ($tugasBelumDikumpulkan as $tbd)
-      @php
-      $deadline = strtotime($tbd->deadline);
-      $diffSeconds = $deadline - $currentTime;
+    @if ($kelasSiswa)
+        @php
+        foreach ($tugasBelumDikumpulkan as $tbd) {
+            $deadline = strtotime($tbd->deadline);
+            if ($currentTime <= $deadline) {
+                $countTugasBelum++;
+                $tugasBelumIDs[] = $tbd->id;
+            }
+        }
+        @endphp
 
-      $years = floor($diffSeconds / (3600 * 24 * 365));
-      $diffSeconds %= 3600 * 24 * 365;
-      $months = floor($diffSeconds / (3600 * 24 * 30));
-      $diffSeconds %= 3600 * 24 * 30;
-      $days = floor($diffSeconds / (3600 * 24));
-      $diffSeconds %= 3600 * 24;
-      $hours = floor($diffSeconds / 3600);
-      $diffSeconds %= 3600;
-      $minutes = floor($diffSeconds / 60);
-      $seconds = $diffSeconds % 60;
+        @foreach ($tugasBelumDikumpulkan as $tbd)
+            @if (in_array($tbd->id, $tugasBelumIDs))
+            @php
+            $TugasCounterBelum++;
+            $deadline = strtotime($tbd->deadline);
+            $diffSeconds = $deadline - $currentTime;
 
-      if ($currentTime <= $deadline) {
-        $counttbs++;
-      }
-      @endphp
-    @endforeach
-
-    @foreach ($tugasBelumDikumpulkan as $tbd)
-      @php
-      $deadline = strtotime($tbd->deadline);
-      $diffSeconds = $deadline - $currentTime;
-
-      $years = floor($diffSeconds / (3600 * 24 * 365));
-      $diffSeconds %= 3600 * 24 * 365;
-      $months = floor($diffSeconds / (3600 * 24 * 30));
-      $diffSeconds %= 3600 * 24 * 30;
-      $days = floor($diffSeconds / (3600 * 24));
-      $diffSeconds %= 3600 * 24;
-      $hours = floor($diffSeconds / 3600);
-      $diffSeconds %= 3600;
-      $minutes = floor($diffSeconds / 60);
-      $seconds = $diffSeconds % 60;
-
-      if ($currentTime <= $deadline) {
-        $countShown++;
-      }
-      @endphp
-      
-      @if ($currentTime <= $deadline)
-      <div class="col-xl-{{ $counttbs % 2 == 0 ? '6' : ($countShown == $counttbs ? '12' : '6') }} col-md-6 mb-4">
-          <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
-            <div class="card border-left-info shadow h-100 py-2">
-              <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                  <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-warning">
-                      Belum Mengumpulkan
+            $years = floor($diffSeconds / (3600 * 24 * 365));
+            $diffSeconds %= 3600 * 24 * 365;
+            $months = floor($diffSeconds / (3600 * 24 * 30));
+            $diffSeconds %= 3600 * 24 * 30;
+            $days = floor($diffSeconds / (3600 * 24));
+            $diffSeconds %= 3600 * 24;
+            $hours = floor($diffSeconds / 3600);
+            $diffSeconds %= 3600;
+            $minutes = floor($diffSeconds / 60);
+            $seconds = $diffSeconds % 60;
+            @endphp
+            
+            <div class="col-xl-{{ ($countTugasBelum % 2 == 0 || $TugasCounterBelum != $countTugasBelum )? '6' : '12' }} col-md-6 mb-4">
+                <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-warning">
+                                        Belum Mengumpulkan
+                                    </div>
+                                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
+                                    <div class="small mb-0 font-weight-bold text-info">Sisa Waktu:
+                                        @if ($years > 0)
+                                            {{ $years }} tahun
+                                        @endif
+                                        @if ($months > 0)
+                                            {{ $months }} bulan
+                                        @endif
+                                        @if ($days > 0)
+                                            {{ $days }} hari
+                                        @endif
+                                        @if ($hours > 0)
+                                            {{ $hours }} jam
+                                        @endif
+                                        @if ($minutes > 0)
+                                            {{ $minutes }} menit
+                                        @endif
+                                        @if ($seconds > 0)
+                                            {{ $seconds }} detik
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-book-open fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
-                      <div class="small mb-0 font-weight-bold text-info">Sisa Waktu: 
-                        @if ($years > 0)
-                            {{ $years }} tahun
-                          @endif
-                          @if ($months > 0)
-                            {{ $months }} bulan
-                          @endif
-                          @if ($days > 0)
-                            {{ $days }} hari
-                          @endif
-                          @if ($hours > 0)
-                            {{ $hours }} jam
-                          @endif
-                          @if ($minutes > 0)
-                            {{ $minutes }} menit
-                          @endif
-                          @if ($seconds > 0)
-                            {{ $seconds }} detik
-                          @endif
-                      </div>
-                  </div>
-                  <div class="col-auto">
-                    <i class="fas fa-book-open fa-2x"></i>
-                  </div>
-                </div>
-              </div>
+                </a>
             </div>
-          </a>
+            @endif
+        @endforeach 
+
+        @if ($countTugasBelum == 0)
+        <div class="col-12 text-center">
+            <p>Tidak ada tugas</p>
         </div>
-      @endif
-    @endforeach 
-
-    @if ($countShown == 0)
-    <div class="col-12 text-center">
-      <p>Tidak ada tugas</p>
-    </div>
+        @endif
+    @else
+        <div class="col-12 text-center">
+            <p>Tidak ada tugas</p>
+        </div>
     @endif
+    </div>
 
-  </div>
 
   <div class="row mb-2">
     <div class="col-sm-6">
@@ -169,106 +161,98 @@
     @php
     date_default_timezone_set('Asia/Jakarta');
     $currentTime = time();
-    $counttbs = 0;
-    $countShown = 0;
-    $totalCount = count($tugasSudahDikumpulkan);
+    $countTugasSudah = 0;
+    $TugasCounterSudah = 0;
+    $tugasSudahIDs = array();
     @endphp
-  
-    @foreach ($tugasSudahDikumpulkan as $tbd)
-      @php
-      $deadline = strtotime($tbd->deadline);
-      $diffSeconds = $deadline - $currentTime;
-  
-      $years = floor($diffSeconds / (3600 * 24 * 365));
-      $diffSeconds %= 3600 * 24 * 365;
-      $months = floor($diffSeconds / (3600 * 24 * 30));
-      $diffSeconds %= 3600 * 24 * 30;
-      $days = floor($diffSeconds / (3600 * 24));
-      $diffSeconds %= 3600 * 24;
-      $hours = floor($diffSeconds / 3600);
-      $diffSeconds %= 3600;
-      $minutes = floor($diffSeconds / 60);
-      $seconds = $diffSeconds % 60;
-  
-      if ($currentTime <= $deadline) {
-        $counttbs++;
-      }
-      @endphp
-    @endforeach
-  
-    @foreach ($tugasSudahDikumpulkan as $tbd)
-      @php
-      $deadline = strtotime($tbd->deadline);
-      $diffSeconds = $deadline - $currentTime;
-  
-      $years = floor($diffSeconds / (3600 * 24 * 365));
-      $diffSeconds %= 3600 * 24 * 365;
-      $months = floor($diffSeconds / (3600 * 24 * 30));
-      $diffSeconds %= 3600 * 24 * 30;
-      $days = floor($diffSeconds / (3600 * 24));
-      $diffSeconds %= 3600 * 24;
-      $hours = floor($diffSeconds / 3600);
-      $diffSeconds %= 3600;
-      $minutes = floor($diffSeconds / 60);
-      $seconds = $diffSeconds % 60;
-  
-      if ($currentTime <= $deadline) {
-        $countShown++;
-      }
-      @endphp
-       
-      @if ($currentTime <= $deadline)
-      <div class="col-xl-{{ $counttbs % 2 == 0 ? '6' : ($countShown == $counttbs ? '12' : '6') }} col-md-6 mb-4">
-          <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
-            <div class="card border-left-info shadow h-100 py-2">
-              <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                  <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-success">
-                      Sudah Mengumpulkan
+
+    @if ($kelasSiswa)
+        @php
+        foreach ($tugasSudahDikumpulkan as $tbd) {
+            $deadline = strtotime($tbd->deadline);
+            if ($currentTime <= $deadline) {
+                $countTugasSudah++;
+                $tugasSudahIDs[] = $tbd->id;
+            }
+        }
+        @endphp
+
+        @foreach ($tugasSudahDikumpulkan as $tbd)
+            @if (in_array($tbd->id, $tugasSudahIDs))
+            @php
+            $TugasCounterSudah++;
+            $deadline = strtotime($tbd->deadline);
+            $diffSeconds = $deadline - $currentTime;
+
+            $years = floor($diffSeconds / (3600 * 24 * 365));
+            $diffSeconds %= 3600 * 24 * 365;
+            $months = floor($diffSeconds / (3600 * 24 * 30));
+            $diffSeconds %= 3600 * 24 * 30;
+            $days = floor($diffSeconds / (3600 * 24));
+            $diffSeconds %= 3600 * 24;
+            $hours = floor($diffSeconds / 3600);
+            $diffSeconds %= 3600;
+            $minutes = floor($diffSeconds / 60);
+            $seconds = $diffSeconds % 60;
+            @endphp
+
+            <div class="col-xl-{{ ($countTugasSudah % 2 == 0 || $TugasCounterSudah != $countTugasSudah )? '6' : '12' }} col-md-6 mb-4">
+                <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-success">
+                                        Sudah Mengumpulkan
+                                    </div>
+                                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
+                                    @if ($hours > 0 || $minutes > 0 || $seconds > 0)
+                                    <div class="small mb-0 font-weight-bold text-info">Sisa Waktu:
+                                        @if ($years > 0)
+                                            {{ $years }} tahun
+                                        @endif
+                                        @if ($months > 0)
+                                            {{ $months }} bulan
+                                        @endif
+                                        @if ($days > 0)
+                                            {{ $days }} hari
+                                        @endif
+                                        @if ($hours > 0)
+                                            {{ $hours }} jam
+                                        @endif
+                                        @if ($minutes > 0)
+                                            {{ $minutes }} menit
+                                        @endif
+                                        @if ($seconds > 0)
+                                            {{ $seconds }} detik
+                                        @endif
+                                    </div>
+                                    @endif
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-book-open fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
-                    @if ($hours > 0 || $minutes > 0 || $seconds > 0)
-                      <div class="small mb-0 font-weight-bold text-info">Sisa Waktu: 
-                        @if ($years > 0)
-                            {{ $years }} tahun
-                          @endif
-                          @if ($months > 0)
-                            {{ $months }} bulan
-                          @endif
-                          @if ($days > 0)
-                            {{ $days }} hari
-                          @endif
-                          @if ($hours > 0)
-                            {{ $hours }} jam
-                          @endif
-                          @if ($minutes > 0)
-                            {{ $minutes }} menit
-                          @endif
-                          @if ($seconds > 0)
-                            {{ $seconds }} detik
-                          @endif
-                      </div>
-                    @endif
-                  </div>
-                  <div class="col-auto">
-                    <i class="fas fa-book-open fa-2x"></i>
-                  </div>
-                </div>
-              </div>
+                </a>
             </div>
-          </a>
+            @endif
+        @endforeach
+
+        @if ($countTugasSudah == 0)
+        <div class="col-12 text-center">
+            <p>Tidak ada tugas</p>
         </div>
-      @endif
-    @endforeach 
-  
-    @if ($countShown == 0)
-    <div class="col-12 text-center">
-      <p>Tidak ada tugas</p>
-    </div>
+        @endif
+    @else
+        <div class="col-12 text-center">
+            <p>Tidak ada tugas</p>
+        </div>
     @endif
-  
-  </div> 
+
+</div>
+ 
   <div class="row mb-2">
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-left">
@@ -288,66 +272,98 @@
     @php
     date_default_timezone_set('Asia/Jakarta');
     $currentTime = time();
-    $counttbs = 0;
-    $countShown = 0;
+    $countTugasTelat = 0;
+    $TugasCounterTelat = 0;
+    $tugasTelatIDs = array();
     @endphp
-  
-    {{-- Tugas Belum Dikumpulkan --}}
-    @foreach ($tugasBelumDikumpulkan as $tbd)
-      @php
-      $deadline = strtotime($tbd->deadline);
-      $diffSeconds = $deadline - $currentTime;
-  
-      if ($currentTime >= $deadline) {
-        $counttbs++;
-      }
-      @endphp
-    @endforeach
-  
-    {{-- Tugas Belum Dikumpulkan --}}
-    @foreach ($tugasBelumDikumpulkan as $tbd)
-      @php
-      $deadline = strtotime($tbd->deadline);
-      $diffSeconds = $deadline - $currentTime;
-  
-      if ($currentTime >= $deadline) {
-        $countShown++;
-      }
-      @endphp
-       
-      @if ($currentTime >= $deadline)
-        <div class="col-xl-{{ $counttbs % 2 == 0 ? '6' : ($countShown == $counttbs ? '12' : '6') }} col-md-6 mb-4">
-          <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
-            <div class="card border-left-info shadow h-100 py-2">
-              <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                  <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-danger">
-                      Belum Mengumpulkan
+
+    @if ($kelasSiswa)
+        @php
+        foreach ($tugasBelumDikumpulkan as $tbd) {
+            $deadline = strtotime($tbd->deadline);
+            if ($currentTime >= $deadline) {
+                $countTugasTelat++;
+                $tugasTelatIDs[] = $tbd->id;
+            }
+        }
+        @endphp
+
+        {{-- Tugas Belum Dikumpulkan dengan Deadline Habis --}}
+        @foreach ($tugasBelumDikumpulkan as $tbd)
+        @if (in_array($tbd->id, $tugasTelatIDs))
+            @php
+            $TugasCounterTelat++;
+            $deadline = strtotime($tbd->deadline);
+            $diffSeconds = $deadline - $currentTime;
+
+            $years = floor($diffSeconds / (3600 * 24 * 365));
+            $diffSeconds %= 3600 * 24 * 365;
+            $months = floor($diffSeconds / (3600 * 24 * 30));
+            $diffSeconds %= 3600 * 24 * 30;
+            $days = floor($diffSeconds / (3600 * 24));
+            $diffSeconds %= 3600 * 24;
+            $hours = floor($diffSeconds / 3600);
+            $diffSeconds %= 3600;
+            $minutes = floor($diffSeconds / 60);
+            $seconds = $diffSeconds % 60;
+            @endphp
+
+            <div class="col-xl-{{ ($countTugasTelat % 2 == 0 || $TugasCounterTelat != $countTugasTelat )? '6' : '12' }} col-md-6 mb-4">
+                <a href="{{ url('siswa/pertemuan/'.$tbd->id_pertemuan) }}" style="text-decoration: none; color: inherit;">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1 text-danger">
+                                        Belum Mengumpulkan
+                                    </div>
+                                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
+                                    <div class="small mb-0 font-weight-bold text-info">Deadline Sudah Habis</div>
+                                    <div class="small mb-0 font-weight-bold text-info">
+                                        @if ($years > 0)
+                                            {{ $years }} tahun
+                                        @endif
+                                        @if ($months > 0)
+                                            {{ $months }} bulan
+                                        @endif
+                                        @if ($days > 0)
+                                            {{ $days }} hari
+                                        @endif
+                                        @if ($hours > 0)
+                                            {{ $hours }} jam
+                                        @endif
+                                        @if ($minutes > 0)
+                                            {{ $minutes }} menit
+                                        @endif
+                                        @if ($seconds > 0)
+                                            {{ $seconds }} detik
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-book-open fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="h5 mb-1 font-weight-bold">{{ $tbd->nama }}</div>
-                      <div class="small mb-0 font-weight-bold text-info">
-                        Deadline Sudah Habis
-                      </div>
-                  </div>
-                  <div class="col-auto">
-                    <i class="fas fa-book-open fa-2x"></i>
-                  </div>
-                </div>
-              </div>
+                </a>
             </div>
-          </a>
+            @endif
+        @endforeach
+
+        @if ($countTugasTelat == 0)
+        <div class="col-12 text-center">
+            <p>Tidak ada tugas</p>
         </div>
-      @endif
-    @endforeach 
-  
-    @if ($countShown == 0)
-      <div class="col-12 text-center">
-        <p>Tidak ada tugas</p>
-      </div>
+        @endif
+    @else
+        <div class="col-12 text-center">
+            <p>Tidak ada tugas</p>
+        </div>
     @endif
-  
-  </div>  
+
+</div>
+
 </div>
 
   <!-- /.row -->
