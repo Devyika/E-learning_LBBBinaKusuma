@@ -57,29 +57,56 @@ class DashboardSiswaController extends Controller
 
         $kelasMapelId = KelasMapel::where('id_jurusanTingkatKelas', $jurusanTingkatKelasId)->pluck('id')->all();
 
-        $pertemuanId = Pertemuan::where('id_kelasMapelGuru', $kelasMapelId)->pluck('id')->all();
+        $matchingPertemuanIds = array();
+        $matchingTugasIds = array();
 
-        $tugasId = Tugas::where('id_pertemuan', $pertemuanId)->pluck('id')->all();  
+        foreach ($kelasMapelId as $kId) {
+            $pertemuanIds = Pertemuan::where('id_kelasMapelGuru', $kId)->pluck('id')->all();
+            
+            if (!empty($pertemuanIds)) {
+                $matchingPertemuanIds[] = $pertemuanIds[0];
+            }
+        }
+
+        foreach ($matchingPertemuanIds as $pId) {
+            $tugasIds = Tugas::where('id_pertemuan', $pId)->pluck('id')->all();  
+            
+            if (!empty($tugasIds)) {
+                $matchingTugasIds[] = $tugasIds[0];
+            }
+        }
         
         // Periksa apakah id dari Tugas ada di kolom id_tugas pada tabel PengumpulanTugas
 
-        $tugasBelumDikumpulkan = Tugas::where('id_pertemuan', $pertemuanId)
-            ->whereNotIn('id', function ($query) use ($tugasId, $userId) {
-                $query->select('id_tugas')
-                    ->from('pengumpulan_tugas')
-                    ->where('id_siswa', $userId)
-                    ->whereIn('id_tugas', $tugasId);
-            })
-            ->get();
+        $tugasBelumDikumpulkan = array();
 
-        $tugasSudahDikumpulkan = Tugas::where('id_pertemuan', $pertemuanId)
-            ->whereIn('id', function ($query) use ($tugasId, $userId) {
-                $query->select('id_tugas')
-                    ->from('pengumpulan_tugas')
-                    ->where('id_siswa', $userId)
-                    ->whereIn('id_tugas', $tugasId);
-            })
-            ->get();  
+        foreach ($matchingPertemuanIds as $pertemuanId) {
+            $tugas = Tugas::where('id_pertemuan', $pertemuanId)
+                ->whereNotIn('id', function ($query) use ($matchingTugasIds, $userId) {
+                    $query->select('id_tugas')
+                        ->from('pengumpulan_tugas')
+                        ->where('id_siswa', $userId)
+                        ->whereIn('id_tugas', $matchingTugasIds);
+                })
+                ->get();
+            
+            $tugasBelumDikumpulkan = array_merge($tugasBelumDikumpulkan, $tugas->toArray());
+        }
+
+        $tugasSudahDikumpulkan = array();
+
+        foreach ($matchingPertemuanIds as $pertemuanId) {
+            $tugas = Tugas::where('id_pertemuan', $pertemuanId)
+                ->whereIn('id', function ($query) use ($matchingTugasIds, $userId) {
+                    $query->select('id_tugas')
+                        ->from('pengumpulan_tugas')
+                        ->where('id_siswa', $userId)
+                        ->whereIn('id_tugas', $matchingTugasIds);
+                })
+                ->get();
+            
+            $tugasSudahDikumpulkan = array_merge($tugasSudahDikumpulkan, $tugas->toArray());
+        } 
 
         $kelasSiswa = KelasSiswa::where('id_siswa', $userId)->get();
 
