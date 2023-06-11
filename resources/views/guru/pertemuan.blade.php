@@ -32,6 +32,66 @@
           @if ($mapel2->count() == 1)
           @foreach ($mapel2 as $m)
           <h3 class="card-title"><b>Kelas :</b> {{$m->tingkat}} {{$m->jurusan}} {{$m->kelas}}  <b>&nbsp;&nbsp;|&nbsp;&nbsp;  Pelajaran :</b> {{$m->nama}}</h3>
+          <button type="button" class="btn btn-primary btn-sm float-right" data-dismiss="modal" data-toggle="modal" data-target="#nilai">
+            <i class="far fa-folder-open mr-2"></i>Nilai {{$m->nama}}
+          </button>
+          <div class="modal fade" id="nilai" tabindex="-1" role="dialog" aria-labelledby="nilaiModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="nilaiModalLabel"> {{$m->tingkat}} {{$m->jurusan}} {{$m->kelas}} - {{$m->nama}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <Strong>Mata Pelajaran</strong>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span>
+                                        Rata - Rata
+                                    </span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span>
+                                        Nilai Huruf
+                                    </span>
+                                </div>
+                            </div>
+                          </li>
+                            @foreach ($pengumpulanWithSiswa as $pws)
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <Strong>{{ $pws['name_siswa'] }}</strong>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <span>
+                                                {{ $pws['rata_rata_nilai'] }}
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <span>
+                                                {{ $pws['grade_total_nilai'] }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ url('/guru/nilai/'.$m->id) }}" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="fas fa-download mr-2"></i>Unduh Nilai
+                        </a>                            
+                    </div>
+                </div>
+            </div>
+          </div>
           @endforeach
           @endif
         </div>

@@ -141,7 +141,7 @@
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="detailModalLabel{{$ks->id}}"><strong>Detail Kelas </strong>{{$ks->name}}</h5>
+        <h5 class="modal-title" id="detailModalLabel{{$ks->id}}"><strong>Detail Siswa</strong>{{$ks->name}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -164,7 +164,7 @@
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editModal-label-{{ $ks->id }}"><strong>Edit Mata Pelajaran</strong></h5>
+        <h5 class="modal-title" id="editModal-label-{{ $ks->id }}"><strong>Edit Siswa</strong></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -205,7 +205,7 @@
   <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="deleteModal-label-{{ $ks->id }}"><strong>Hapus Mata Pelajaran </strong>{{ $ks->nama }}</h5>
+              <h5 class="modal-title" id="deleteModal-label-{{ $ks->id }}"><strong>Hapus Siswa </strong>{{ $ks->nama }}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
               </button>

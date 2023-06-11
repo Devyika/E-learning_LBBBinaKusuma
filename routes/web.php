@@ -93,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/tugas-siswa/{id}', [PengumpulanTugasController::class, 'nilai']);
         Route::delete('/tugas-siswa/{id}', [PengumpulanTugasController::class, 'destroy_tugas']);
         Route::resource('pertemuan', PertemuanController::class);
+        Route::get('/nilai/{id}', [PertemuanController::class, 'nilai']);
         Route::post('/pertemuan/{pertemuan}', [PertemuanController::class, 'store_pertemuan']);
         Route::post('/pertemuan/modul/{pertemuan}/{id}', [PertemuanController::class, 'store_modul'])->name('add.modul');
         Route::post('/pertemuan/tugas/{pertemuan}/{id}', [PertemuanController::class, 'store_tugas']);

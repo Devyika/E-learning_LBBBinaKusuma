@@ -114,7 +114,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="addTingkatForm"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>
@@ -136,7 +135,6 @@
         <p>{{$t->name}}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
       </div>
     </div>
   </div>
@@ -167,7 +165,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
         <button type="submit" class="btn btn-primary btn-sm" form="editTingkatForm-{{ $t->id }}"><i class="fa-solid fa-save"></i></button>
       </div>
     </div>                              
@@ -192,7 +189,6 @@
               <form method="POST" action="{{ url('/admin/input-tingkat/'.$t->id)}}">
                   @csrf
                   @method('DELETE')
-                  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa-solid fa-close"></i></button>
                   <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
               </form>
           </div>

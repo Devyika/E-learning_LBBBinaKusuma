@@ -55,20 +55,37 @@
                         </div>
                         <div class="modal-body">
                             <ul class="list-group list-group-flush">
-                                @foreach ($nilaiMapel as $nm)
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <Strong>Mata Pelajaran</strong>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <span>
+                                                Rata - Rata
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <span>
+                                                Nilai Huruf
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                @foreach ($dataPerhitunganNilai as $dpn)
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-sm-9">
-                                                <Strong>{{ $nm['mapel_nama'] }}</strong>
+                                            <div class="col-sm-6">
+                                                <Strong>{{ $dpn['nama_mapel'] }}</strong>
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-3">
                                                 <span>
-                                                    {{ $nm['nilai'] }}
+                                                    {{ $dpn['rata_rata_nilai'] }}
                                                 </span>
                                             </div>
-                                            <div class="col-sm-1">
+                                            <div class="col-sm-3">
                                                 <span>
-                                                    {{ $nm['nilai_huruf'] }}
+                                                    {{ $dpn['grade_total_nilai'] }}
                                                 </span>
                                             </div>
                                         </div>
@@ -109,7 +126,7 @@
         $tugasBelumIDs = array();
         @endphp
 
-        @if ($kelasSiswa)
+        @if ($jurusanTingkatKelasId)
             @php
             foreach ($tugasBelumDikumpulkan as $tbd) {
                 $deadline = strtotime($tbd['deadline']);
@@ -216,7 +233,7 @@
         $tugasSudahIDs = array();
         @endphp
 
-        @if ($kelasSiswa)
+        @if ($jurusanTingkatKelasId)
             @php
             foreach ($tugasSudahDikumpulkan as $tbd) {
                 $deadline = strtotime($tbd['deadline']);
@@ -326,7 +343,7 @@
         $tugasTelatIDs = array();
         @endphp
 
-        @if ($kelasSiswa)
+        @if ($jurusanTingkatKelasId)
             @php
             foreach ($tugasBelumDikumpulkan as $tbd) {
                 $deadline = strtotime($tbd['deadline']);

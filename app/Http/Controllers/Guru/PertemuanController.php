@@ -3,15 +3,19 @@ namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
+use App\Models\KelasMapel;
+use App\Models\KelasSiswa;
 use App\Models\Modul;
 use App\Models\PengumpulanTugas;
 use App\Models\Pertemuan;
+use App\Models\Siswa;
 use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class PertemuanController extends Controller
 {
@@ -181,6 +185,83 @@ class PertemuanController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
 
+        $tugasArray = $tugas->toArray();
+
+        $jurusanTingkatKelasId = KelasMapel::where('id', $id)->pluck('id_jurusanTingkatKelas')->all();
+        $matchingKelasSiswa = [];
+        foreach ($jurusanTingkatKelasId as $jId) {
+            $kelasSiswaIds = KelasSiswa::where('id_jurusanTingkatKelas', $jId)->pluck('id_siswa')->all();
+            $siswas = Siswa::whereIn('id', $kelasSiswaIds)->select('id', 'name')->get();
+            
+            if ($siswas->isNotEmpty()) {
+                $matchingKelasSiswa = array_merge($matchingKelasSiswa, $siswas->toArray());
+            }
+        }
+
+        $matchingTugasIds = [];
+                
+        foreach ($tugasArray as $tAr) {
+            $tugasIds = Tugas::where('id', $tAr->id)->pluck('id')->all();
+            if (!empty($tugasIds)) {
+                $matchingTugasIds = array_merge($matchingTugasIds, $tugasIds);
+            }
+        }
+
+        $matchingPengumpulanIds = [];
+        foreach ($matchingTugasIds as $m) {
+            $tugasPengumpulan = Tugas::find($m);
+            $pengumpulanTugas = PengumpulanTugas::where('id_tugas', $m)->pluck('nilai', 'id_siswa')->all();
+            
+            if (count($pengumpulanTugas) > 0) {
+                foreach ($pengumpulanTugas as $idSiswa => $nilai) {
+                    $matchingPengumpulanIds[] = [
+                        'id_tugas' => $m,
+                        'nama_tugas' => $tugasPengumpulan->nama,
+                        'nilai' => $nilai,
+                        'id_siswa' => $idSiswa,
+                    ];
+                }
+            } else {
+                $matchingPengumpulanIds[] = [
+                    'id_tugas' => $m,
+                    'nama_tugas' => $tugasPengumpulan->nama,
+                    'nilai' => 0,
+                    'id_siswa' => null,
+                ];
+            }
+        }
+
+        $pengumpulanWithSiswa = [];
+        foreach ($matchingKelasSiswa as $mks) {
+            $idSiswa = $mks['id'];
+            $nameSiswa = $mks['name'];
+            $totalNilai = 0;
+            $jumlahTugas = 0;
+            
+            foreach ($matchingPengumpulanIds as $mp) {
+                $totalNilai += isset($mp['nilai']) ? $mp['nilai'] : 0;
+                $jumlahTugas++;
+                $detailNilai[] = [
+                    'id_tugas' => $mp['id_tugas'],
+                    'nama_tugas' => $mp['nama_tugas'],
+                    'nilai' => isset($mp['nilai']) ? $mp['nilai'] : 0,
+                ];
+            }
+
+            $rataRataNilai = $jumlahTugas > 0 ? $totalNilai / $jumlahTugas : 0;
+            $gradeTotalNilai = $this->convertToGrade($rataRataNilai);
+
+            if (!empty($idSiswa)) {
+                $tempPengumpulanWithSiswa['id_siswa'] = $idSiswa;
+                $tempPengumpulanWithSiswa['name_siswa'] = $nameSiswa;
+                $tempPengumpulanWithSiswa['detail_nilai'] = $detailNilai;
+                $tempPengumpulanWithSiswa['total_nilai'] = $totalNilai;
+                $tempPengumpulanWithSiswa['rata_rata_nilai'] = $rataRataNilai;
+                $tempPengumpulanWithSiswa['grade_total_nilai'] = $gradeTotalNilai;
+            }
+            $pengumpulanWithSiswa[] = $tempPengumpulanWithSiswa;
+        }
+
         return view('guru.pertemuan')
             ->with('kelas', $kelas)
             ->with('mapel', $mapel)
@@ -190,6 +271,7 @@ class PertemuanController extends Controller
             ->with('tugas', $tugas)
             ->with('id', $id)
             ->with('user', $user)
+            ->with('pengumpulanWithSiswa', $pengumpulanWithSiswa)
         ;
     }
 
@@ -253,5 +335,141 @@ class PertemuanController extends Controller
         Tugas::where('id', $id)->delete();
 
         return redirect()->back()->with('success', 'Data modul berhasil dihapus.');
+    }
+
+    public function nilai($id)
+    {
+        $mapel2 = DB::table('kelas_mapel_guru as a')
+        ->join('mapel as b', 'a.id_mapel', '=', 'b.id')
+        ->join('jurusan_tingkat_kelas as c', 'c.id', '=', 'a.id_jurusanTingkatKelas')
+        ->join('kelas as d', 'd.id', '=', 'c.id_kelas')
+        ->join('jurusan as e', 'e.id', '=', 'c.id_jurusan')
+        ->join('tingkat as f', 'f.id', '=', 'c.id_tingkat')
+        ->select('b.nama','a.id', 'd.nama as kelas', 'e.name as jurusan', 'f.name as tingkat')
+        ->where('a.id', $id)
+        ->get();
+
+        $tugas = DB::table('pertemuan')
+        ->join('tugas', 'tugas.id_pertemuan', '=', 'pertemuan.id')
+        ->select('tugas.nama as nama', 'tugas.id_pertemuan as id_pertemuan', 'tugas.id', 'tugas.deadline') // tambahkan 'tugas.deadline' dalam select
+        ->where('pertemuan.id_kelasMapelGuru', $id)
+        ->get();
+        
+        $user = User::join('guru', 'users.username', '=', 'guru.username')
+                ->select('users.username', 'guru.*')
+                ->where('users.id', Auth::user()->id)
+                ->first();
+
+        $tugasArray = $tugas->toArray();
+
+        $jurusanTingkatKelasId = KelasMapel::where('id', $id)->pluck('id_jurusanTingkatKelas')->all();
+        $matchingKelasSiswa = [];
+        foreach ($jurusanTingkatKelasId as $jId) {
+            $kelasSiswaIds = KelasSiswa::where('id_jurusanTingkatKelas', $jId)->pluck('id_siswa')->all();
+            $siswas = Siswa::whereIn('id', $kelasSiswaIds)->select('id', 'name')->get();
+            
+            if ($siswas->isNotEmpty()) {
+                $matchingKelasSiswa = array_merge($matchingKelasSiswa, $siswas->toArray());
+            }
+        }
+
+        $matchingTugasIds = [];
+                
+        foreach ($tugasArray as $tAr) {
+            $tugasIds = Tugas::where('id', $tAr->id)->pluck('id')->all();
+            if (!empty($tugasIds)) {
+                $matchingTugasIds = array_merge($matchingTugasIds, $tugasIds);
+            }
+        }
+
+        $matchingPengumpulanIds = [];
+        foreach ($matchingTugasIds as $m) {
+            $tugasPengumpulan = Tugas::find($m);
+            $pengumpulanTugas = PengumpulanTugas::where('id_tugas', $m)->pluck('nilai', 'id_siswa')->all();
+            
+            if (count($pengumpulanTugas) > 0) {
+                foreach ($pengumpulanTugas as $idSiswa => $nilai) {
+                    $matchingPengumpulanIds[] = [
+                        'id_tugas' => $m,
+                        'nama_tugas' => $tugasPengumpulan->nama,
+                        'nilai' => $nilai,
+                        'id_siswa' => $idSiswa,
+                    ];
+                }
+            } else {
+                $matchingPengumpulanIds[] = [
+                    'id_tugas' => $m,
+                    'nama_tugas' => $tugasPengumpulan->nama,
+                    'nilai' => 0,
+                    'id_siswa' => null,
+                ];
+            }
+        }
+
+        $pengumpulanWithSiswa = [];
+        foreach ($matchingKelasSiswa as $mks) {
+            $idSiswa = $mks['id'];
+            $nameSiswa = $mks['name'];
+            $totalNilai = 0;
+            $jumlahTugas = 0;
+            
+            foreach ($matchingPengumpulanIds as $mp) {
+                $totalNilai += isset($mp['nilai']) ? $mp['nilai'] : 0;
+                $jumlahTugas++;
+                $detailNilai[] = [
+                    'id_tugas' => $mp['id_tugas'],
+                    'nama_tugas' => $mp['nama_tugas'],
+                    'nilai' => isset($mp['nilai']) ? $mp['nilai'] : 0,
+                ];
+            }
+
+            $rataRataNilai = $jumlahTugas > 0 ? $totalNilai / $jumlahTugas : 0;
+            $gradeTotalNilai = $this->convertToGrade($rataRataNilai);
+
+            if (!empty($idSiswa)) {
+                $tempPengumpulanWithSiswa['id_siswa'] = $idSiswa;
+                $tempPengumpulanWithSiswa['name_siswa'] = $nameSiswa;
+                $tempPengumpulanWithSiswa['detail_nilai'] = $detailNilai;
+                $tempPengumpulanWithSiswa['total_nilai'] = $totalNilai;
+                $tempPengumpulanWithSiswa['rata_rata_nilai'] = $rataRataNilai;
+                $tempPengumpulanWithSiswa['grade_total_nilai'] = $gradeTotalNilai;
+            }
+            $pengumpulanWithSiswa[] = $tempPengumpulanWithSiswa;
+        }
+
+        // dd($pengumpulanWithSiswa);
+        $pdf = PDF::loadView('guru.nilai', compact('pengumpulanWithSiswa', 'user', 'mapel2'));
+        foreach ($mapel2 as $m) {
+            $fileName = 'nilai_' . $m->tingkat . '-' . $m->jurusan .  '-' . $m->kelas . '_' . $m->nama . '.pdf';
+        }
+
+        return $pdf->stream($fileName);
+    }
+
+    private function convertToGrade($nilai)
+    {
+        if ($nilai >= 90) {
+            return 'A+';
+        } elseif ($nilai >= 85) {
+            return 'A';
+        } elseif ($nilai >= 80) {
+            return 'A-';
+        } elseif ($nilai >= 75) {
+            return 'B+';
+        } elseif ($nilai >= 70) {
+            return 'B';
+        } elseif ($nilai >= 65) {
+            return 'B-';
+        } elseif ($nilai >= 60) {
+            return 'C+';
+        } elseif ($nilai >= 55) {
+            return 'C';
+        } elseif ($nilai >= 50) {
+            return 'C-';
+        } elseif ($nilai >= 45) {
+            return 'D';
+        } else {
+            return 'E';
+        }
     }
 }
