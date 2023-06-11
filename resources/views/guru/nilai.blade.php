@@ -182,7 +182,9 @@
   
   </div>
   <div class="footer">
-    <p>© LMS - Nilai Hasil Pengumpulan Tugas</p>
+    @foreach ($mapel2 as $m)
+        <title>© LMS - Nilai Pengumpulan Tugas {{ $m->nama }}</title>
+    @endforeach
   </div>
 </body>
 </html>
