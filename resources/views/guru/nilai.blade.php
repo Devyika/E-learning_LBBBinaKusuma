@@ -80,7 +80,7 @@
     @foreach($mapel2 as $m)
   <div class="header">
     <img src="{{ asset('storage/file/img/default/logo.png') }}" alt="Company Logo" class="logo">
-    <div class="company-name">SMA Negeri 4 Ponorogo</div>
+    <div class="company-name">SMA Negeri 4 Probolinggo</div>
     <div class="company-address">LMS - Nilai Pengumpulan Tugas {{ $m->nama }}</div>
   </div>
   <div class="content">

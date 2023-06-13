@@ -49,7 +49,7 @@
                           <li class="list-group-item">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <Strong>Mata Pelajaran</strong>
+                                    <Strong>Nama Siswa</strong>
                                 </div>
                                 <div class="col-sm-3">
                                     <span>

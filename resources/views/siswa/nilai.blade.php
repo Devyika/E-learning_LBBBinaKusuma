@@ -77,7 +77,7 @@
 
   <div class="header">
     <img src="{{ asset('storage/file/img/default/logo.png') }}" alt="Company Logo" class="logo">
-    <div class="company-name">SMA Negeri 4 Ponorogo</div>
+    <div class="company-name">SMA Negeri 4 Probolinggo</div>
     <div class="company-address">LMS - Nilai Hasil Pengumpulan Tugas</div>
   </div>
   <div class="content">
