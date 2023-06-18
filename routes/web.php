@@ -90,13 +90,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('guru')->middleware(['IsGuru'])->group(function () {
         Route::get('/dashboard', [DashboardGuruController::class, 'index']);
         Route::get('/tugas-siswa/{id_tugas}/{id_kelasMapelGuru}/{id_pertemuan}', [PengumpulanTugasController::class, 'index']);
-        //nyobak route guru penilaian tugas
-        Route::post('/tugas-siswa/{id_tugas}/{id_kelasMapelGuru}/{id_pertemuan}', [PengumpulanTugasController::class, 'saveNilai']);
-        Route::post('/guru/tugas-siswa/save-nilai', [PengumpulanTugasController::class, 'saveNilai'])->name('guru.tugas-siswa.save-nilai');
+        Route::post('/tugas-siswa/save-nilai', [PengumpulanTugasController::class, 'saveNilai']);
         Route::put('/tugas-siswa/{id}', [PengumpulanTugasController::class, 'nilai']);
-        //Route::post('/tugas-siswa/save-nilai', [PengumpulanTugasController::class, 'saveNilai']);
-        //Route::post('/tugas-siswa/save-nilai', [PengumpulanTugasController::class, 'saveNilai'])->name('guru.tugas-siswa.save-nilai');
-        //sampek kene
         Route::delete('/tugas-siswa/{id}', [PengumpulanTugasController::class, 'destroy_tugas']);
         Route::resource('pertemuan', PertemuanController::class);
         Route::get('/nilai/{id}', [PertemuanController::class, 'nilai']);
