@@ -14,6 +14,7 @@ use App\Models\PengumpulanTugas;
 use App\Models\Pertemuan;
 use App\Models\Siswa;
 use App\Models\Tingkat;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 
@@ -44,12 +45,20 @@ class AppServiceProvider extends ServiceProvider
         View::share('countKelas', Kelas::count());
         View::share('countMapel', Mapel::count());
         View::share('countPertemuan', Pertemuan::count());
-        View::share('allGuru', Guru::all());
-        View::share('allJurusan', Jurusan::all());
-        View::share('allTingkat', Tingkat::all());
-        View::share('allKelas', Kelas::all());
-        View::share('allMapel', Mapel::all());
-        View::share('allSiswa', Siswa::all());
+        View::share('allGuru', Guru::all()->where('hapus', 0));
+        View::share('allJurusan', Jurusan::all()->where('hapus', 0));
+        View::share('allTingkat', Tingkat::all()->where('hapus', 0));
+        View::share('allKelas', Kelas::all()->where('hapus', 0));
+        View::share('allMapel', Mapel::all()->where('hapus', 0));
+        View::share('allSiswa', Siswa::all()->where('hapus', 0));
+        View::share('allSiswaKls', DB::table('siswa')
+        ->whereNotIn('id', function ($query) {
+            $query->select('id_siswa')
+                ->from('kelas_siswa');
+        })
+        ->where('hapus', 0)
+        ->get()
+        );
         View::share('allKelasMapel', KelasMapel::all());
         View::share('allKelasSiswa', KelasSiswa::all());
         View::share('allPengumpulanTugas', PengumpulanTugas::all());

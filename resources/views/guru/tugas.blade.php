@@ -1,6 +1,7 @@
 @extends('guru.layout.template')
 
 @section('content')
+@csrf
 <div class="container-fluid">
   <div class="row mb-2">
     <div class="col-sm-6">
@@ -49,7 +50,6 @@
                         <th style="width: 30%;">Nama</th>
                         <th style="width: 40%;">Tugas</th>
                         <th style="width: 15%;">Nilai</th>
-                        <th style="width: 10%;">Action</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -60,90 +60,14 @@
                             <td>{{$d->nama}}</td>
                             <td><a href="{{asset('storage/'.$d->file)}}" target="_blank" rel="noopener noreferrer">{{$d->tugas}}</a></td>
                             <td>
-                              @if ($d->nilai == -1)
-                                Belum dinilai
-                              @else
-                                {{$d->nilai}}
-                              @endif
-                            </td>
-                            <td class="d-flex justify-content-around align-items-center">
-                              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#nilai-{{$d->id}}">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                              </button>
-                              <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hapus-{{$d->id}}">
-                                <i class="fa-solid fa-trash"></i>
-                              </button>                              
-                            </td>                            
+                              <input type="text" class="form-control" name="nilai{{$d->id}}" value="{{$d->nilai != -1 ? $d->nilai : ''}}">
+                            </td>                          
                           </tr>
-                          <!-- Modal -->
-                          <div class="modal fade" id="nilai-{{ $d->id }}" tabindex="-1" role="dialog" aria-labelledby="nilai-label-{{ $d->id }}" aria-hidden="true">
-                            <div class="modal-dialog modal-md" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="nilai-label-{{ $d->id }}"><strong>Nilai</strong></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="form-nilai-{{ $d->id }}" method="POST" action="{{ url('/guru/tugas-siswa/'. $d->id) }}" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="form-group">
-                                              <strong>Nama</strong><br>
-                                              {{ $d->nama }}
-                                            </div>
-                                            <div class="form-group">
-                                              <label for="nilai">Nilai</label>
-                                              <input type="text" class="form-control @error('nilai') is-invalid @enderror" id="nilai" name="nilai" value="{{ $d->nilai != -1 ? old('nilai', $d->nilai) : '' }}" placeholder="{{ $d->nilai != -1 ? 'Masukkan Nilai' : 'Belum dinilai' }}">
-                                              @error('nilai')
-                                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                                              @enderror
-                                            </div>                                            
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary btn-sm" form="form-nilai-{{ $d->id }}"><i class="fa-solid fa-save"></i></button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>                              
-                            </div>
-                        </div>
-                        <!-- Modal Hapus -->
-                        <div class="modal fade" id="hapus-{{ $d->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-label-{{ $d->id }}" aria-hidden="true">
-                          <div class="modal-dialog modal-sm" role="document">
-                              <div class="modal-content">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="deleteModal-label-{{ $d->id }}"><strong>Hapus Tugas </strong>{{ $d->nama }}</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span aria-hidden="true">&times;</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body">
-                                      <p>Anda yakin ingin menghapus Tugas ini ?</p>
-                                  </div>
-                                  <div class="modal-footer">
-                                      <form method="POST" action="{{ url('/guru/tugas-siswa/'.$d->id)}}">
-                                          @csrf
-                                          @method('DELETE')
-                                          <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
-                                      </form>
-                                  </div>
-                              </div>
-                          </div>
-                        </div>
                           @endforeach
                         @else
                           <tr><td colspan="6" class="text-center">No matching records found</td></tr>
                         @endif
                       </tbody>
-                      {{-- <tfoot>
-                      <tr>
-                        <th>No.</th>
-                        <th>Username</th>
-                        <th>Name</th>
-                        <th>Action</th>
-                      </tr>
-                      </tfoot> --}}
                     </table>
                   </div>
                 </td>
@@ -153,17 +77,53 @@
           </table>
         </div>
         <!-- /.card-body -->
+        <div class="card-footer">
+          <button type="button" class="btn btn-primary" onclick="saveNilai()">Simpan Nilai</button>
+        </div>
       </div>
       <!-- /.card -->
     </div>
   </div>
   <!-- /.row -->
-  <!-- Main row -->
-  
-  <!-- /.row (main row) -->
 </div>
-  <!-- /.card-body -->
+<!-- /.card-body -->
 </div>
 <!-- /.card -->
+
+<script>
+  function saveNilai() {
+    var formData = new FormData();
+
+    @foreach ($data as $d)
+      formData.append("nilai{{$d->id}}", document.getElementsByName("nilai{{$d->id}}")[0].value);
+    @endforeach
+
+    var currentUrl = "{{ url()->current() }}";
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+    $.ajax({
+      url: currentUrl,
+      type: "POST",
+      data: formData,
+      headers: {
+        'X-CSRF-TOKEN': csrfToken
+      },
+      processData: false, // Prevent jQuery from processing the data
+      contentType: false, // Prevent jQuery from setting the content type
+      success: function(response) {
+        // Handle the response from the server
+        console.log(response);
+      },
+      error: function(xhr, status, error) {
+        // Handle the error
+        console.log(error);
+      }
+    });
+  }
+</script>
+
+
+
+
 
 @endsection

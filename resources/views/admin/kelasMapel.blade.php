@@ -58,12 +58,12 @@
                                             <td>{{ $km->mapel->nama }}</td>
                                             <td>{{ $km->guru->name }}</td>
                                             <td class="d-flex justify-content-around">
-                                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal{{ $km->id }}">
+                                                {{-- <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal{{ $km->id }}">
                                                     <i class="fa-solid fa-circle-info"></i>
                                                 </button>
                                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editModal-{{ $km->id }}">
                                                     <i class="fa-solid fa-pen-to-square"></i>
-                                                </button>
+                                                </button> --}}
                                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal-{{ $km->id }}">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </button>
@@ -103,7 +103,7 @@
 <!-- Modal -->
 @foreach($jurusanTingkatKelas as $ju)
 <div class="modal fade" id="addModal{{ $ju->id }}" tabindex="-1" role="dialog" aria-labelledby="addModal-label{{ $ju->id }}" aria-hidden="true">
-  <div class="modal-dialog modal-sm" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addModal-label{{ $ju->id }}"><strong>Setting Mata Pelajaran</strong></h5>
@@ -122,22 +122,39 @@
           </div>
           <div class="form-group">
             <label for="id_mapel">Mata Pelajaran</label>
-            <select name="id_mapel" class="form-control">
-              <option value="" selected disabled>Pilih Mata Pelajaran</option>
-              @foreach($allMapel as $m)
-                  <option value="{{ $m->id }}">{{ $m->nama }}</option>
-              @endforeach
-            </select>
+            <table id="mataPelajaranTable" class="table">
+              <thead>
+                <tr>
+                  <th>Pilih</th>
+                  <th>Mata Pelajaran</th>
+                  <th>Nama Guru</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($allMapel as $m)
+                  @php
+                    $mapelExists = $ju->kelasMapel->contains('id_mapel', $m->id);
+                  @endphp
+                  @if (!$mapelExists)
+                    <tr>
+                      <td>
+                        <input type="checkbox" name="mata_pelajaran[]" value="{{ $m->id }}">
+                      </td>
+                      <td>{{ $m->nama }}</td>
+                      <td>
+                        <select name="guru_id[]" class="form-control">
+                          <option value="" selected disabled>Pilih Guru</option>
+                          @foreach($allGuru as $g)
+                            <option value="{{ $g->id }}">{{ $g->name }}</option>
+                          @endforeach
+                        </select>
+                      </td>
+                    </tr>
+                  @endif
+                @endforeach
+              </tbody>
+            </table>
           </div>
-          <div class="form-group">
-            <label for="id_guru">Nama Guru</label>
-            <select name="id_guru" class="form-control">
-              <option value="" selected disabled>Pilih Guru</option>
-              @foreach($allGuru as $g)
-                  <option value="{{ $g->id }}">{{ $g->name }}</option>
-              @endforeach
-            </select>
-          </div>             
         </form>
       </div>
       <div class="modal-footer">
@@ -224,28 +241,67 @@
 @endforeach
 
 @foreach ($allKelasMapel as $km)
-<div class="modal fade" id="deleteModal-{{ $km->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-label-{{ $km->id }}" aria-hidden="true">
+
+<div class="modal fade deleteBTN" id="deleteModal-{{ $km->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-label-{{ $km->id }}" aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="deleteModal-label-{{ $km->id }}"><strong>Hapus Mata Pelajaran </strong>{{ $km->nama }}</h5>
+              <h5 class="modal-title" id="deleteModal-label-{{ $km->id }}"><strong>Hapus Kelas </strong>{{ $km->nama }}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
               </button>
           </div>
           <div class="modal-body">
-              <p>Anda yakin ingin menghapus Mata Pelajaran ini ?</p>
+              <p>Anda yakin ingin menghapus Kelas ini?</p>
           </div>
           <div class="modal-footer">
-              <form method="POST" action="{{ url('/admin/setting-mata_pelajaran/'.$km->id)}}">
+              <form id="delete-form-{{ $km->id }}" method="POST" action="{{ url('/admin/setting-mata_pelajaran/'.$km->id)}}">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                  <button type="submit" class="btn btn-danger btn-sm delete-btn" data-id="{{ $km->id }}"><i class="fa-solid fa-trash"></i></button>
               </form>
           </div>
       </div>
   </div>
-</div>     
+</div>
 @endforeach                          
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+      $('.delete-btn').click(function(e) {
+          e.preventDefault(); // Prevent form submission
 
+          var form = $(this).closest('form'); // Get the closest form element
+          var url = form.attr('action'); // Get the form action URL
+          var dataId = $(this).data('id'); // Get the data-id attribute value
+
+          $.ajax({
+              url: url,
+              type: 'POST',
+              dataType: 'json',
+              data: form.serialize(),
+              success: function(response) {
+                  if (response.message) {
+                      // Show notification
+                      showNotification('', response.message);
+                      $('.deleteBTN').modal('hide');
+                  }else {
+                      // Reload the page
+                      window.location.reload();
+                  }
+              },
+              error: function(xhr, status, error) {
+                  // Handle error if needed
+              }
+          });
+      });
+
+      // Function to show notification
+      function showNotification(type, message) {
+          // Modify this part to display the notification in your desired way
+          // For example, using a library like Toastr, SweetAlert, or custom implementation
+          alert(type + '' + message);
+      }
+  });
+</script>
 @endsection

@@ -11,6 +11,7 @@
     ];
     @endphp
     {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }} | {{ Auth::user()->username }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('storage/file/img/default/logo.png') }}" sizes="32x32" />
 
   <!-- Google Font: Source Sans Pro -->
@@ -22,8 +23,10 @@
   <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
   <!-- Theme style -->
+  
   <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
   <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+  
   <style>
     .image-preview {
         width: 250px;

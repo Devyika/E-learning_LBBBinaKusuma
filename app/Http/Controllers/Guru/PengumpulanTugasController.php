@@ -73,6 +73,20 @@ class PengumpulanTugasController extends Controller
             ->with('mapel', $mapel)
             ->with('user', $user);
     }
+    
+    //iki controller e
+    public function saveNilai(Request $request)
+{
+    $nilaiData = $request->all();
+
+    foreach ($nilaiData as $id => $nilai) {
+        $pengumpulanTugas = PengumpulanTugas::findOrFail($id);
+        $pengumpulanTugas->nilai = $nilai;
+        $pengumpulanTugas->save();
+    }
+
+    return response()->json(['message' => 'Nilai berhasil disimpan.']);
+}
 
     public function nilai(Request $request, $id)
         {

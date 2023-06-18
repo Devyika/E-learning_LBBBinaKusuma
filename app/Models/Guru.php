@@ -16,6 +16,7 @@ class Guru extends Model
         'name',
         'email',
         'foto',
+        'hapus',
     ];
 
     protected $hidden = [

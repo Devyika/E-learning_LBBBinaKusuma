@@ -103,6 +103,7 @@ class UserSiswaController extends Controller
             'username' => $username,
             'password' => $hashedPassword,
             'level_user' => 2,
+            'hapus' => 0,
         ]);
 
         Siswa::create([
@@ -110,6 +111,7 @@ class UserSiswaController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'foto' => $image_name,
+            'hapus' => 0,
         ]);
 
         return response()->json([
@@ -169,6 +171,7 @@ class UserSiswaController extends Controller
     {
         // Validasi inputan
         $validator = Validator::make($request->all(), [
+            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($id), 'regex:/^[^\s\W]+$/'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('siswa')->ignore($id)],
             'foto' => ['nullable', 'image', 'max:2048'],
@@ -185,14 +188,23 @@ class UserSiswaController extends Controller
 
         // Cari data Siswa berdasarkan ID
         $siswa = Siswa::find($id);
+        $user = User::where('username', $siswa->username)->first();
 
         if (!$siswa) {
             return response()->json(['error' => 'Siswa tidak ditemukan.'], 404);
         }
 
         // Update data Siswa
+        $siswa->username = $request->input('username');
         $siswa->name = $request->input('name');
         $siswa->email = $request->input('email');
+
+        $user->username = $request->input('username');
+        if(empty($request->input('password'))){
+    
+        }else{
+            $user->password = Hash::make($request->input('password'));   
+        }
 
         // Proses upload dan update foto ke dalam server jika ada
         if ($request->hasFile('foto')) {
@@ -211,6 +223,7 @@ class UserSiswaController extends Controller
         }
 
         $siswa->save();
+        $user->save();
 
         // Update password jika diisi
         if ($request->filled('password')) {
@@ -239,27 +252,11 @@ public function destroy($id)
     $siswa = Siswa::find($id);
     $user = User::where('username', $siswa->username)->first();
 
-    if ($siswa->foto && $siswa->foto !== 'file/img/default/profile.png') {
-        Storage::disk('public')->delete($siswa->foto);
-    }
+    $siswa->hapus = 1;
+    $user->hapus = 1;
 
-    // Delete related records in the "pengumpulan_tugas" table and delete associated files
-    $pengumpulanTugas = PengumpulanTugas::where('id_siswa', $id)->get();
-    foreach ($pengumpulanTugas as $tugas) {
-        if ($tugas->file) {
-            Storage::disk('public')->delete($tugas->file);
-        }
-        $tugas->delete();
-    }
-
-    // Delete related records in the "kelas_siswa" table
-    $siswa->kelasSiswa()->delete();
-
-    $siswa->delete();
-
-    if ($user) {
-        $user->delete();
-    }
+    $siswa->save();
+    $user->save();
 
     return response()->json([
         'status' => true,
@@ -272,7 +269,7 @@ public function destroy($id)
     
     public function data()
     {
-        $data = Siswa::selectRaw('id, username, name, email, foto');
+        $data = Siswa::selectRaw('id, username, name, email, foto')->where('hapus', 0);
 
         return DataTables::of($data)
                     ->addIndexColumn()
@@ -302,19 +299,16 @@ public function destroy($id)
     {
         $request->validate([
             'id_jurusanTingkatKelas' => ['required'],
-            'id_siswa' => ['required'],
         ]);
 
-        // Pemeriksaan apakah siswa sudah terdaftar di kelas lain
-        $siswaTerdaftar = KelasSiswa::where('id_siswa', $request->input('id_siswa'))->exists();
-        if ($siswaTerdaftar) {
-            return redirect()->back()->with('error', 'Siswa sudah terdaftar di kelas lain');
+        $selectedSiswa = $request->input('selected_siswa', []);
+
+        foreach ($selectedSiswa as $id_siswa) {
+            KelasSiswa::create([
+                'id_jurusanTingkatKelas' => $request->input('id_jurusanTingkatKelas'),
+                'id_siswa' => $id_siswa,
+            ]);   
         }
-
-        KelasSiswa::create([
-            'id_jurusanTingkatKelas' => $request->input('id_jurusanTingkatKelas'),
-            'id_siswa' => $request->input('id_siswa'),
-        ]);
 
         return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
@@ -346,9 +340,20 @@ public function destroy($id)
     public function kelasSiswa_destroy($id)
     {
         $kelasSiswa = KelasSiswa::findOrFail($id);
-        $kelasSiswa->delete();
 
-        return redirect()->back()->with('success', 'Data berhasil disimpan');
+        $idSiswa = KelasSiswa::select('id_siswa')
+                ->where('id', $id)
+                ->get();
+
+        $pengumpulanTugas = PengumpulanTugas::whereIn('id_siswa', $idSiswa)->get();
+        
+        if ($pengumpulanTugas->count() > 0){
+            $message = "Data Tidak Bisa Dihapus, Karena Sudah Terhubung dengan Entitas Lainnya";
+            return response()->json(['message' => $message]);
+        }else{
+            $kelasSiswa->delete();
+            return response()->json(['message' => '']);
+        }
     }
     
 }

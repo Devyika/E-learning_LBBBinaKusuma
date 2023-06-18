@@ -22,7 +22,7 @@ class AdminJurusanController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
         
-        $jurusan = Jurusan::all();
+        $jurusan = Jurusan::all()->where('hapus', 0);
 
         return view('admin.jurusan', ['jurusan' => $jurusan])
                 ->with('user', $user);
@@ -52,6 +52,7 @@ class AdminJurusanController extends Controller
 
         Jurusan::create([
             'name' => $request->input('name'),
+            'hapus' => 0,
         ]);
 
         return redirect('admin/input-jurusan')->with('success', 'User Berhasil Ditambahkan');
@@ -110,9 +111,11 @@ class AdminJurusanController extends Controller
     $jurusan = Jurusan::findOrFail($id);
 
     // Delete related records in the "jurusan_tingkat_kelas" table
-    $jurusan->jurusanTingkatKelas()->delete();
+    //$jurusan->jurusanTingkatKelas()->delete();
 
-    $jurusan->delete();
+    $jurusan->hapus = 1;
+
+    $jurusan->save();
 
     return redirect('admin/input-jurusan')->with('success', 'Data Jurusan Berhasil Dihapus');
 }

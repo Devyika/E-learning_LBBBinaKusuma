@@ -15,6 +15,7 @@ use App\Models\Tugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MapelController extends Controller
@@ -31,7 +32,7 @@ class MapelController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
         
-        $mapel = Mapel::all();
+        $mapel = Mapel::all()->where('hapus', 0);
 
         return view('admin.mapel', ['mapel' => $mapel])
                 ->with('user', $user);
@@ -61,6 +62,7 @@ class MapelController extends Controller
 
         Mapel::create([
             'nama' => $request->input('nama'),
+            'hapus' => 0,
         ]);
 
         return redirect('admin/input-mata_pelajaran')->with('success', 'User Berhasil Ditambahkan');
@@ -118,20 +120,9 @@ class MapelController extends Controller
 {
     $mapel = Mapel::findOrFail($id);
 
-    // Delete related records in the "pertemuan" table
-    $kelasMapelIds = $mapel->kelasMapel()->pluck('id');
-    $pertemuanIds = Pertemuan::whereIn('id_kelasMapelGuru', $kelasMapelIds)->pluck('id');
+    $mapel->hapus = 1;
 
-    // Delete related records in the "tugas" table
-    Tugas::whereIn('id_pertemuan', $pertemuanIds)->delete();
-
-    // Delete related records in the "pertemuan" table
-    Pertemuan::whereIn('id_kelasMapelGuru', $kelasMapelIds)->delete();
-
-    // Delete related records in the "kelas_mapel_guru" table
-    $mapel->kelasMapel()->delete();
-
-    $mapel->delete();
+    $mapel->save();
 
     return redirect('admin/input-mata_pelajaran')->with('success', 'Mapel berhasil dihapus.');
 }
@@ -149,6 +140,7 @@ class MapelController extends Controller
             ->where('id_jurusan', $j)
             ->get();
 
+        
         $tingkat = Tingkat::find($t);
         $jurusan = Jurusan::find($j);
 
@@ -160,15 +152,20 @@ class MapelController extends Controller
     {
         $request->validate([
             'id_jurusanTingkatKelas' => ['required'],
-            'id_mapel' => ['required'],
-            'id_guru' => ['required'],
         ]);
 
+        $id_jurusanTingkatKelas = $request->input('id_jurusanTingkatKelas');
+    $selectedMapel = $request->input('mata_pelajaran', []);
+    $guruIds = $request->input('guru_id', []);
+    
+    // Simpan data ke dalam database
+    for ($i = 0; $i < count($selectedMapel); $i++) {
         KelasMapel::create([
-            'id_jurusanTingkatKelas' => $request->input('id_jurusanTingkatKelas'),
-            'id_mapel' => $request->input('id_mapel'),
-            'id_guru' => $request->input('id_guru'),
+            'id_jurusanTingkatKelas' => $id_jurusanTingkatKelas,
+            'id_mapel' => $selectedMapel[$i],
+            'id_guru' => $guruIds[$i],
         ]);
+    }
 
         return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
@@ -195,37 +192,16 @@ class MapelController extends Controller
         // Menghapus entri dalam model Pertemuan
         $kelasMapel = KelasMapel::findOrFail($id);
         $idPertemuan = $kelasMapel->pertemuan->pluck('id');
-    
-        // Menghapus entri dalam model PengumpulanTugas
-        PengumpulanTugas::whereIn('id_tugas', function ($query) use ($idPertemuan) {
-            $query->select('id')->from('tugas')->whereIn('id_pertemuan', $idPertemuan);
-        })->get()->each(function ($pengumpulanTugas) {
-            // Hapus file terkait
-            Storage::disk('public')->delete($pengumpulanTugas->file);
-    
-            // Hapus entri dalam model PengumpulanTugas
-            $pengumpulanTugas->delete();
-        });
-    
-        // Menghapus entri dalam model Tugas
-        Tugas::whereIn('id_pertemuan', $idPertemuan)->delete();
-    
-        // Menghapus file dan entri dalam model Modul
-        Modul::whereIn('id_pertemuan', $idPertemuan)->get()->each(function ($modul) {
-            // Hapus file terkait
-            Storage::disk('public')->delete($modul->file);
-    
-            // Hapus entri dalam model Modul
-            $modul->delete();
-        });
-    
-        // Menghapus entri dalam model Pertemuan
-        Pertemuan::whereIn('id', $idPertemuan)->delete();
-    
-        // Menghapus entri dalam model KelasMapel
-        $kelasMapel->delete();
-    
-        return redirect()->back()->with('success', 'Data berhasil dihapus');
+
+        $pertm = Pertemuan::whereIn('id', $idPertemuan)->get();
+        
+        if ($pertm->count() > 0){
+            $message = "Data Tidak Bisa Dihapus, Karena Sudah Terhubung dengan Entitas Lainnya";
+            return response()->json(['message' => $message]);
+        }else{
+            $kelasMapel->delete();
+            return response()->json(['message' => '']);
+        }
     }
     
 

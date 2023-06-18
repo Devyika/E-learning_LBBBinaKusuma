@@ -22,7 +22,7 @@ class AdminTingkatController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
         
-        $tingkat = Tingkat::all();
+        $tingkat = Tingkat::all()->where('hapus', 0);
 
         return view('admin.tingkat', ['tingkat' => $tingkat])
                 ->with('user', $user);
@@ -52,6 +52,7 @@ class AdminTingkatController extends Controller
 
         Tingkat::create([
             'name' => $request->input('name'),
+            'hapus' => 0,
         ]);
 
         return redirect('admin/input-tingkat')->with('success', 'User Berhasil Ditambahkan');
@@ -108,7 +109,9 @@ class AdminTingkatController extends Controller
     public function destroy($id)
     {
         $tingkat = Tingkat::findOrFail($id);
-        $tingkat->delete();
+        $tingkat->hapus = 1;
+
+        $tingkat->save();
 
         return redirect('admin/input-tingkat')->with('success', 'Kelas berhasil dihapus.');
     }

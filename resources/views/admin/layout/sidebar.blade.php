@@ -51,7 +51,7 @@
                   <i class="fas fa-user-shield pr-2"></i>
                   <p>
                     Admin
-                    <span class="badge badge-info right">{{ $countAdmin }}</span>
+                    {{-- <span class="badge badge-info right">{{ $countAdmin }}</span> --}}
                   </p>
                 </a>
               </li>
@@ -60,7 +60,6 @@
                   <i class="fas fa-chalkboard-teacher pr-2"></i>
                   <p>
                     Guru
-                    <span class="badge badge-info right">{{ $countGuru }}</span>
                   </p>
                 </a>
               </li>
@@ -69,7 +68,6 @@
                   <i class="fas fa-user-graduate pl-1 pr-2"></i>
                   <p>
                     Siswa
-                    <span class="badge badge-info right">{{ $countSiswa }}</span>
                   </p>
                 </a>
               </li>
@@ -78,7 +76,6 @@
                   <i class="fas fa-scroll pr-2"></i>
                   <p>
                     Jurusan
-                    <span class="badge badge-info right">{{ $countJurusan }}</span>
                   </p>
                 </a>
               </li>
@@ -87,7 +84,6 @@
                   <i class="fa-solid fa-layer-group pr-2"></i>
                   <p>
                     Tingkat
-                    <span class="badge badge-info right">{{ $countTingkat }}</span>
                   </p>
                 </a>
               </li>
@@ -96,7 +92,6 @@
                   <i class="fas fa-chalkboard pr-2"></i>
                   <p>
                     Kelas
-                    <span class="badge badge-info right">{{ $countKelas }}</span>
                   </p>
                 </a>
               </li>
@@ -105,7 +100,6 @@
                   <i class="fa-solid fa-lines-leaning pr-2"></i>
                   <p>
                     Mata Pelajaran
-                    <span class="badge badge-info right">{{ $countMapel }}</span>
                   </p>
                 </a>
               </li>

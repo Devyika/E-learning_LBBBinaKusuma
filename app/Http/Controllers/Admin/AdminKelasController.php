@@ -29,7 +29,7 @@ class AdminKelasController extends Controller
                 ->where('users.id', Auth::user()->id)
                 ->first();
         
-        $kelas = Kelas::all();
+        $kelas = Kelas::all()->where('hapus', 0);
 
         return view('admin.kelas', ['kelas' => $kelas])
                 ->with('user', $user);
@@ -59,6 +59,7 @@ class AdminKelasController extends Controller
 
         Kelas::create([
             'nama' => $request->input('nama'),
+            'hapus' => 0,
         ]);
 
         return redirect('admin/input-kelas')->with('success', 'User Berhasil Ditambahkan');
@@ -116,10 +117,9 @@ class AdminKelasController extends Controller
     {
         $kelas = Kelas::findOrFail($id);
 
-        // Delete related records in the "jurusan_tingkat_kelas" table
-        $kelas->jurusanTingkatKelas()->delete();
+        $kelas->hapus = 1;
 
-        $kelas->delete();
+        $kelas->save();
 
         return redirect('admin/input-kelas')->with('success', 'Kelas berhasil dihapus.');
     }
@@ -199,22 +199,15 @@ class AdminKelasController extends Controller
 
     public function jurusanTingkatKelas_destroy($id)
     {
-        // Menghapus entri dalam model Pertemuan
         $kelasMapelGuruIds = KelasMapel::where('id_jurusanTingkatKelas', $id)->pluck('id');
-        $pertemuanIds = Pertemuan::whereIn('id_kelasMapelGuru', $kelasMapelGuruIds)->pluck('id');
-        Tugas::whereIn('id_pertemuan', $pertemuanIds)->delete();
-        Pertemuan::whereIn('id_kelasMapelGuru', $kelasMapelGuruIds)->delete();
-
-        // Menghapus entri dalam model KelasMapelGuru
-        KelasMapel::where('id_jurusanTingkatKelas', $id)->delete();
-
-        // Menghapus entri dalam model KelasSiswa
-        KelasSiswa::where('id_jurusanTingkatKelas', $id)->delete();
-
-        // Menghapus entri dalam model JurusanTingkatKelas
-        $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);
-        $jurusanTingkatKelas->delete();
-
-        return redirect()->back()->with('success', 'Data berhasil dihapus');
+        
+        if ($kelasMapelGuruIds->count() > 0){
+            $message = "Data Tidak Bisa Dihapus, Karena Sudah Terhubung dengan Entitas Lainnya";
+            return response()->json(['message' => $message]);
+        }else{
+            $jurusanTingkatKelas = JurusanTingkatKelas::findOrFail($id);
+            $jurusanTingkatKelas->delete();
+            return response()->json(['message' => '']);
+        }
     }
 }

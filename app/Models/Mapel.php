@@ -13,6 +13,7 @@ class Mapel extends Model
 
     protected $fillable = [
         'nama',
+        'hapus',
     ];
 
     public function kelasMapel()

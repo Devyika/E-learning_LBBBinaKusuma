@@ -157,7 +157,7 @@
                         @if ($mm->id_pertemuan == $p->id)                        
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            &emsp; <a href="{{asset('storage/'.$mm->file)}}" target="_blank" rel="noopener noreferrer">{{$mm->nama}}</a>
+                            &emsp; <a href="{{asset('storage/'.$mm->file)}}" target="_blank" rel="noopener noreferrer">{{ pathinfo($mm->file, PATHINFO_BASENAME) }}</a>
                             <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#deleteModalModul{{$mm->id}}">
                               <i class="fa-solid fa-trash"></i>
                             </button>

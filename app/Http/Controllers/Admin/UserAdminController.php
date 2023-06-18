@@ -14,6 +14,8 @@ use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\isEmpty;
+
 class UserAdminController extends Controller
 {
     /**
@@ -98,6 +100,7 @@ class UserAdminController extends Controller
             'username' => $username,
             'password' => $hashedPassword,
             'level_user' => 0,
+            'hapus' => 0,
         ]);
 
         Admin::create([
@@ -105,6 +108,7 @@ class UserAdminController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'foto' => $image_name,
+            'hapus' => 0,
         ]);
 
         return response()->json([
@@ -164,9 +168,11 @@ class UserAdminController extends Controller
     {
         // Validasi inputan
         $validator = Validator::make($request->all(), [
+            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($id), 'regex:/^[^\s\W]+$/'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($id)],
             'foto' => ['nullable', 'image', 'max:2048'],
+            'password' => [],
         ]);
 
         if($validator->fails()){
@@ -180,14 +186,23 @@ class UserAdminController extends Controller
 
         // Cari data Admin berdasarkan ID
         $admin = Admin::find($id);
+        $user = User::where('username', $admin->username)->first();
 
         if (!$admin) {
             return response()->json(['error' => 'Admin tidak ditemukan.'], 404);
         }
 
         // Update data Admin
+        $admin->username = $request->input('username');
         $admin->name = $request->input('name');
         $admin->email = $request->input('email');
+
+        $user->username = $request->input('username');
+        if(empty($request->input('password'))){
+    
+        }else{
+            $user->password = Hash::make($request->input('password'));   
+        }
 
         // Proses upload dan update foto ke dalam server jika ada
         if ($request->hasFile('foto')) {
@@ -206,6 +221,7 @@ class UserAdminController extends Controller
         }        
 
         $admin->save();
+        $user->save();
 
         // Update password jika diisi
         if ($request->filled('password')) {
@@ -234,15 +250,11 @@ class UserAdminController extends Controller
         $admin = Admin::find($id);
         $user = User::where('username', $admin->username)->first();
 
-        if ($admin->foto && $admin->foto !== 'file/img/default/profile.png') {
-            Storage::disk('public')->delete($admin->foto);
-        }
+        $admin->hapus = 1;
+        $user->hapus = 1;
 
-        $admin->delete();
-
-        if ($user) {
-            $user->delete();
-        }
+        $admin->save();
+        $user->save();
 
         return response()->json([
             'status' => true,
@@ -254,7 +266,7 @@ class UserAdminController extends Controller
     
     public function data()
     {
-        $data = Admin::selectRaw('id, username, name, email, foto');
+        $data = Admin::selectRaw('id, username, name, email, foto')->where('hapus', 0);
 
         return DataTables::of($data)
                     ->addIndexColumn()

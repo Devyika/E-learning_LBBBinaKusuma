@@ -57,12 +57,12 @@
                         <td>{{$ju->tingkat->name}}</td>
                         <td>{{$ju->kelas->nama}}</td>
                         <td class="d-flex justify-content-around">
-                          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal{{$ju->id}}">
+                          {{-- <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal{{$ju->id}}">
                             <i class="fa-solid fa-circle-info"></i>
                           </button>
                           <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editModal-{{ $ju->id }}">
                             <i class="fa-solid fa-pen-to-square"></i>
-                          </button>
+                          </button> --}}
                           <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal-{{ $ju->id }}">
                             <i class="fa-solid fa-trash"></i>
                           </button>
@@ -218,7 +218,7 @@
 @endforeach
 
 @foreach ($jurusanTingkatKelas as $ju)
-<div class="modal fade" id="deleteModal-{{ $ju->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-label-{{ $ju->id }}" aria-hidden="true">
+<div class="modal fade deleteBTN" id="deleteModal-{{ $ju->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModal-label-{{ $ju->id }}" aria-hidden="true">
   <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
           <div class="modal-header">
@@ -231,15 +231,55 @@
               <p>Anda yakin ingin menghapus Kelas ini?</p>
           </div>
           <div class="modal-footer">
-              <form method="POST" action="{{ url('/admin/setting-kelas/'.$ju->id)}}">
+              <form id="delete-form-{{ $ju->id }}" method="POST" action="{{ url('/admin/setting-kelas/'.$ju->id)}}">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                  <button type="submit" class="btn btn-danger btn-sm delete-btn" data-id="{{ $ju->id }}"><i class="fa-solid fa-trash"></i></button>
               </form>
           </div>
       </div>
   </div>
-</div>     
-@endforeach                          
+</div>
+@endforeach
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+      $('.delete-btn').click(function(e) {
+          e.preventDefault(); // Prevent form submission
+
+          var form = $(this).closest('form'); // Get the closest form element
+          var url = form.attr('action'); // Get the form action URL
+          var dataId = $(this).data('id'); // Get the data-id attribute value
+
+          $.ajax({
+              url: url,
+              type: 'POST',
+              dataType: 'json',
+              data: form.serialize(),
+              success: function(response) {
+                  if (response.message) {
+                      // Show notification
+                      showNotification('', response.message);
+                      $('.deleteBTN').modal('hide');
+                  }else {
+                      // Reload the page
+                      window.location.reload();
+                  }
+              },
+              error: function(xhr, status, error) {
+                  // Handle error if needed
+              }
+          });
+      });
+
+      // Function to show notification
+      function showNotification(type, message) {
+          // Modify this part to display the notification in your desired way
+          // For example, using a library like Toastr, SweetAlert, or custom implementation
+          alert(type + '' + message);
+      }
+  });
+</script>
 
 @endsection

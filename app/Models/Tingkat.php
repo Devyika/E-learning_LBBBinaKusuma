@@ -13,6 +13,7 @@ class Tingkat extends Model
 
     protected $fillable = [
         'name',
+        'hapus',
     ];
 
     public function jurusanTingkatKelas()

@@ -16,6 +16,7 @@ class Siswa extends Model
         'name',
         'email',
         'foto',
+        'hapus',
     ];
 
     protected $hidden = [

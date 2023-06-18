@@ -103,6 +103,7 @@ class UserGuruController extends Controller
             'username' => $username,
             'password' => $hashedPassword,
             'level_user' => 1,
+            'hapus' => 0,
         ]);
 
         Guru::create([
@@ -110,6 +111,7 @@ class UserGuruController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'foto' => $image_name,
+            'hapus' => 0,
         ]);
 
         return response()->json([
@@ -169,6 +171,7 @@ class UserGuruController extends Controller
     {
         // Validasi inputan
         $validator = Validator::make($request->all(), [
+            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($id), 'regex:/^[^\s\W]+$/'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('guru')->ignore($id)],
             'foto' => ['nullable', 'image', 'max:2048'],
@@ -182,17 +185,25 @@ class UserGuruController extends Controller
                 'data' => $validator->errors()
             ]);
         }
-
         // Cari data Guru berdasarkan ID
         $guru = Guru::find($id);
+        $user = User::where('username', $guru->username)->first();
 
         if (!$guru) {
             return response()->json(['error' => 'Guru tidak ditemukan.'], 404);
         }
 
         // Update data Guru
+        $guru->username = $request->input('username');
         $guru->name = $request->input('name');
         $guru->email = $request->input('email');
+
+        $user->username = $request->input('username');
+        if(empty($request->input('password'))){
+    
+        }else{
+            $user->password = Hash::make($request->input('password'));   
+        }
 
         // Proses upload dan update foto ke dalam server jika ada
         if ($request->hasFile('foto')) {
@@ -211,6 +222,7 @@ class UserGuruController extends Controller
         }
 
         $guru->save();
+        $user->save();
 
         // Update password jika diisi
         if ($request->filled('password')) {
@@ -239,56 +251,11 @@ public function destroy($id)
     $guru = Guru::find($id);
     $user = User::where('username', $guru->username)->first();
 
-    if ($guru->foto && $guru->foto !== 'file/img/default/profile.png') {
-        Storage::disk('public')->delete($guru->foto);
-    }
+    $guru->hapus = 1;
+    $user->hapus = 1;
 
-    // Delete related records in the "pengumpulan_tugas" table
-    $tugasIds = Tugas::whereIn('id_pertemuan', function ($query) use ($id) {
-        $query->select('id')->from('pertemuan')->whereIn('id_kelasMapelGuru', function ($subQuery) use ($id) {
-            $subQuery->select('id')->from('kelas_mapel_guru')->where('id_guru', $id);
-        });
-    })->pluck('id');
-
-    // Delete related files in the "PengumpulanTugas" model
-    $pengumpulanTugas = PengumpulanTugas::whereIn('id_tugas', $tugasIds)->get();
-    foreach ($pengumpulanTugas as $tugas) {
-        if ($tugas->file) {
-            Storage::disk('public')->delete($tugas->file);
-        }
-    }
-
-    PengumpulanTugas::whereIn('id_tugas', $tugasIds)->delete();
-
-    // Delete related records in the "modul" table and delete associated files
-    $pertemuanIds = Pertemuan::whereIn('id_kelasMapelGuru', function ($query) use ($id) {
-        $query->select('id')->from('kelas_mapel_guru')->where('id_guru', $id);
-    })->pluck('id');
-    
-    $moduls = Modul::whereIn('id_pertemuan', $pertemuanIds)->get();
-    foreach ($moduls as $modul) {
-        if ($modul->file) {
-            Storage::disk('public')->delete($modul->file);
-        }
-        $modul->delete();
-    }
-
-    // Delete related records in the "tugas" table
-    Tugas::whereIn('id_pertemuan', $pertemuanIds)->delete();
-
-    // Delete related records in the "pertemuan" table
-    Pertemuan::whereIn('id_kelasMapelGuru', function ($query) use ($id) {
-        $query->select('id')->from('kelas_mapel_guru')->where('id_guru', $id);
-    })->delete();
-
-    // Delete related records in the "kelas_mapel_guru" table
-    KelasMapel::where('id_guru', $id)->delete();
-
-    $guru->delete();
-
-    if ($user) {
-        $user->delete();
-    }
+    $guru->save();
+    $user->save();
 
     return response()->json([
         'status' => true,
@@ -301,7 +268,7 @@ public function destroy($id)
     
     public function data()
     {
-        $data = Guru::selectRaw('id, username, name, email, foto');
+        $data = Guru::selectRaw('id, username, name, email, foto')->where('hapus', 0);
 
         return DataTables::of($data)
                     ->addIndexColumn()

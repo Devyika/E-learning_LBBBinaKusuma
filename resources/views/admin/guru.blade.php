@@ -207,6 +207,13 @@
             </div>
             <div class="col-md-8">
               <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username-edit" name="username" value="" placeholder="Masukkan Username">
+                @error('username')
+                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                @enderror
+              </div>
+              <div class="form-group">
                 <label for="name">Nama</label>
                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name-edit" name="name" value="" placeholder="Masukkan Nama">
                 @error('name')
@@ -222,7 +229,7 @@
               </div>
               <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password-edit" name="password" placeholder="Masukkan Password">
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password-edit" name="password" placeholder="Kosongkan Jika Tidak Ingin Merubah Password">
                 @error('password')
                   <span class="invalid-feedback" role="alert">{{ $message }}</span>
                 @enderror
@@ -291,6 +298,7 @@
         
         $('#photo-preview-edit').attr('src', '{{ asset('storage/') }}' + '/' + $(th).data('foto'));
         $('#photo-preview-edit').attr('alt', $(th).data('name'));
+        $('#editGuruModal #username-edit').val($(th).data('username'));
         $('#editGuruModal #name-edit').val($(th).data('name'));
         $('#editGuruModal #email-edit').val($(th).data('email'));
         $('#editGuruModal #password-edit').val('');
@@ -347,8 +355,8 @@
                 {data:'id',name:'id', sortable: false, searchable: false,
                 render: function(data, type, row, meta) {
                     var btn = `<div class="d-flex justify-content-around">` +
-                        `<button data-url="{{ url('/admin/input-guru/') }}/` + data + `" class="btn btn-info btn-sm" data-toggle="modal" onclick="updateData(this)" data-id="` + row.id + `" data-username="` + row.username + `" data-name="` + row.name + `" data-email="` + row.email + `" data-foto="` + row.foto + `" data-level_user="` + row.level_user + `"><i class="fa-solid fa-pen-to-square"></i></button>` +
                         `<button href="{{ url('/admin/input-guru/') }}/` + data + `" onclick="showData(` + data + `)" class="btn btn-primary btn-sm" data-toggle="modal"><i class="fa-solid fa-circle-info"></i></button>` +
+                        `<button data-url="{{ url('/admin/input-guru/') }}/` + data + `" class="btn btn-info btn-sm" data-toggle="modal" onclick="updateData(this)" data-id="` + row.id + `" data-username="` + row.username + `" data-name="` + row.name + `" data-email="` + row.email + `" data-foto="` + row.foto + `" data-level_user="` + row.level_user + `"><i class="fa-solid fa-pen-to-square"></i></button>` +
                         `<button data-url="{{ url('/admin/input-guru/') }}/` + data + `" class="btn btn-danger btn-sm" data-toggle="modal" onclick="deleteData(this)" data-id="` + row.id + `" data-name="` + row.name + `"><i class="fa-solid fa-trash"></i></button>` +
                         `</div>`;
                     return btn;
