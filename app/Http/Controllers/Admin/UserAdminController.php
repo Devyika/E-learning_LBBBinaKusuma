@@ -166,9 +166,12 @@ class UserAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $admin = Admin::find($id);
+        $adminId = $admin->id;
+        $userId = User::where('username', $admin->username)->pluck('id')->first();
         // Validasi inputan
         $validator = Validator::make($request->all(), [
-            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($id), 'regex:/^[^\s\W]+$/'],
+            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($userId), Rule::unique('admin')->ignore($adminId), 'regex:/^[^\s\W]+$/'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('admin')->ignore($id)],
             'foto' => ['nullable', 'image', 'max:2048'],
@@ -185,7 +188,6 @@ class UserAdminController extends Controller
         }
 
         // Cari data Admin berdasarkan ID
-        $admin = Admin::find($id);
         $user = User::where('username', $admin->username)->first();
 
         if (!$admin) {

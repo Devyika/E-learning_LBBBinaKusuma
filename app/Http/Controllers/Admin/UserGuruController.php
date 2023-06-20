@@ -169,12 +169,16 @@ class UserGuruController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $guru = Guru::find($id);
+        $guruId = $guru->id;
+        $userId = User::where('username', $guru->username)->pluck('id')->first();
         // Validasi inputan
         $validator = Validator::make($request->all(), [
-            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($id), 'regex:/^[^\s\W]+$/'],
+            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($userId), Rule::unique('guru')->ignore($guruId), 'regex:/^[^\s\W]+$/'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('guru')->ignore($id)],
             'foto' => ['nullable', 'image', 'max:2048'],
+            'password' => [],
         ]);
 
         if($validator->fails()){
@@ -185,8 +189,8 @@ class UserGuruController extends Controller
                 'data' => $validator->errors()
             ]);
         }
+
         // Cari data Guru berdasarkan ID
-        $guru = Guru::find($id);
         $user = User::where('username', $guru->username)->first();
 
         if (!$guru) {
@@ -211,15 +215,15 @@ class UserGuruController extends Controller
             $extension = $foto->getClientOriginalExtension();
             $randomString = Str::random(3); // Menghasilkan string acak sepanjang 3 karakter
             $fotoName = 'guru-foto-' . $guru->username . '-' . $randomString . '.' . $extension;
-
+        
             if ($guru->foto !== 'file/img/default/profile.png') {
                 Storage::disk('public')->delete($guru->foto);
-            }            
-
+            }
+        
             // Simpan foto baru
             $foto->storeAs('file/img/guru', $fotoName, 'public');
             $guru->foto = 'file/img/guru/' . $fotoName;
-        }
+        }        
 
         $guru->save();
         $user->save();

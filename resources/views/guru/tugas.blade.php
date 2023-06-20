@@ -27,8 +27,9 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
+            <button class="btn btn-primary btn-sm" onclick="window.history.back()"><i class="fas fa-arrow-left mr-2"></i>Kembali</button>
             @foreach ($kelas2 as $m)
-            <h3 class="card-title"><b>Kelas :</b> {{$m->tingkat}} {{$m->jurusan}} {{$m->kelas}}  <b>&nbsp;&nbsp;|&nbsp;&nbsp;  Pelajaran :</b> {{$m->mapel}}</h3>
+            <h3 class="card-title float-right"><b>Kelas :</b> {{$m->tingkat}} {{$m->jurusan}} {{$m->kelas}}  <b>&nbsp;&nbsp;|&nbsp;&nbsp;  Pelajaran :</b> {{$m->mapel}}</h3>
             @endforeach
           </div>
           <!-- ./card-header -->

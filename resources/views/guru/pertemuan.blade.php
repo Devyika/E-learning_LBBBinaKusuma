@@ -33,7 +33,7 @@
           @foreach ($mapel2 as $m)
           <h3 class="card-title"><b>Kelas :</b> {{$m->tingkat}} {{$m->jurusan}} {{$m->kelas}}  <b>&nbsp;&nbsp;|&nbsp;&nbsp;  Pelajaran :</b> {{$m->nama}}</h3>
           <button type="button" class="btn btn-primary btn-sm float-right" data-dismiss="modal" data-toggle="modal" data-target="#nilai">
-            <i class="far fa-folder-open mr-2"></i>Nilai {{$m->nama}}
+            <i class="far fa-folder-open mr-2"></i>Rekap Nilai {{$m->nama}}
           </button>
           <div class="modal fade" id="nilai" tabindex="-1" role="dialog" aria-labelledby="nilaiModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -71,7 +71,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <span>
-                                                {{ $pws['rata_rata_nilai'] }}
+                                              {{ number_format($pws['rata_rata_nilai'], 2) }}
                                             </span>
                                         </div>
                                         <div class="col-sm-3">
@@ -86,7 +86,7 @@
                     </div>
                     <div class="modal-footer">
                         <a href="{{ url('/guru/nilai/'.$m->id) }}" target="_blank" class="btn btn-primary btn-sm">
-                            <i class="fas fa-download mr-2"></i>Unduh Nilai
+                            <i class="fas fa-download mr-2"></i>Unduh Rekap Nilai
                         </a>                            
                     </div>
                 </div>

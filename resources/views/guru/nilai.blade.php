@@ -81,35 +81,47 @@
   <div class="header">
     <img src="{{ asset('storage/file/img/default/logo.png') }}" alt="Company Logo" class="logo">
     <div class="company-name">SMA Negeri 4 Probolinggo</div>
-    <div class="company-address">LMS - Nilai Pengumpulan Tugas {{ $m->nama }}</div>
+    <div class="company-address">LMS - Rekap Nilai Pengumpulan Tugas {{ $m->nama }}</div>
   </div>
   <div class="content">
-    <p><span class="label">Nama Guru</span> {{ $user->name }}</p>
-    <p><span class="label">Kelas</span> {{$m->tingkat}} {{$m->jurusan}} {{$m->kelas}}</p>
+    <p><span class="label">Nama Guru</span>: {{ $user->name }}</p>
+    <p><span class="label">Kelas</span>: {{$m->tingkat}} {{$m->jurusan}} {{$m->kelas}}</p>
   </div>
   @endforeach
   <table>
         <thead>
             <tr>
-                <th style="width: 20%;">Nama Siswa</th>
-                @foreach ($pengumpulanWithSiswa[0]['detail_nilai'] as $d)
-                    <td>{{ $d['nama_tugas'] }}</td>
-                @endforeach
-                <th style="width: 10%">Rata - Rata</th>
-                <th style="width: 10%">Nilai Huruf</th>
+                <th rowspan="2" style="width: 20%; text-align: center;">Nama Siswa</th>
+                @php
+                  $maxColumns = 0;
+                  foreach ($pengumpulanWithSiswa as $nilai) {
+                      $numColumns = count($nilai['detail_nilai']);
+                      if ($numColumns > $maxColumns) {
+                          $maxColumns = $numColumns;
+                      }
+                  }
+                @endphp
+                <th colspan="{{ $maxColumns > 0 ? $maxColumns : 1 }}" style="text-align: center;">Tugas</th>
+                <th rowspan="2" style="width: 10%; text-align: center;">Rata - Rata</th>
+              <th rowspan="2" style="width: 10%; text-align: center;">Nilai Huruf</th>
             </tr>
+            <tr>
+              @for ($i = 1; $i <= $maxColumns; $i++)
+                  <th style="text-align: center;">{{ $i }}</th>
+              @endfor
+            </tr>  
         </thead>
         <tbody>
-            @foreach ($pengumpulanWithSiswa as $p)
+          @foreach ($pengumpulanWithSiswa as $p)
             <tr>
                 <td>{{ $p['name_siswa'] }}</td>
-                @foreach ($pengumpulanWithSiswa[0]['detail_nilai'] as $d)
-                    <td>{{ $d['nilai'] }}</td>
+                @foreach ($p['detail_nilai'] as $d)
+                    <td style="text-align: center;">{{ $d['nilai'] }}</td>
                 @endforeach
-                <td>{{ $p['rata_rata_nilai'] }}</td>
-                <td>{{ $p['grade_total_nilai'] }}</td>
+                <td style="width: 10%; text-align: center;">{{ number_format($p['rata_rata_nilai'], 2) }}</td>
+                <td style="width: 10%; text-align: center;">{{ $p['grade_total_nilai'] }}</td>
             </tr>
-            @endforeach
+          @endforeach      
         </tbody>
   </table>
   <div class="ttd" style="text-align: right;">

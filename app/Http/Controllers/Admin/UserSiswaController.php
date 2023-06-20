@@ -169,12 +169,16 @@ class UserSiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $siswa = Siswa::find($id);
+        $siswaId = $siswa->id;
+        $userId = User::where('username', $siswa->username)->pluck('id')->first();
         // Validasi inputan
         $validator = Validator::make($request->all(), [
-            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($id), 'regex:/^[^\s\W]+$/'],
+            'username' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($userId), Rule::unique('siswa')->ignore($siswaId), 'regex:/^[^\s\W]+$/'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('siswa')->ignore($id)],
             'foto' => ['nullable', 'image', 'max:2048'],
+            'password' => [],
         ]);
 
         if($validator->fails()){
@@ -187,7 +191,6 @@ class UserSiswaController extends Controller
         }
 
         // Cari data Siswa berdasarkan ID
-        $siswa = Siswa::find($id);
         $user = User::where('username', $siswa->username)->first();
 
         if (!$siswa) {
@@ -212,15 +215,15 @@ class UserSiswaController extends Controller
             $extension = $foto->getClientOriginalExtension();
             $randomString = Str::random(3); // Menghasilkan string acak sepanjang 3 karakter
             $fotoName = 'siswa-foto-' . $siswa->username . '-' . $randomString . '.' . $extension;
-
+        
             if ($siswa->foto !== 'file/img/default/profile.png') {
                 Storage::disk('public')->delete($siswa->foto);
-            }            
-
+            }
+        
             // Simpan foto baru
             $foto->storeAs('file/img/siswa', $fotoName, 'public');
             $siswa->foto = 'file/img/siswa/' . $fotoName;
-        }
+        }        
 
         $siswa->save();
         $user->save();

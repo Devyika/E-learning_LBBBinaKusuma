@@ -55,9 +55,18 @@
                         @if ($mm->id_pertemuan == $p->id)                        
                         <tr data-widget="expandable-table" aria-expanded="false">
                           <td>
-                            &emsp; <a href="{{asset('storage/'.$mm->file)}}" target="_blank" rel="noopener noreferrer">{{$mm->nama}} <i class="far fa-file float-right"></i></a>
+                            <a href="{{ asset('storage/' . $mm->file) }}" target="_blank" rel="noopener noreferrer">
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  {{ $mm->nama }}
+                                </div>
+                                <div class="col-sm-9">
+                                  {{ str_replace('file/modul/', '', $mm->file) }}<i class="far fa-file float-right"></i>
+                                </div>
+                              </div>
+                            </a>
                           </td>
-                        </tr>
+                        </tr>                        
                         @endif
                         @endforeach
                       </tbody>
@@ -102,7 +111,14 @@
                                     <a href="{{ url('/siswa/pengumpulan-tugas/'.$t->id) }}" onclick="{{ ($currentTime > $deadline) ? 'event.preventDefault(); toastr.error(\'Deadline telah berlalu\');' : '' }}" data-toggle="{{ ($currentTime <= $deadline) ? 'modal' : '' }}" data-target="{{ ($currentTime <= $deadline) ? '#modal'.$t->id : '' }}" style="text-decoration: none; color: inherit;">
                                           <div class="card">
                                               <div class="card-header text-primary">
-                                                  {{ $t->nama }} <i class="far fa-file float-right"></i>
+                                                  <div class="row">
+                                                    <div class="col-sm-3">
+                                                      Pengumpulan Tugas
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                      {{ $t->nama }} <i class="far fa-file float-right"></i>
+                                                    </div>
+                                                  </div>
                                               </div>
                                               <div class="card-body">
                                                   <div class="row">
@@ -170,7 +186,14 @@
                                                       @endphp
                                                       <a href="{{ asset('storage/'.$pt->file) }}" target="_blank" class="bg-success" style="text-decoration: none; color: inherit;">
                                                           <div class="card-footer">
-                                                              Sudah Mengumpulkan<i class="far fa-file-pdf float-right"></i>
+                                                            <div class="row">
+                                                              <div class="col-sm-3">
+                                                                Tugas Yang Dikumpulkan
+                                                              </div>
+                                                              <div class="col-sm-9">
+                                                                {{ str_replace('file/tugas/', '', $pt->file) }}<i class="far fa-file-pdf float-right"></i>
+                                                              </div>
+                                                            </div>
                                                           </div>
                                                       </a>
                                                       @break

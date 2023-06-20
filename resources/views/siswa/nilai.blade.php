@@ -78,32 +78,35 @@
   <div class="header">
     <img src="{{ asset('storage/file/img/default/logo.png') }}" alt="Company Logo" class="logo">
     <div class="company-name">SMA Negeri 4 Probolinggo</div>
-    <div class="company-address">LMS - Nilai Hasil Pengumpulan Tugas</div>
+    <div class="company-address">LMS - Rekap Nilai Hasil Pengumpulan Tugas {{ $siswa->name }}</div>
   </div>
   <div class="content">
-    <p><span class="label">Nama Siswa</span> {{ $siswa->name }}</p>
-    <p><span class="label">Username</span> {{ $siswa->username }}</p>
-    <p><span class="label">Kelas</span> {{ $jurusanTingkatKelas->jurusan->name }} {{ $jurusanTingkatKelas->tingkat->name }} {{ $jurusanTingkatKelas->kelas->nama }}</p>
+    <p><span class="label">Nama Siswa</span>: {{ $siswa->name }}</p>
+    <p><span class="label">Username</span>: {{ $siswa->username }}</p>
+    <p><span class="label">Kelas</span>: {{ $jurusanTingkatKelas->jurusan->name }} {{ $jurusanTingkatKelas->tingkat->name }} {{ $jurusanTingkatKelas->kelas->nama }}</p>
   </div>
   <table>
         <thead>
             <tr>
-                <th style="width: 20%;">Mata Pelajaran</th>
-                @php
-                    $maxColumns = 0;
-                    foreach ($dataPerhitunganNilai as $nilai) {
-                        $numColumns = count($nilai['detail_nilai']);
-                        if ($numColumns > $maxColumns) {
-                            $maxColumns = $numColumns;
-                        }
-                    }
-                @endphp
-                @for ($i = 1; $i <= $maxColumns; $i++)
-                    <th>Tugas {{ $i }}</th>
-                @endfor
-                <th colspan="{{ $maxColumns > 0 ? $maxColumns : 1 }}">Rata - Rata</th>
-                <th style="width: 10%">Nilai Huruf</th>
-            </tr>
+              <th rowspan="2" style="width: 20%; text-align: center;">Mata Pelajaran</th>
+              @php
+                  $maxColumns = 0;
+                  foreach ($dataPerhitunganNilai as $nilai) {
+                      $numColumns = count($nilai['detail_nilai']);
+                      if ($numColumns > $maxColumns) {
+                          $maxColumns = $numColumns;
+                      }
+                  }
+              @endphp
+              <th colspan="{{ $maxColumns > 0 ? $maxColumns : 1 }}" style="text-align: center;">Tugas</th>
+              <th rowspan="2" style="width: 10%; text-align: center;">Rata - Rata</th>
+              <th rowspan="2" style="width: 10%; text-align: center;">Nilai Huruf</th>
+          </tr>
+          <tr>
+              @for ($i = 1; $i <= $maxColumns; $i++)
+                  <th style="text-align: center;">{{ $i }}</th>
+              @endfor
+          </tr>        
         </thead>
         <tbody>
             @foreach ($dataPerhitunganNilai as $nilai)
@@ -114,13 +117,13 @@
                     $missingColumns = $maxColumns - $numColumns;
                 @endphp
                 @foreach ($nilai['detail_nilai'] as $tugasId => $detail)
-                    <td>{{ $detail }}</td>
+                    <td style="text-align: center;">{{ $detail }}</td>
                 @endforeach
                 @for ($i = 0; $i < $missingColumns; $i++)
                     <td>-</td>
                 @endfor
-                <td colspan="{{ $maxColumns > 0 ? $maxColumns : 1 }}">{{ $nilai['rata_rata_nilai'] }}</td>
-                <td>{{ $nilai['grade_total_nilai'] }}</td>
+                <td style="width: 10%; text-align: center;">{{ number_format($nilai['rata_rata_nilai'], 2) }}</td>
+                <td style="width: 10%; text-align: center;">{{ $nilai['grade_total_nilai'] }}</td>
             </tr>
             @endforeach
         </tbody>

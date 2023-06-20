@@ -87,6 +87,7 @@ class DashboardSiswaController extends Controller
             $tugasIds = collect($tugas)->pluck('id')->all();
 
             $pengumpulanTugas = PengumpulanTugas::whereIn('id_tugas', $tugasIds)
+                ->where('id_siswa', $userId)
                 ->pluck('nilai', 'id_tugas')
                 ->all();
 
@@ -104,6 +105,8 @@ class DashboardSiswaController extends Controller
             ];
         }
 
+        // dd($dataMapel);
+
         $dataPerhitunganNilai = [];
 
         foreach ($dataMapel as $mapelItem) {
@@ -115,17 +118,17 @@ class DashboardSiswaController extends Controller
             $jumlahTugas = 0;
         
             foreach ($tugasItems as $tugas) {
-                $nilai = isset($tugas['nilai']) ? $tugas['nilai'] : 0;
+                $nilai = isset($tugas['nilai']) ? ($tugas['nilai'] == -1 ? 0 : $tugas['nilai']) : 0;
                 $totalNilai += $nilai;
                 $jumlahTugas++;
-            }
+            }            
         
             $dataMapels = [];
         
             foreach ($tugasItems as $tugas) {
-                $nilai = isset($tugas['nilai']) ? $tugas['nilai'] : 0;
+                $nilai = isset($tugas['nilai']) ? ($tugas['nilai'] == -1 ? 0 : $tugas['nilai']) : 0;
                 $dataMapels[] = $nilai;
-            }
+            }            
         
             $rataRataNilai = $jumlahTugas > 0 ? $totalNilai / $jumlahTugas : 0;
             $gradeTotalNilai = $this->convertToGrade($rataRataNilai);
@@ -152,36 +155,11 @@ class DashboardSiswaController extends Controller
                 ->get();
             $tugasBelumDikumpulkan = array_merge($tugasBelumDikumpulkan, $tugas->toArray());
         }
-        $tugasSudahDikumpulkan = [];
-        foreach ($matchingPertemuanIds as $pertemuanId) {
-            $tugas = Tugas::where('id_pertemuan', $pertemuanId)
-                ->whereIn('id', function ($query) use ($matchingTugasIds, $userId) {
-                    $query->select('id_tugas')
-                        ->from('pengumpulan_tugas')
-                        ->where('id_siswa', $userId)
-                        ->whereIn('id_tugas', $matchingTugasIds);
-                })
-                ->get();
-
-            foreach ($tugas as $tugasItem) {
-                $pengumpulanTugas = PengumpulanTugas::where('id_siswa', $userId)
-                    ->where('id_tugas', $tugasItem->id)
-                    ->first();
-
-                if ($pengumpulanTugas) {
-                    $tugasItem->nilai = $pengumpulanTugas->nilai;
-                    $tugasItem->id_siswa = $pengumpulanTugas->id_siswa;
-                }
-
-                $tugasSudahDikumpulkan[] = $tugasItem;
-            }
-        }
 
         return view('siswa.dashboard', ['user' => $user, 'mapelSiswa' => $mapelSiswa])
             ->with('pertemuan', $pertemuan)
             ->with('jurusanTingkatKelasId', $jurusanTingkatKelasId)
             ->with('tugasBelumDikumpulkan', $tugasBelumDikumpulkan)
-            ->with('tugasSudahDikumpulkan', $tugasSudahDikumpulkan)
             ->with('pertemuanSidebar', $pertemuanSidebar)
             ->with('dataPerhitunganNilai', $dataPerhitunganNilai);
     }
@@ -300,6 +278,7 @@ class DashboardSiswaController extends Controller
                 $tugasIds = collect($tugas)->pluck('id')->all();
 
                 $pengumpulanTugas = PengumpulanTugas::whereIn('id_tugas', $tugasIds)
+                    ->where('id_siswa', $userId)
                     ->pluck('nilai', 'id_tugas')
                     ->all();
 
@@ -329,16 +308,22 @@ class DashboardSiswaController extends Controller
             
                 foreach ($tugasItems as $tugas) {
                     $nilai = isset($tugas['nilai']) ? $tugas['nilai'] : 0;
+                    if ($nilai == -1) {
+                        $nilai = 0;
+                    }
                     $totalNilai += $nilai;
                     $jumlahTugas++;
-                }
+                }                
             
                 $dataMapels = [];
             
                 foreach ($tugasItems as $tugas) {
                     $nilai = isset($tugas['nilai']) ? $tugas['nilai'] : 0;
+                    if ($nilai == -1) {
+                        $nilai = 0;
+                    }
                     $dataMapels[] = $nilai;
-                }
+                }                
             
                 $rataRataNilai = $jumlahTugas > 0 ? $totalNilai / $jumlahTugas : 0;
                 $gradeTotalNilai = $this->convertToGrade($rataRataNilai);
@@ -352,6 +337,8 @@ class DashboardSiswaController extends Controller
                     'grade_total_nilai' => $gradeTotalNilai
                 ];
             }
+
+            // dd($dataPerhitunganNilai);
 
             $jurusanTingkatKelas = JurusanTingkatKelas::whereIn('id', $jurusanTingkatKelasId)->first();
 
