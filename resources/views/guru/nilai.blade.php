@@ -2,7 +2,7 @@
 <html>
 <head>
     @foreach ($mapel2 as $m)
-        <title>LMS - Nilai Pengumpulan Tugas {{ $m->nama }}</title>
+        <title>LMS - Rekap Nilai Pengumpulan Tugas {{ $m->nama }}</title>
     @endforeach
   <style>
     @page {

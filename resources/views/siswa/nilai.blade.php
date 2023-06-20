@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LMS - Nilai Hasil Pengumpulan Tugas</title>
+    <title>LMS - Rekap Nilai Hasil Pengumpulan Tugas {{ $siswa->name }}</title>
   <style>
     @page {
       size: A4;
@@ -120,7 +120,7 @@
                     <td style="text-align: center;">{{ $detail }}</td>
                 @endforeach
                 @for ($i = 0; $i < $missingColumns; $i++)
-                    <td>-</td>
+                    <td style="text-align: center;">-</td>
                 @endfor
                 <td style="width: 10%; text-align: center;">{{ number_format($nilai['rata_rata_nilai'], 2) }}</td>
                 <td style="width: 10%; text-align: center;">{{ $nilai['grade_total_nilai'] }}</td>
