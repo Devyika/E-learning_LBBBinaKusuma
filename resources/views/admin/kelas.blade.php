@@ -106,7 +106,7 @@
           @csrf
           <div class="form-group">
             <label for="nama">Nama Kelas</label>
-            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama">
+            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" placeholder="Masukkan Nama" required>
             @error('nama')
               <span class="invalid-feedback" role="alert">{{ $message }}</span>
             @enderror
@@ -157,7 +157,7 @@
           @method('PUT')
           <div class="form-group">
             <label for="nama">Nama Kelas</label>
-            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama', $k->nama) }}" placeholder="Masukkan Nama">
+            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama', $k->nama) }}" placeholder="Masukkan Nama" required>
             @error('nama')
               <span class="invalid-feedback" role="alert">{{ $message }}</span>
             @enderror

@@ -15,6 +15,7 @@ class Tugas extends Model
         'nama',
         'id_pertemuan',
         'deadline',
+        'deskripsi',
     ];
 
     public function pengumpulanTugas()

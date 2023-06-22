@@ -14,7 +14,8 @@ class PengumpulanTugas extends Model
         'id_siswa',
         'id_tugas',
         'file',
-        'nilai'
+        'nilai',
+        'keterangan'
     ];
 
     public function tugas()

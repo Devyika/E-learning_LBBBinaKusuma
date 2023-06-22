@@ -91,6 +91,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [DashboardGuruController::class, 'index']);
         Route::get('/tugas-siswa/{id_tugas}/{id_kelasMapelGuru}/{id_pertemuan}', [PengumpulanTugasController::class, 'index']);
         Route::post('/tugas-siswa/save-nilai', [PengumpulanTugasController::class, 'saveNilai']);
+        Route::post('/tugas-siswa/save-keterangan', [PengumpulanTugasController::class, 'saveKeterangan']);
         Route::put('/tugas-siswa/{id}', [PengumpulanTugasController::class, 'nilai']);
         Route::delete('/tugas-siswa/{id}', [PengumpulanTugasController::class, 'destroy_tugas']);
         Route::resource('pertemuan', PertemuanController::class);

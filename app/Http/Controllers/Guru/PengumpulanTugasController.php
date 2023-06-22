@@ -33,7 +33,7 @@ class PengumpulanTugasController extends Controller
 
         $data = DB::table('pengumpulan_tugas as a')
                 ->join('siswa as b', 'b.id', '=', 'a.id_siswa')
-                ->select('b.name as nama', DB::raw("REPLACE(a.file, 'file/tugas/', '') as tugas"), 'a.file', 'a.nilai', 'a.id')
+                ->select('b.name as nama', DB::raw("REPLACE(a.file, 'file/tugas/', '') as tugas"), 'a.file', 'a.nilai', 'a.id', 'a.keterangan')
                 ->where('a.id_tugas', $id_tgs)
                 ->get();        
 
@@ -90,6 +90,23 @@ class PengumpulanTugasController extends Controller
         return response()->json(['success' => false, 'id' => $id]);
     }
 }
+
+public function saveKeterangan(Request $request)
+{
+    $id = $request->input('id');
+    $keterangan = $request->input('keterangan');
+
+    try {
+        $pengumpulanTugas = PengumpulanTugas::findOrFail($id);
+        $pengumpulanTugas->keterangan = $keterangan;
+        $pengumpulanTugas->save();
+
+        return response()->json(['success' => true, 'id' => $id]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'id' => $id]);
+    }
+}
+
 
 
     public function nilai(Request $request, $id)

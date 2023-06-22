@@ -48,9 +48,10 @@
                         <thead>
                         <tr>
                           <th style="width: 5%;">No.</th>
-                          <th style="width: 30%;">Nama</th>
-                          <th style="width: 40%;">Tugas</th>
-                          <th style="width: 15%;">Nilai</th>
+                          <th style="width: 20%;">Nama</th>
+                          <th style="width: 30%;">Tugas</th>
+                          <th style="width: 10%;">Nilai</th>
+                          <th style="width: 35%;">Keterangan</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -64,9 +65,16 @@
                                 <form>
                                   @csrf
                                   <input type="hidden" name="id" value="{{$d->id}}">
-                                  <input type="text" class="form-control" name="nilai{{$d->id}}" value="{{$d->nilai != -1 ? $d->nilai : ''}}" onkeyup="handleDelayedSaveNilai(this, 2000)">
+                                  <input type="text" class="form-control" name="nilai{{$d->id}}" value="{{$d->nilai != -1 ? $d->nilai : ''}}" onkeydown="handleSaveNilai(event, this)">
                                 </form>
-                              </td>                          
+                              </td>     
+                              <td>
+                                <form>
+                                  @csrf
+                                  <input type="hidden" name="id_keterangan" value="{{$d->id}}">
+                                  <input type="text" class="form-control" name="keterangan{{$d->id}}" value="{{$d->keterangan}}" onkeydown="handleSaveKeterangan(event, this)">
+                                </form>
+                              </td>                     
                             </tr>
                             @endforeach
                           @else
@@ -88,42 +96,119 @@
     </div>
     <!-- /.row -->
   </div>
+
+  {{-- --}}
   
   <script>
     var saveTimeout;
 
-    function handleDelayedSaveNilai(input, delay) {
-      clearTimeout(saveTimeout); // Membersihkan timeout sebelumnya jika ada
+    function handleSaveNilai(event, input) {
+    if (event.key === 'Enter') { // Tombol Enter ditekan
+      event.preventDefault();
+      clearTimeout(saveTimeout); // Clear any previous timeouts
 
       saveTimeout = setTimeout(function() {
         saveNilai(input);
-      }, delay);
+      }, 0);
     }
+  }
+
+  function handleSaveKeterangan(event, input) {
+    if (event.key === 'Enter') { // Tombol Enter ditekan
+      event.preventDefault();
+      clearTimeout(saveTimeout); // Clear any previous timeouts
+
+      saveTimeout = setTimeout(function() {
+        saveKeterangan(input);
+      }, 0);
+    }
+  }
 
     function saveNilai(input) {
       var id = $(input).closest("form").find("input[name='id']").val();
       var nilai = $(input).val();
       var url = "{{ url('/guru/tugas-siswa/save-nilai') }}";
-  
-      // Mengambil token CSRF
+
       var csrfToken = $('meta[name="csrf-token"]').attr('content');
-  
-      // Mengirim permintaan AJAX untuk menyimpan nilai
+
       $.ajax({
         url: url,
         type: "POST",
         dataType: "json",
-        data: { id: id, nilai: nilai, _token: csrfToken }, // Menambahkan token CSRF ke dalam data
+        data: { id: id, nilai: nilai, _token: csrfToken },
         success: function(response) {
-          if (response.success) {
-            console.log("Nilai berhasil disimpan");
-          } else {
-            console.log("Gagal menyimpan nilai");
-          }
-        },
-        error: function() {
-          console.log("Terjadi kesalahan");
-        }
+  if (response.success) {
+    swal({
+      title: 'Sukses!',
+      text: "Keterangan berhasil disimpan",
+      icon: 'success',
+      timer: 1000, // Waktu (dalam milidetik) sebelum notifikasi ditutup
+      buttons: false // Menyembunyikan tombol OK
+    });
+  } else {
+    swal({
+      title: 'Gagal!',
+      text: "Gagal menyimpan keterangan",
+      icon: 'error',
+      timer: 1000, // Waktu (dalam milidetik) sebelum notifikasi ditutup
+      buttons: false // Menyembunyikan tombol OK
+    });
+  }
+},
+error: function() {
+  swal({
+    title: 'Error',
+    text: 'Terjadi kesalahan',
+    icon: 'error',
+    timer: 1000, // Waktu (dalam milidetik) sebelum notifikasi ditutup
+    buttons: false // Menyembunyikan tombol OK
+  });
+}
+
+      });
+    }
+
+    function saveKeterangan(input) {
+      var id = $(input).closest("form").find("input[name='id_keterangan']").val();
+      var keterangan = $(input).val();
+      var url = "{{ url('/guru/tugas-siswa/save-keterangan') }}";
+
+      var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+      $.ajax({
+        url: url,
+        type: "POST",
+        dataType: "json",
+        data: { id: id, keterangan: keterangan, _token: csrfToken },
+        success: function(response) {
+  if (response.success) {
+    swal({
+      title: 'Sukses!',
+      text: "Keterangan berhasil disimpan",
+      icon: 'success',
+      timer: 1000, // Waktu (dalam milidetik) sebelum notifikasi ditutup
+      buttons: false // Menyembunyikan tombol OK
+    });
+  } else {
+    swal({
+      title: 'Gagal!',
+      text: "Gagal menyimpan keterangan",
+      icon: 'error',
+      timer: 1000, // Waktu (dalam milidetik) sebelum notifikasi ditutup
+      buttons: false // Menyembunyikan tombol OK
+    });
+  }
+},
+error: function() {
+  swal({
+    title: 'Error',
+    text: 'Terjadi kesalahan',
+    icon: 'error',
+    timer: 1000, // Waktu (dalam milidetik) sebelum notifikasi ditutup
+    buttons: false // Menyembunyikan tombol OK
+  });
+}
+
       });
     }
   </script>   

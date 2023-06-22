@@ -69,11 +69,13 @@ class PertemuanController extends Controller
         $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'deadline' => ['required', 'date'],
+            'deskripsi' => ['nullable']
         ]);
 
         Tugas::create([
             'nama' => $request->input('nama'),
             'deadline' => $request->input('deadline'),
+            'deskripsi' => $request->input('deskripsi'),
             'id_pertemuan' => $id
         ]);
 
@@ -85,6 +87,7 @@ class PertemuanController extends Controller
         $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'deadline' => ['required', 'date'],
+            'deskripsi' => ['nullable']
         ]);
 
         $tugas = Tugas::find($id);
@@ -95,6 +98,7 @@ class PertemuanController extends Controller
 
         $tugas->nama = $request->input('nama');
         $tugas->deadline = $request->input('deadline');
+        $tugas->deskripsi = $request->input('deskripsi');
         $tugas->save();
 
         return redirect('guru/pertemuan/'.$pertemuan)->with('success', 'Tugas berhasil diperbarui');
@@ -171,7 +175,7 @@ class PertemuanController extends Controller
 
         $tugas = DB::table('pertemuan')
         ->join('tugas', 'tugas.id_pertemuan', '=', 'pertemuan.id')
-        ->select('tugas.nama as nama', 'tugas.id_pertemuan as id_pertemuan', 'tugas.id', 'tugas.deadline') // tambahkan 'tugas.deadline' dalam select
+        ->select('tugas.nama as nama', 'tugas.id_pertemuan as id_pertemuan', 'tugas.id', 'tugas.deadline', 'tugas.deskripsi') // tambahkan 'tugas.deadline' dalam select
         ->where('pertemuan.id_kelasMapelGuru', $id)
         ->get();
 

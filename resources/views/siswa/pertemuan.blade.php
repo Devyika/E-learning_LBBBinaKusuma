@@ -149,6 +149,33 @@
                                                       </div>
                                                   </div>
                                                   <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <p class="card-text">Keterangan Penilaian</p>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        @php $found = false; @endphp
+                                                        @foreach($allPengumpulanTugas as $pt)
+                                                            @if($pt->id_siswa == $userId && $pt->id_tugas == $t->id)
+                                                                @php
+                                                                    $found = true;
+                                                                @endphp
+                                                                <span class="text-muted">
+                                                                  {{ $pt->keterangan === null ? $pt->keterangan : '-' }}
+                                                                    @if ($pt->keterangan == null)
+                                                                        <i class="far fa-pause-circle float-right"></i>
+                                                                    @elseif ($pt->keterangan != null)
+                                                                        <i class="far fa-check-circle float-right"></i>
+                                                                    @endif
+                                                                </span>
+                                                                @break
+                                                            @endif
+                                                        @endforeach
+                                                        @if(!$found)
+                                                            <span class="text-danger">0 <i class="far fa-times-circle float-right"></i></span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                  <div class="row">
                                                       <div class="col-sm-3">
                                                           <p class="card-text">Deadline</p>
                                                       </div>
@@ -177,6 +204,16 @@
                                                         </span>                                                                                                            
                                                       </div>
                                                   </div>
+                                                  <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <p class="card-text">Deskripsi</p>
+                                                    </div>
+                                                    <div class="col-sm-9">
+                                                      <span class="text-muted">
+                                                            {{ $t->deskripsi }} <i class="far fa-check-circle float-right"></i>
+                                                      </span>                                                                                                            
+                                                    </div>
+                                                </div>
                                               </div>
                                               @php $found = false; @endphp
                                               @foreach($allPengumpulanTugas as $pt)

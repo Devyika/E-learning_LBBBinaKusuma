@@ -12,6 +12,7 @@
     @endphp
     {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }} | {{ Auth::user()->username }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="icon" href="{{ asset('storage/file/img/default/logo.png') }}" sizes="32x32" />
 
   <!-- Google Font: Source Sans Pro -->

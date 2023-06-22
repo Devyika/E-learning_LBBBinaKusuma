@@ -229,6 +229,13 @@
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                              <label for="deskripsi">Deskripsi</label>
+                              <input type="text" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" value="{{ old('deskripsi') }}" placeholder="Masukkan Deskripsi">
+                              @error('deskripsi')
+                                  <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                              @enderror
+                          </div>
                         </form>                        
                         </div>
                         <div class="modal-footer">
@@ -256,7 +263,7 @@
                               <div class="col-sm-4 d-flex justify-content-center align-items-center">
                                 <a href="{{ url('/guru/tugas-siswa/'.$t->id.'/'.$id.'/'.$t->id_pertemuan)}}" class="btn btn-sm btn-primary btn-block">Lihat Tugas Siswa</a>
                               </div>                            
-                              <div class="col-sm-8">
+                              <div class="col-sm-2">
                                   <?php
                                       date_default_timezone_set('Asia/Jakarta');
                                       $currentTime = date('Y-m-d H:i:s');
@@ -270,6 +277,10 @@
                                   @else
                                       <span class="{{ $textColorClass }}">{{ $deadline }}</span>
                                   @endif
+                              </div>
+                              <div class="col-sm-6">
+                                <span class="text-muted">Deskripsi: </span><br>
+                                <span class="text-muted">{{ $t->deskripsi }}</span>
                               </div>
                               <div class="col-sm-4 d-flex justify-content-around align-items-center">
                                 <button type="button" class="btn btn-primary btn-sm w-100 mr-1" data-toggle="modal" data-target="#editTugasModal{{$t->id}}">
@@ -332,7 +343,14 @@
                                             @error('deadline')
                                                 <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                             @enderror
-                                        </div>                                        
+                                          </div> 
+                                          <div class="form-group">
+                                            <label for="deskripsi">Deskripsi</label>
+                                            <input type="text" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" value="{{ old('deskripsi') }}" placeholder="Masukkan Deskripsi">
+                                            @error('deskripsi')
+                                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                            @enderror
+                                          </div>                                       
                                       </form>
                                   </div>
                                   <div class="modal-footer">
