@@ -76,20 +76,24 @@ class PengumpulanTugasController extends Controller
     
     //iki controller e
     public function saveNilai(Request $request)
-{
-    $id = $request->input('id');
-    $nilai = $request->input('nilai');
+    {
+        $request->validate([
+            'nilai' => ['required', 'integer', 'between:0,100'],
+        ]);
+        
+        $id = $request->input('id');
+        $nilai = $request->input('nilai');
 
-    try {
-        $pengumpulanTugas = PengumpulanTugas::findOrFail($id);
-        $pengumpulanTugas->nilai = $nilai;
-        $pengumpulanTugas->save();
+        try {
+            $pengumpulanTugas = PengumpulanTugas::findOrFail($id);
+            $pengumpulanTugas->nilai = $nilai;
+            $pengumpulanTugas->save();
 
-        return response()->json(['success' => true, 'id' => $id]);
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'id' => $id]);
+            return response()->json(['success' => true, 'id' => $id]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'id' => $id]);
+        }
     }
-}
 
 public function saveKeterangan(Request $request)
 {

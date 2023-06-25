@@ -318,7 +318,7 @@
                 $('#show_username').text(data.username);
                 $('#show_name').text(data.name);
                 $('#show_email').text(data.email);
-                if (data.level_user === 1) {
+                if (data.level_user === 2) {
                     $('#show_level_user').text('Siswa');
                 } else {
                     $('#show_level_user').text(data.level_user);
