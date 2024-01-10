@@ -18,7 +18,7 @@
 
     <div class="card card-default">
       <div class="card-header">
-        <h3 class="card-title">Jurusan</h3>
+        <h3 class="card-title">Program</h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -42,7 +42,7 @@
                   <thead>
                   <tr>
                     <th style="width: 5%;">No.</th>
-                    <th style="width: 80%;">Nama Jurusan</th>
+                    <th style="width: 80%;">Nama Program</th>
                     <th style="width: 15%;">Action</th>
                   </tr>
                   </thead>
@@ -72,7 +72,7 @@
                   <tfoot>
                   <tr>
                     <th>No.</th>
-                    <th>Nama Jurusan</th>
+                    <th>Nama Program</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
@@ -96,7 +96,7 @@
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addJurusanModal-label"><strong>Tambah Jurusan</strong></h5>
+        <h5 class="modal-title" id="addJurusanModal-label"><strong>Tambah Data</strong></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -105,7 +105,7 @@
         <form id="addJurusanForm" method="POST" action="{{ url('admin/input-jurusan') }}" enctype="multipart/form-data">
           @csrf
           <div class="form-group">
-            <label for="name">Nama Jurusan</label>
+            <label for="name">Nama Program</label>
             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama" required>
             @error('name')
               <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -125,13 +125,13 @@
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="detailModalLabel{{$j->id}}"><strong>Detail Jurusan </strong>{{$j->name}}</h5>
+        <h5 class="modal-title" id="detailModalLabel{{$j->id}}"><strong>Detail Program </strong>{{$j->name}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <label><strong>Nama Jurusan</strong></label>
+        <label><strong>Nama Program</strong></label>
         <p>{{$j->name}}</p>
       </div>
       <div class="modal-footer">  
@@ -146,7 +146,7 @@
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editJurusanModal-label-{{ $j->id }}"><strong>Edit Jurusan </strong>{{ $j->name }}</h5>
+        <h5 class="modal-title" id="editJurusanModal-label-{{ $j->id }}"><strong>Edit Program </strong>{{ $j->name }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -156,7 +156,7 @@
           @csrf
           @method('PUT')
           <div class="form-group">
-            <label for="name">Nama Jurusan</label>
+            <label for="name">Nama Program</label>
             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $j->name) }}" placeholder="Masukkan Nama" required>
             @error('name')
               <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -177,13 +177,13 @@
   <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="deleteJurusanModal-label-{{ $j->id }}"><strong>Hapus Jurusan </strong>{{ $j->name }}</h5>
+              <h5 class="modal-title" id="deleteJurusanModal-label-{{ $j->id }}"><strong>Hapus Program </strong>{{ $j->name }}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
               </button>
           </div>
           <div class="modal-body">
-              <p>Anda yakin ingin menghapus jurusan ini?</p>
+              <p>Anda yakin ingin menghapus Data program ini?</p>
           </div>
           <div class="modal-footer">
               <form method="POST" action="{{ url('/admin/input-jurusan/'.$j->id)}}">

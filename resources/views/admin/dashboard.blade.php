@@ -105,9 +105,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Jurusan
+                                Program
                             </div>
-                            <div class="h5 mb-0 font-weight-bold">{{ $countJurusan }} Jurusan</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ $countJurusan }} Program</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-scroll fa-2x"></i>
@@ -124,9 +124,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Tingkat
+                                Sertifikat
                             </div>
-                            <div class="h5 mb-0 font-weight-bold">{{ $countTingkat }} Tingkat</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ $countTingkat }} Sertifikat</div>
                         </div>
                         <div class="col-auto">
                             <i class="fa-solid fa-layer-group fa-2x"></i>
@@ -164,9 +164,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Mata Pelajaran
+                                Materi
                             </div>
-                            <div class="h5 mb-0 font-weight-bold">{{ $countMapel }} Mata Pelajaran</div>
+                            <div class="h5 mb-0 font-weight-bold">{{ $countMapel }} Materi</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-swatchbook fa-2x"></i>

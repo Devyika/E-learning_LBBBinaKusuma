@@ -1,8 +1,8 @@
 <aside class="main-sidebar sidebar-light-warning elevation-4">
     <!-- Brand Logo -->
     <a href="{{ url('/') }}" class="brand-link bg-warning">
-      <img src="{{ asset('storage/file/img/default/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">LMS | 
+      <img src="{{ asset('storage/file/img/default/logo_lbb.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">LBB | 
         @php
         $userLevels = [
           0 => 'Admin',
@@ -10,12 +10,12 @@
           2 => 'Siswa',
         ];
         @endphp
-        {{ $userLevels[Auth::user()->level_user] ?? 'Developer' }}
+        {{ $userLevels[Auth::user()->level_user] ?? 'Bina Kusuma' }}
       </span>
     </a>
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar"> 
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -26,7 +26,7 @@
                 <a href="{{ url('admin/dashboard') }}" class="nav-link active bg-warning">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>
-                    Dashboard
+                    Dashboard Admin
                     {{-- <i class="right fas fa-angle-left"></i> --}}
                   </p>
                 </a>
@@ -75,7 +75,7 @@
                 <a href="{{ url('admin/input-jurusan') }}" class="nav-link">
                   <i class="fas fa-scroll pr-2"></i>
                   <p>
-                    Jurusan
+                    Program
                   </p>
                 </a>
               </li>
@@ -83,7 +83,7 @@
                 <a href="{{ url('admin/input-tingkat') }}" class="nav-link">
                   <i class="fa-solid fa-layer-group pr-2"></i>
                   <p>
-                    Tingkat
+                    Sertifikat
                   </p>
                 </a>
               </li>
@@ -99,11 +99,11 @@
                 <a href="{{ url('admin/input-mata_pelajaran') }}" class="nav-link">
                   <i class="fa-solid fa-lines-leaning pr-2"></i>
                   <p>
-                    Mata Pelajaran
+                    Materi
                   </p>
                 </a>
               </li>
-              <li class="nav-header">SETTING</li>
+              <!--<li class="nav-header">SETTING</li>
               <li class="nav-item">
                 <a href="{{ url('admin/setting-kelas') }}" class="nav-link">
                   <i class="fas fa-chalkboard pr-2"></i>
@@ -193,7 +193,7 @@
                   </li>
                   @endforeach
                 </ul>
-              </li>
+              </li>-->
               
               {{-- <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -213,7 +213,7 @@
                   <li class="nav-item">
                     <a href="{{ url('/ipa/') }}" class="nav-link">
                       <i class="fas fa-book pr-2"></i>
-                      <p>Mata Pelajaran</p>
+                      <p>Materi</p>
                     </a>
                   </li>
                 </ul>

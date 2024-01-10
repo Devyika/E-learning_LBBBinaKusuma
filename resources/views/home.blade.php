@@ -6,7 +6,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title id="current-time"></title>
-        <link rel="icon" href="{{ asset('storage/file/img/default/logo.png') }}" sizes="32x32" />
+        <link rel="icon" href="{{ asset('storage/file/img/default/logo_lbb.png') }}" sizes="32x32" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
@@ -19,8 +19,8 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <div class="container">
-                {{-- <div class="masthead-subheading">Learning Management System</div> --}}
-                <a class="navbar-brand" href="#page-top">LMS</a>
+                {{-- <div class="masthead-subheading">Website Elearning</div> --}}
+                <a class="navbar-brand" href="#page-top">LBB Bina Kusuma</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars ms-1"></i>
@@ -38,8 +38,8 @@
         <!-- Masthead-->
         <header class="masthead">
             <div class="container">
-                <div class="masthead-subheading">Learning Management System</div>
-                <div class="masthead-heading text-uppercase">SMA Negeri 4 Probolinggo</div>
+                <div class="masthead-subheading">Website E-learning</div>
+                <div class="masthead-heading text-uppercase">LBB Bina Kusuma</div>
                 <span id="current-time" class="navbar-brand"></span>
                 @guest
                     <a class="btn btn-primary btn-xl text-uppercase" href="{{ url('/login') }}">Masuk</a>
@@ -63,7 +63,7 @@
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Fitur</h2>
-                    <h3 class="section-subheading text-muted">Dapatkan kemudahan belajar dari mana saja dan kapan saja dengan LMS kami yang mobile-friendly.</h3>
+                    <h3 class="section-subheading text-muted">Dapatkan kemudahan belajar dari mana saja dan kapan saja dengan website E-learning kami yang mobile-friendly.</h3>
                 </div>
                 <div class="row text-center">
                     <div class="col-md-4">
@@ -199,7 +199,7 @@
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Versi</h2>
-                    <h3 class="section-subheading text-muted">Pengembangan LMS kami bertujuan untuk memberikan pengalaman belajar yang lebih baik dan efektif bagi pengguna.</h3>
+                    <h3 class="section-subheading text-muted">Pengembangan website kami bertujuan untuk memberikan pengalaman belajar yang lebih baik dan efektif bagi pengguna.</h3>
                 </div>
                 <ul class="timeline">
                     <li>
@@ -209,7 +209,7 @@
                                 <h4>2023</h4>
                                 <h4 class="subheading">Versi 1.0</h4>
                             </div>
-                            <div class="timeline-body"><p class="text-muted">Dalam proses pembuatan LMS, penting untuk memperhatikan aspek desain, fungsionalitas, dan keamanan yang dapat memengaruhi pengalaman belajar pengguna.</p></div>
+                            <div class="timeline-body"><p class="text-muted">Dalam proses pembuatan website E-learning, penting untuk memperhatikan aspek desain, fungsionalitas, dan keamanan yang dapat memengaruhi pengalaman belajar pengguna.</p></div>
                         </div>
                     </li>
                     <li class="timeline-inverted">
@@ -268,7 +268,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">LMS tidak akan ada tanpa tim pengembang yang berdedikasi untuk menciptakan solusi pembelajaran yang sesuai dengan kebutuhan pengguna.</p></div>
+                    <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">website E-learning tidak akan ada tanpa tim pengembang yang berdedikasi untuk menciptakan solusi pembelajaran yang sesuai dengan kebutuhan pengguna.</p></div>
                 </div>
             </div>
         </section>
