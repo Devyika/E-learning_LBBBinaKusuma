@@ -117,4 +117,6 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->back();
         });
     });
+
+    Route::resource('absensisiswa', AbsensiSiswaController::class);
 });

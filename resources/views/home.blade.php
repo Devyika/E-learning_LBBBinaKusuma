@@ -15,7 +15,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{ asset('home/css/styles.css') }}" rel="stylesheet" />
     </head>
-    <body id="page-top">
+    <body id="page-top" >
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <div class="container">
@@ -28,9 +28,10 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                         <li class="nav-item"><a class="nav-link" href="#services">Fitur</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#gabung">Tutorial</a></li>
                         {{-- <li class="nav-item"><a class="nav-link" href="#portfolio">Jurusan</a></li> --}}
                         <li class="nav-item"><a class="nav-link" href="#about">Versi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#team">Pengembang</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -92,6 +93,61 @@
                     </div>
                 </div>
             </div>
+        </section>
+        <!--Langkah-Langkah Mendaftar-->
+        <!-- Services-->
+        <section class="page-section" id="gabung">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Tutorial Bergabung</h2>
+                    <h3 class="section-subheading text-muted">Berikut langkah-langkah bergabung di lembaga bimbingan belajar kami</h3>
+                </div>
+                <div class="timeline">
+                <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4>
+                                Hubungi WA admin di halaman paling bawah
+                            </h4>
+                        </div>
+                    </li>
+                <div class="timeline">
+                <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4>
+                            Lakukan pembayaran
+                            </h4>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4>
+                               Mendapat username dan password dari admin
+                            </h4>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4>
+                                Masuk 
+                            </h4>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4>
+                                Dapat mengakses Dashboard Siswa
+                            </h4>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4>
+                                Selamat Belajar
+                            </h4>
+                        </div>
+                    </li>
+                </div>
+                
         </section>
         <!-- Portfolio Grid-->
         {{-- <section class="page-section bg-light" id="portfolio">
@@ -227,7 +283,7 @@
             </div>
         </section>
         <!-- Team-->
-        <section class="page-section bg-light" id="team">
+        <!--<section class="page-section bg-light" id="team">
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Pengembang</h2>
@@ -271,7 +327,7 @@
                     <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">website E-learning tidak akan ada tanpa tim pengembang yang berdedikasi untuk menciptakan solusi pembelajaran yang sesuai dengan kebutuhan pengguna.</p></div>
                 </div>
             </div>
-        </section>
+        </section>-->
         <!-- Clients-->
         <div class="py-5">
             <div class="container">
@@ -291,7 +347,8 @@
                 </div>
             </div>
         </div>
-        {{-- <!-- Contact-->
+        -- <!-- Contact-->
+        
         <section class="page-section" id="contact">
             <div class="container">
                 <div class="text-center">
@@ -354,20 +411,22 @@
                     <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">Send Message</button></div>
                 </form>
             </div>
-        </section> --}}
+        </section> 
         <!-- Footer-->
         <footer class="footer py-4">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-5 text-lg-start">
-                        <strong>Copyright &copy; Proyek_1 <a href="https://github.com/MochNad/proyek_1">Kelompok 5</a>.</strong>
-                        TI-2B
+                        <strong>Copyright &copy; Proyek_1 <a href="https://github.com/Devyika/E-Learning_LBB_Bina_Kusuma.git">Devy, Mentari, Nurul</a>.</strong>
+                        TI-D
                     <div class="float-right d-none d-sm-inline-block">
                         <b>Version</b> 1.0
                     </div>
                 </div>
                     <div class="col-lg-2 my-3 my-lg-0">
-                        <a class="btn btn-dark btn-social mx-2" href="https://github.com/MochNad/proyek_1" aria-label="Twitter"><i class="fa-brands fa-github"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="https://github.com/Devyika/E-Learning_LBB_Bina_Kusuma.git" aria-label="Twitter"><i class="fa-brands fa-github"></i></a>
+                    
+                        <a class="btn btn-dark btn-social mx-2" href="https://wa.me/6288235711046" aria-label="Twitter"><i class="fa-brands fa-whatsapp"></i></a>
                     </div>
                     <div class="col-lg-5 text-lg-end">
                         <a class="link-dark text-decoration-none me-3" href="#page-top">Privacy Policy</a>
@@ -607,7 +666,7 @@
                     url: "{{ url('/get-current-time') }}",
                     type: "GET",
                     success: function(response) {
-                        $('#current-time').text("LMS | SMA Negeri 4 Probolinggo | " + response.current_time);
+                        $('#current-time').text("LBB | Bina Kusuma | " + response.current_time);
                     },
                     error: function(xhr) {
                         console.log(xhr.responseText);
